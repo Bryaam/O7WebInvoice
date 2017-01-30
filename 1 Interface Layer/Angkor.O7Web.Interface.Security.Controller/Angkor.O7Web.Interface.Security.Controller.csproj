@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{AEFDF061-0BBE-4BBF-9A49-B4B40111AAD6}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Angkor.O7Web.Interface.Security.Controllers</RootNamespace>
     <AssemblyName>Angkor.O7Web.Interface.Security.Controllers</AssemblyName>
