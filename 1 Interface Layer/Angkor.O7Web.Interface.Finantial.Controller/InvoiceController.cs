@@ -32,6 +32,12 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["documentId"] = invoiceNumber;
             return View();
         }
+        public ActionResult Show(string invoiceSerie, string invoiceNumber)
+        {
+            ViewData["documentType"] = invoiceSerie;
+            ViewData["documentId"] = invoiceNumber;
+            return View();
+        }
 
         public JsonResult Invoices_Populate(string filter)
         {
