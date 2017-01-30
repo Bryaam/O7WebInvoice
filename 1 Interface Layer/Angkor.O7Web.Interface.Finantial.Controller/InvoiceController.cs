@@ -19,6 +19,10 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         public ActionResult Insert()
         {
             return View();
+            /*
+            ViewData["action"] = "1";
+            return View("Management");
+            */
         }
 
         public ActionResult Index()
@@ -28,6 +32,12 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 
         public ActionResult Edit(string invoiceSerie, string invoiceNumber)
         {
+            /*
+            ViewData["action"] = "2";
+            ViewData["idClient"] = invoiceSerie;
+            ViewData["documentId"] = invoiceNumber;
+            return View("Management");
+            */
             ViewData["documentType"] = invoiceSerie;
             ViewData["documentId"] = invoiceNumber;
             return View();
@@ -40,7 +50,8 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-
+        [HttpPost]
+        [ActionName("Insert")]
         public JsonResult Insert_Invoice(string documentType, string serie,
                                             string currency, string documentDate,
                                             string documentExpiration, string clienteCode
@@ -261,6 +272,9 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var response = domain.Perceptions();
             return new O7JsonResult(response);
         }
+
+        [HttpPost]
+        [ActionName("Edit")]
         public JsonResult UpdateInvoiceHead(string documentType, string documentId,
             string currency, string documentDate,
             string documentExpiration, string clienteCode
