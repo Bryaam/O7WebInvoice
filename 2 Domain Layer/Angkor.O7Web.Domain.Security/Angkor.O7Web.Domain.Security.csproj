@@ -1,0 +1,89 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{F4793CCD-CFB9-4AFE-A223-4F181C247B88}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Angkor.O7Web.Domain.Security</RootNamespace>
+    <AssemblyName>Angkor.O7Web.Domain.Security</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Angkor.O7Framework.Common">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Components">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Components.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Data">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Domain">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Infrastructure">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Utility">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Web, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Base\SecurityDomain.cs" />
+    <Compile Include="SecurityFlow.cs" />
+    <Compile Include="Tools\Algorithm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\3 Data Layer\Angkor.O7Web.Data.Security\Angkor.O7Web.Data.Security.csproj">
+      <Project>{9F7124F8-DD4A-4A72-859B-EF6C643A9507}</Project>
+      <Name>Angkor.O7Web.Data.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Common.Security.Entity\Angkor.O7Web.Common.Security.Entity.csproj">
+      <Project>{3BCC6CB0-D276-4770-BE89-F70826BE9F7D}</Project>
+      <Name>Angkor.O7Web.Common.Security.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

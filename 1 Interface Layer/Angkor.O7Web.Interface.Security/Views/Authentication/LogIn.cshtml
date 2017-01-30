@@ -1,0 +1,165 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O7ERP Web | Administración</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/b6f7189985.js"></script>    
+    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
+    @Html.StyleLink("css/plugins/toastr/toastr.min.css")
+    @Html.StyleLink("css/animate.css")
+    @Html.StyleLink("css/style.css")
+    <style>
+        #toast-container > .toast-warning:before {
+            content: "\f071";
+        }
+
+        #capa1 {
+			margin-top: 0px;
+			position: absolute;
+			z-index: 0;
+			margin-left: 0px;
+        }
+        #capa2 {
+			margin-top: 0px;
+			position: absolute;
+			z-index: 1;
+			margin-left: 0px;
+        }
+        #logo-o {
+        z-index: 0;
+        margin-top: -110px;
+        font-family: "Times New Roman", Georgia, Serif;
+        font-style: italic;
+        font-size: 250px;
+        color: #999c9e;
+        }
+        #logo-7 {
+        z-index: 1;
+        margin-top: -225px;
+        padding-left: 46px;
+        font-family: Arial Black Arial Bold, Gadget, sans-serif;
+        font-size: 160px;
+        font-weight: bolder;
+        color: #676A6C;
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+
+<div class="middle-box text-center loginscreen animated fadeInDown">
+    <div>
+        <div style="height: 325px !important;">
+            <div id="logo-o">O</div>
+            <div id="logo-7">7</div>
+        </div>
+        <h3>Bienvenido</h3>
+        <p>Versión web 1.0</p>
+        <form action="Authentication/LogIn" method="post" id="LogInForm" class="m-t" role="form">
+            <div class="form-group">
+                <input type="text" id="logIn" class="form-control" name="logIn" placeholder="Usuario" required>
+            </div>
+            <div class="input-group form-group">
+                <input type="password" id="password" class="form-control" name="password" placeholder="Contraseña" required>
+                <span class="input-group-addon" id="validate-user" style="cursor: pointer;"><span class="fa fa-angle-right"></span></span>
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <input type="hidden" id="companyId" name="company">
+                <select id="companies" data-placeholder="Elige Compañia" class="chosen-select" disabled="disabled" tabindex="2"></select>
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <input type="hidden" id="branchId" name="branch">
+                <select id="branches" data-placeholder="Elige Sucursal" class="chosen-select" disabled="disabled" tabindex="2"></select>
+            </div>
+            <button id="sign" type="submit" class="btn btn-primary block full-width m-b" disabled="disabled">Ingresar</button>
+            <a href="#">
+                <small>¿Olvidaste la contraseña?</small>
+            </a>
+        </form>
+        <p class="m-t">
+            <small>Desarrollado por AngkorGroup S.A.C &copy; 2016 - @DateTime.Now.Year</small>
+        </p>
+    </div>
+</div>
+
+<!-- Mainly scripts -->
+    @Html.JavaScriptLink("js/jquery-2.1.1.js")
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
+    @Html.JavaScriptLink("js/plugins/toastr/toastr.min.js")
+<script type="text/javascript">
+        $(document).ready(function () {
+            $(".chosen-select").chosen({
+                width: "100%",
+                disable_search: true
+            });
+
+        $("#validate-user").on("click", function (e) {
+            var txtLogin = $("#logIn");
+            var txtPassword = $("#password");
+            $.ajax({ method: "POST", url: "/Security/Authentication/GetCompanies", data: { login: txtLogin.val(), password: txtPassword.val() } })
+                .done(function (result) {
+                    var objResult = jQuery.parseJSON(result);
+                    if (!jQuery.isEmptyObject(objResult)) {
+                        txtLogin.attr("readonly", "readonly");
+                        txtPassword.attr("readonly", "readonly");
+                        var sltCompanies = $("#companies");
+                        sltCompanies.append("<option value='0'>Elige Compañia</option>");
+                        $.each(objResult, function (index, value) {
+                            var descripcion = value.Description;
+                            if ($.trim(descripcion).length <= 0)
+                                descripcion = "---";
+                            sltCompanies.append("<option value='" + value.Id + "'>" + descripcion + "</option>");
+                        });
+                        sltCompanies.attr("disabled", false);
+                        sltCompanies.children("option[value=0]").hide();
+                        sltCompanies.trigger("chosen:updated");
+                        $("#validate-user").removeAttr("style");
+                        $("#validate-user").off("click");
+                    }
+                })
+                .fail(function (result) {                   
+                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                });
+        });
+
+        $("#companies").on("change", function (evt, params) {
+            var txtLogin = $("#logIn");
+            var txtPassword = $("#password");
+            var company = params.selected;
+            $.ajax({ method: "POST", url: "/Security/Authentication/GetBranches", data: { login: txtLogin.val(), password: txtPassword.val(), companyId: company } })
+                .done(function (result) {
+                    var objResult = jQuery.parseJSON(result);
+                    if (!jQuery.isEmptyObject(objResult)) {
+                        var sltBranches = $("#branches");
+                        sltBranches.find("option").remove().end().append("<option value='0'>Elige Sucursal</option>");
+                        $.each(objResult, function (index, value) {
+                            var descripcion = value.Description;
+                            if ($.trim(descripcion).length <= 0)
+                                descripcion = "---";
+                            sltBranches.append("<option value='" + value.Id + "'>" + descripcion + "</option>");
+                        });
+                        sltBranches.attr("disabled", false);
+                        sltBranches.children("option[value=0]").hide();
+                        sltBranches.trigger("chosen:updated");
+                        $("#sign").attr("disabled", true);
+                        $("#companyId").val(company);
+                    }
+                })
+                .fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                });
+        });
+
+        $("#branches").on("change", function (evt, params) {
+            $("#sign").attr("disabled", false);
+            var branch = params.selected;
+            $("#branchId").val(branch);
+        });
+        });
+    </script>
+</body>
+
+</html>

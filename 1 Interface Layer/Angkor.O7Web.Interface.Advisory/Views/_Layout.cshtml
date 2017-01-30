@@ -1,0 +1,208 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>O7ERP Web | O7Advisory</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <script src="https://use.fontawesome.com/b6f7189985.js"></script>
+    @Html.StyleLink("css/plugins/toastr/toastr.min.css")
+    @Html.StyleLink("css/animate.css")
+    @Html.StyleLink("css/style.css")
+    @RenderSection("styles_link", false)
+    <style type="text/css">
+        #capa1 {
+            font-family: "Times New Roman", Georgia, Serif;
+            font-style: italic;
+            font-size: 25px;
+            margin-top: -49px;
+            position: absolute;
+            z-index: 0;
+            margin-left: 38px;
+        }
+
+        #capa2 {
+            color: #676a6c;
+            font-family: Arial Black,Arial Bold,Gadget,sans-serif;
+            font-size: 16px;
+            font-weight: bolder;
+            margin-left: 43px;
+            position: absolute;
+            z-index: 0;
+            margin-top: -36px;
+        }
+
+        #fuera {
+            z-index: 1;
+            padding-top: 0px;
+        }
+
+        #li:hover {
+            background-color: #006db9;
+        }
+        
+        .cool-link {
+            display: inline-block;
+            color: #676a6c;
+            text-decoration: none;
+        }
+
+        .cool-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #676a6c;
+            transition: width .3s;
+        }
+
+        .cool-link:hover::after {
+            width: 100%;            
+        }
+    </style>
+</head>
+
+<body>
+    <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu" style="margin-top: -6px;">
+                    <li class="nav-header" style="padding-bottom: 16px ! important; padding-top: 16px ! important;">
+                        <div class="dropdown profile-element">
+                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                <span class="clear">
+                                    <span class="block m-t-xs"><strong class="font-bold">@User.Name</strong></span>
+                                    <span class="text-muted text-xs block">Rol</span>
+                                </span>
+                            </a>
+                        </div>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa fa-calendar"></i>
+                            <span class="nav-label">Actividades y tiempos</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="/Advisory/Activity/Dashboard">Administración</a></li>
+                            <li><a href="/Advisory/Activity/WorkerManagment">Trabajador</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a>
+                            <i class="fa fa-cog"></i>
+                            <span class="nav-label">Ajustes del sistema</span>
+                            <span class="fa arrow"></span>
+                        </a>
+                        <ul class="nav nav-second-level">
+                            <li><a href="/Advisory/Settings/Period">Periodo</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg dashbard-1" style="min-height: 322px;">
+            <div class="row border-bottom" style="margin-right: -20px; height: 45px !important;">
+                <nav class="navbar navbar-static-top" role="navigation" style="margin-top: -6px !important; height: 30px !important;">
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li onmouseover="this.style.backgroundColor='#fff'" onmouseout="this.style.backgroundColor=''" style="word-spacing: 8px; margin-right: 30px !important; margin-right: 30px !important; margin-top: 16px; height: 25px !important;">
+                            <a class="right-sidebar-toggle" style="padding-top: 11px; margin-top: -8px !important; margin-right: 12px !important;">
+                                Inicio
+                                <i>
+                                    <div id="capa1">O</div>
+                                    <div id="capa2">7</div>
+                                </i>
+                            </a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="row wrapper border-bottom white-bg page-heading">
+                <div class="col-lg-8">
+                    <h2>@ViewBag.Title</h2>
+                    <ol class="breadcrumb">
+                        <li><a href="/Advisory/Home/Index">O7Advisory</a></li>
+                        <li>@ViewBag.Section</li>
+                        <li class="active"><strong>@ViewBag.Title</strong></li>
+                    </ol>
+                </div>                
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="wrapper wrapper-content animated fadeInRight">
+                        @RenderBody()
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+
+    <div id="right-sidebar" class="animated" style="margin-top: -16px">
+        <div class="sidebar-container">
+            <ul class="nav nav-tabs navs-2">
+                <li class="active"><a data-toggle="tab" href="#tab-1">Sesión</a></li>
+                <li><a data-toggle="tab" href="#tab-2">Modulos</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div id="tab-1" class="tab-pane active">
+                    <div class="sidebar-title">
+                        <h3>
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square-o fa-stack-2x"></i>
+                                <i class="fa fa-user fa-stack-1x"></i>
+                            </span>
+                            Sesión
+                        </h3>
+                    </div>
+                    <div class="setings-item">
+                        <span>Datos de sesión</span>
+                    </div>
+                    <div class="setings-item">
+                        <span>Cambiar contraseña</span>
+                    </div>
+                    <div class="setings-item">
+                        <span onclick="location='/Advisory/Security/Logout'" style="cursor: pointer;" class="cool-link">Cerrar sesión</span>
+                    </div>
+                </div>
+                <div id="tab-2" class="tab-pane">
+                    <div class="sidebar-title">
+                        <h3>
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-square-o fa-stack-2x"></i>
+                                <i class="fa fa-puzzle-piece fa-stack-1x"></i>
+                            </span>
+                            Elección de modulos
+                        </h3>
+                    </div>
+                    <div class="setings-item">
+                        <span>Financiero</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.JavaScriptLink("js/jquery-2.1.1.js")
+    @Html.JavaScriptLink("js/plugins/jquery-ui/jquery-ui.min.js")
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    @Html.JavaScriptLink("js/plugins/metisMenu/jquery.metisMenu.js")
+    @Html.JavaScriptLink("js/plugins/slimscroll/jquery.slimscroll.min.js")
+    @Html.JavaScriptLink("js/inspinia.js")
+    @Html.JavaScriptLink("js/plugins/pace/pace.min.js")    
+    @Html.JavaScriptLink("js/plugins/toastr/toastr.min.js")
+    @RenderSection("scripts_link", false)
+    <script>
+        $(document).ready(function () {
+            @RenderSection("section_script", false)
+        });
+    </script>
+    
+</body>
+</html>
