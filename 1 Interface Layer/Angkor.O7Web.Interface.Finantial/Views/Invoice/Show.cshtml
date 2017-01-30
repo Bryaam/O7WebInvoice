@@ -156,7 +156,7 @@
             confirmButtonText: "Sí",
             closeOnConfirm: false
         }, function () {
-            $.ajax({ method: "POST", url: "/Finantial/Invoice/DeleteInvoice", data:{documenType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+            $.ajax({ method: "POST", url: "/Finantial/Invoice/DeleteInvoice", data:{documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
                 .done(function (result) {
                     var jsonResult = jQuery.parseJSON(result);
                     if (!jQuery.isEmptyObject(jsonResult)) {
@@ -174,15 +174,12 @@
     });
 
     $('#btnPDF').click(function () {
-        $.ajax({ method: "POST", url: "/Finantial/Invoice/GenerateReporte", data:{documenType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
-        .done(function (result) {
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
+         var url = "./GenerateReporte?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
+            window.location.href = url;       
     });
 
     $('#btnEditar').click(function () {
-        $.ajax({ method: "POST", url: "/Finantial/Invoice/Edit", data:{documenType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+        $.ajax({ method: "POST", url: "/Finantial/Invoice/Edit", data:{documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
         .done(function (result) {
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
