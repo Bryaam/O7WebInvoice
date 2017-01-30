@@ -124,10 +124,11 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response GetInvoiceDetail(string companyId, string branchId, string documentType, string documentId);
 
+        public abstract O7Response AnularInvoice(string companyId, string branchId,
+                                                string documentType, string documentId);
         public abstract O7Response documentInformation(string companyId, string branchId, string documentType);
 
-        public abstract O7Response GeneratePDF(string companyId, string branchId, string documentType, string documentId);
-        public abstract O7Response GenerateReporte(string companyId, string branchId, string documentType, string documentId);
+           public abstract O7Response GenerateReporte(string companyId, string branchId, string documentType, string documentId);
 
         public abstract O7Response DeleteDetailInvoice(string companyId, string branchId,
             string DocumentType, string DocumentId);

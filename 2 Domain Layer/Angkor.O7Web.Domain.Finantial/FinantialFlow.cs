@@ -271,16 +271,15 @@ namespace Angkor.O7Web.Domain.Finantial
 
         public override O7Response GetInvoiceHeadView(string companyId, string branchId, string documentType, string documentId)
         {
-            var result = FinantialDataService.GetInvoiceHeadView(companyId, branchId, documentType, documentId);
-            var seriesSerialized = O7JsonSerealizer.Serialize(result);
-            return O7SuccessResponse.MakeResponse(seriesSerialized);
+            var head = FinantialDataService.GetInvoiceHeadView(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(head);
+ 
         }
 
         public override O7Response GetInvoiceDetailView(string companyId, string branchId, string documentType, string documentId)
         {
-            var result = FinantialDataService.GetInvoiceDetailView(companyId, branchId, documentType, documentId);
-            var seriesSerialized = O7JsonSerealizer.Serialize(result);
-            return O7SuccessResponse.MakeResponse(seriesSerialized);
+            var detail = FinantialDataService.GetInvoiceDetailView(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(detail);
         }
 
 
@@ -291,17 +290,12 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
-        public override O7Response GeneratePDF(string companyId, string branchId, string documentType, string documentId)
-        {
-            var pdf = FinantialDataService.GeneratePDF(companyId, branchId, documentType, documentId);
-            return O7SuccessResponse.MakeResponse(pdf);
-        }
+    
 
         public override O7Response GenerateReporte(string companyId, string branchId, string documentType, string documentId)
         {
-            var client = FinantialDataService.GenerateReporte(companyId, branchId, documentType, documentId);
-            var clientSerialized = O7JsonSerealizer.Serialize(client);
-            return O7SuccessResponse.MakeResponse(clientSerialized);
+            var pdf = FinantialDataService.GenerateReporte(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(pdf);
         }
 
         public override O7Response UpdateInvoice(string companyId, string branchId,
@@ -335,6 +329,15 @@ namespace Angkor.O7Web.Domain.Finantial
                                         documentIdRef, documentOC,
                                         guiRem, addressId,
                                         serieExtRef, nroExtRef);
+            var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
+            return O7SuccessResponse.MakeResponse(invoicesSerialized);
+        }
+
+        public override O7Response AnularInvoice(string companyId, string branchId,
+                                        string documentType, string documentId)
+        {
+            var invoices = FinantialDataService.AnularInvoice(companyId, branchId,
+                                         documentType, documentId);
             var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
             return O7SuccessResponse.MakeResponse(invoicesSerialized);
         }

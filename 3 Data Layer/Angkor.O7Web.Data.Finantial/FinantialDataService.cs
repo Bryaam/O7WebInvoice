@@ -573,6 +573,18 @@ namespace Angkor.O7Web.Data.Finantial
 
         }
 
+        public virtual int AnularInvoice(string companyId, string branchId,
+                                       string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
+            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
+            return DataAccess.ExecuteFunction<int>("finantial_invoice.anula_documento", parameters);
+
+        }
+
         public virtual List<InvoiceHeadView> GetInvoiceHeadView(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;
@@ -623,23 +635,7 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceSeries>("finantial_invoice.serie_ext_type", parameters, InvoiceSeriesMapper.Class);
         }
 
-        public virtual Stream GeneratePDF(string companyId, string branchId, string documentType, string documentId)
-        {
-            var parameters = O7DbParameterCollection.Make;
-            parameters.Add(O7Parameter.Make("p_cia", companyId));
-            parameters.Add(O7Parameter.Make("p_suc", branchId));
-            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
-            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
-
-            HeadInvoicePDF head =
-                DataAccess.ExecuteFunction<HeadInvoicePDF>("finantial_invoice.head_pdf", parameters,
-                    HeadInvoicePDFMapper.Class)[0];
-
-            List<DetailInvoicePDF> details = DataAccess.ExecuteFunction<DetailInvoicePDF>("finantial_invoice.detail_pdf", parameters, DetailInvoicePDFMapper.Class);
-
-            return PdfGenerator.generar(head, details, "tura.pdf");
-
-        }
+      
         public virtual Stream GenerateReporte(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;
@@ -649,15 +645,16 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
 
             HeadInvoicePDF head =
-                DataAccess.ExecuteFunction<HeadInvoicePDF>("finantial_invoice.head_pdf", parameters,
-                    HeadInvoicePDFMapper.Class)[0];
+              DataAccess.ExecuteFunction<HeadInvoicePDF>("finantial_invoice.head_pdf", parameters,
+                  HeadInvoicePDFMapper.Class)[0];
 
             List<DetailInvoicePDF> details = DataAccess.ExecuteFunction<DetailInvoicePDF>("finantial_invoice.detail_pdf", parameters, DetailInvoicePDFMapper.Class);
 
+
             int result = DataAccess.ExecuteFunction<int>("finantial_invoice.facturar_electronica", parameters);
 
-            return PdfGenerator.generar(head, details, "./Factura.pdf");
 
+            return PdfGenerator.generar(head, details, "tura.pdf");
         }
 
         public virtual List<SingleValue> GetFecVto(string companyId, string branchId, string payment, string documentDate)

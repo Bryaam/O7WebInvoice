@@ -34,11 +34,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["documentId"] = invoiceNumber;
             return View();
         }
-        public ActionResult Show(string invoiceSerie, string invoiceNumber)
+        public ActionResult Show(string documentType, string documentId)
         {
 
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.GetInvoice(User.Company, User.Branch, invoiceSerie, invoiceNumber);
+            var response = domain.GetInvoiceHeadView(User.Company, User.Branch, documentType, documentId);
             var head = ((O7SuccessResponse<List<InvoiceHeadView>>) response).Value1;//new O7JsonResult(response);
 
             ViewData["documentType"] = head[0].documentType;
@@ -75,9 +75,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["impIGV"] = head[0].impIGV;
             ViewData["impPerc"] = head[0].impPer;
             ViewData["impTot"] = head[0].impTot;
-            var detail = ((O7SuccessResponse<List<InvoiceDetailView>>)response).Value1;//new O7JsonResult(response);
+
+            var responseDetail = domain.GetInvoiceDetailView(User.Company, User.Branch, documentType, documentId);
+            var detail = ((O7SuccessResponse<List<InvoiceDetailView>>)responseDetail).Value1;//new O7JsonResult(response);
             ViewData["detail"] = detail;
-            return View("Show");
+            return View();
         }
 
         public JsonResult Invoices_Populate(string filter)
@@ -179,18 +181,13 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        public FileResult GeneratePDF(string documentType, string documentId)
-        {
-            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.GeneratePDF(User.Company, User.Branch, documentType, documentId);
-            return File(((O7SuccessResponse<Stream>)response).Value1, "application/pdf", documentType + "-" + documentId + ".pdf");
-        }
-
-        public JsonResult GenerateReporte(string documentType, string documentId)
+     
+        public FileResult GenerateReporte(string documentType, string documentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.GenerateReporte(User.Company, User.Branch, documentType, documentId);
-            return new O7JsonResult(response);
+            return File(((O7SuccessResponse<Stream>)response).Value1, "application/pdf", documentType + "-" + documentId + ".pdf");
+
         }
 
 
@@ -346,6 +343,14 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                         documentIdRef, documentOC,
                                         guiRem, addressId,
                                         serieExtRef, nroExtRef);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult DeleteInvoice(string documentType, string documentId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.AnularInvoice(User.Company, User.Branch,
+                                         documentType, documentId);
             return new O7JsonResult(response);
         }
 

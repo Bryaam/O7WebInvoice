@@ -31,7 +31,5 @@ namespace Angkor.O7Web.Comunication
             return O7DomainInstanceMaker.MakeInstance<FinantialFlow, BasicFlow>(argDomain, argFlow);
         }
 
-
-
     }
 }
