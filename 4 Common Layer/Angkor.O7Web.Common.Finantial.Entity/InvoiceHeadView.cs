@@ -29,6 +29,10 @@ namespace Angkor.O7Web.Common.Finantial.Entity
 
         public string documentDate { get; set; }
         public string documentVenc { get; set; }
+
+        public string currency { get; set; }
+
+        public string tax { get; set; }
         public string language { get; set; }
         public string perception { get; set; }
         public string nroOc { get; set; }

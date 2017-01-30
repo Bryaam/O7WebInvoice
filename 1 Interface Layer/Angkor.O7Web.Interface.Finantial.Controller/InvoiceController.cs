@@ -1,11 +1,13 @@
 ﻿// O7ERP Web created by felix_dev
 
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Angkor.O7Framework.Web.Base;
 using Angkor.O7Framework.Web.WebResult;
 using Angkor.O7Web.Comunication;
 using Angkor.O7Framework.Common.Model;
 using System.IO;
+using Angkor.O7Web.Common.Finantial.Entity;
 
 namespace Angkor.O7Web.Interface.Finantial.Controller
 {
@@ -34,9 +36,48 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         }
         public ActionResult Show(string invoiceSerie, string invoiceNumber)
         {
-            ViewData["documentType"] = invoiceSerie;
-            ViewData["documentId"] = invoiceNumber;
-            return View();
+
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetInvoice(User.Company, User.Branch, invoiceSerie, invoiceNumber);
+            var head = ((O7SuccessResponse<List<InvoiceHeadView>>) response).Value1;//new O7JsonResult(response);
+
+            ViewData["documentType"] = head[0].documentType;
+            ViewData["documentId"] = head[0].documentId;
+            ViewData["documentSerie"] = head[0].documentSerie;
+            ViewData["documentExt"] = head[0].documentExt;
+            ViewData["clientCode"] = head[0].clientCode;
+            ViewData["clientId"] = head[0].clientId;
+            ViewData["clientPhone"] = head[0].clientPhone;
+            ViewData["clientName"] = head[0].clientName;
+            ViewData["clientAddress"] = head[0].clientAddress;
+            ViewData["condSell"] = head[0].condSell;
+            ViewData["payment"] = head[0].payment;
+            ViewData["bussinessLine"] = head[0].bussinessLine;
+            ViewData["seller"] = head[0].seller;
+            ViewData["finantialCode"] = head[0].finantialCode;
+            ViewData["sellType"] = head[0].sellType;
+            ViewData["documentDate"] = head[0].documentDate;
+            ViewData["documentVenc"] = head[0].documentVenc;
+            ViewData["currency"] = head[0].currency;
+            ViewData["tax"] = head[0].tax;
+            ViewData["language"] = head[0].language;
+            ViewData["perception"] = head[0].perception;
+            ViewData["nroOc"] = head[0].nroOc;
+            ViewData["nroGuiRem"] = head[0].nroGuiRem;
+            ViewData["glosa"] = head[0].glosa;
+            ViewData["donate"] = head[0].donate;
+            ViewData["documentTypeRef"] = head[0].documentTypeRef;
+            ViewData["documentIdRef"] = head[0].documentIdRef;
+            ViewData["documentSerieRef"] = head[0].documentSerieRef;
+            ViewData["documentExtRef"] = head[0].documentExtRef;
+            ViewData["impBase"] = head[0].impBase;
+            ViewData["impVta"] = head[0].impVta;
+            ViewData["impIGV"] = head[0].impIGV;
+            ViewData["impPerc"] = head[0].impPer;
+            ViewData["impTot"] = head[0].impTot;
+            var detail = ((O7SuccessResponse<List<InvoiceDetailView>>)response).Value1;//new O7JsonResult(response);
+            ViewData["detail"] = detail;
+            return View("Show");
         }
 
         public JsonResult Invoices_Populate(string filter)
