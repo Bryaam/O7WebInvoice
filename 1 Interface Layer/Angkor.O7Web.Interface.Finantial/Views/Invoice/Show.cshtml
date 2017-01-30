@@ -17,8 +17,10 @@
     @Html.StyleLink("css/animate.css");
     @Html.StyleLink("css/style.css");
 
-    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
-    @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")
+    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css");
+    @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css");
+
+    @Html.StyleLink("css/plugins/sweetalert/sweetalert.css")
     <style type="text/css">
         body {
             padding-right: 0 !important;
@@ -105,6 +107,8 @@
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
 
+    @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
+
     <script>
         var currentDate = new Date();
         var month = currentDate.getMonth() + 1;
@@ -137,19 +141,53 @@
 
     tableProduct.page.len( 5 ).draw();
 
+    $('#btnAtras').click(function(){
+		parent.history.back();
+		return false;
+	});
+
     $('#btnAnular').click(function () {
-    swal({
-        title: "¿Estás seguro?",
-        text: "No podrás recuperar esta factura",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Sí",
-        closeOnConfirm: false
-    }, function () {
-        swal("Deleted!", "Your imaginary file has been deleted.", "success");
+        swal({
+            title: "¿Estás seguro?",
+            text: "No podrás recuperar esta factura",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            closeOnConfirm: false
+        }, function () {
+            $.ajax({ method: "POST", url: "/Finantial/Invoice/DeleteInvoice", data:{documenType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+                .done(function (result) {
+                    var jsonResult = jQuery.parseJSON(result);
+                    if (!jQuery.isEmptyObject(jsonResult)) {
+                        if(jsonResult == 0){
+                            swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
+                        } else {
+                            swal("Eliminado!", "Tu factura se anuló", "success");
+                        }
+                    }
+                }).fail(function (result) {
+                    swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
+                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                });
+        });
     });
-});
+
+    $('#btnPDF').click(function () {
+        $.ajax({ method: "POST", url: "/Finantial/Invoice/GenerateReporte", data:{documenType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+        .done(function (result) {
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
+    });
+
+    $('#btnEditar').click(function () {
+        $.ajax({ method: "POST", url: "/Finantial/Invoice/Edit", data:{documenType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+        .done(function (result) {
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
+    });
 
 }
 
