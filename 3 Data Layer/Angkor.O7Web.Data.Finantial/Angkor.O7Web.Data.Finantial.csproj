@@ -1,0 +1,104 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8059BAA3-67B3-4A58-93BE-5E9EE64BFE68}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Angkor.O7Web.Data.Finantial</RootNamespace>
+    <AssemblyName>Angkor.O7Web.Data.Finantial</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Angkor.O7Framework.Common">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Data">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Infrastructure">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Utility">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Utility.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="DataMapper\AddressEntryMapper.cs" />
+    <Compile Include="DataMapper\AddressFactMapper.cs" />
+    <Compile Include="DataMapper\ClientCountryMapper.cs" />
+    <Compile Include="DataMapper\ClientDefaultValueMapper.cs" />
+    <Compile Include="DataMapper\ClientDepartmentMapper.cs" />
+    <Compile Include="DataMapper\ClientDistrictMapper.cs" />
+    <Compile Include="DataMapper\ClientOriginMapper.cs" />
+    <Compile Include="DataMapper\ClientPostaleMapper.cs" />
+    <Compile Include="DataMapper\ClientProvinceMapper.cs" />
+    <Compile Include="DataMapper\ClientRoutMapper.cs" />
+    <Compile Include="DataMapper\ClientStateMapper.cs" />
+    <Compile Include="DataMapper\ClientTypeMapper.cs" />
+    <Compile Include="DataMapper\ClientViewMapper.cs" />
+    <Compile Include="DataMapper\ClientZoneMapper.cs" />
+    <Compile Include="DataMapper\DetailInvoicePDFMapper.cs" />
+    <Compile Include="DataMapper\HeadInvoicePDFMapper.cs" />
+    <Compile Include="DataMapper\InvoiceBasicInformationMapper.cs" />
+    <Compile Include="DataMapper\InvoiceClientMapper.cs" />
+    <Compile Include="DataMapper\InvoiceDetailMapper.cs" />
+    <Compile Include="DataMapper\InvoiceDetailsMapper.cs" />
+    <Compile Include="DataMapper\InvoiceDocumentCountMapper.cs" />
+    <Compile Include="DataMapper\InvoiceDocumentTypeMapper.cs" />
+    <Compile Include="DataMapper\InvoiceGenericListMapper.cs" />
+    <Compile Include="DataMapper\InvoiceMapper.cs" />
+    <Compile Include="DataMapper\InvoiceSeriesMapper.cs" />
+    <Compile Include="DataMapper\InvoiceTaxMapper.cs" />
+    <Compile Include="DataMapper\ProductDetailsMapper.cs" />
+    <Compile Include="DataMapper\SingleValueMapper.cs" />
+    <Compile Include="DataMapper\TypeAheadMapper.cs" />
+    <Compile Include="FinantialDataService.cs" />
+    <Compile Include="InvoiceDataService.cs" />
+    <Compile Include="PdfGenerator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Common.Finantial.Entity\Angkor.O7Web.Common.Finantial.Entity.csproj">
+      <Project>{1FE6DFCB-60C1-45F3-93D2-A36609B97CED}</Project>
+      <Name>Angkor.O7Web.Common.Finantial.Entity</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

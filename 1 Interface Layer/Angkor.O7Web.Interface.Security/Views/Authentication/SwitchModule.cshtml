@@ -1,0 +1,81 @@
+﻿@using Angkor.O7Framework.Web.Model
+@{
+    var modules = (List<O7Module>)ViewData["modules"];
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O7ERP Web | Modulos</title>
+    @Html.StyleLink("css/bootstrap.min.css")
+    <script src="https://use.fontawesome.com/b6f7189985.js"></script>
+    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
+    @Html.StyleLink("css/animate.css")
+    @Html.StyleLink("css/style.css")
+</head>
+<body class="top-navigation">
+<div id="wrapper">
+    <div id="page-wrapper" class="gray-bg">
+        <div class="row border-bottom white-bg" style="margin-top: -5px; height: 0px !important;">
+            <nav class="navbar navbar-static-top border-bottom" role="navigation" style="height: 0px !important;">
+                <div class="navbar-header">
+                    <a class="navbar-brand font-bold" style="
+                       background: rgb(38, 56, 71) none repeat scroll 0% 0%;
+                       width: 220px;
+                       text-align: left;
+                       color: rgb(223, 228, 237);
+                       font-size: 13px;
+                       padding-top: 19px !important;">O7ERP WEB</a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbar" style="height: 0px !important;">
+                    <ul class="nav navbar-nav">
+                        <p style="margin-left: 14px; padding-top: 20px;">Elección de modulos</p>
+                    </ul>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li>
+                            <a style="background: transparent none repeat scroll 0px 0px;
+									color: rgb(153, 156, 158);
+									padding-top: 19px !important;
+									padding-right: 8px !important;
+									height: 0px !important;"><i class="fa fa-sign-out" style="margin-right: 0 !important;"></i>&nbsp;Cerrar Sesión</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <div class="wrapper wrapper-content" style="margin-top: 40px !important;">
+            <div class="container">
+                @foreach (var module in modules) {
+                    <div class="row col-lg-4">
+                        <div class="col-lg-11">
+                            <div class="contact-box center-version">
+                                <a href="#">                                    
+                                    <i class="@module.Icon fa-5x"></i>
+                                    <h3 class="m-b-xs">
+                                        <strong>@module.Title</strong>
+                                    </h3>
+                                    <div class="font-bold">@module.Version</div>
+                                </a>
+                                <div class="contact-box-footer">
+                                    <div class="m-t-xs btn-group">
+                                        <a class="btn btn-xs btn-white"><i class="fa fa-search"></i> Detalle</a>
+                                        <a href="@module.Url" class="btn btn-xs btn-white"><i class="fa fa-sign-in"></i> Ingresar</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@Html.JavaScriptLink("js/jquery-2.1.1.js")
+@Html.JavaScriptLink("js/bootstrap.min.js")
+@Html.JavaScriptLink("js/plugins/metisMenu/jquery.metisMenu.js")
+@Html.JavaScriptLink("js/plugins/slimscroll/jquery.slimscroll.min.js")
+@Html.JavaScriptLink("js/inspinia.js")
+@Html.JavaScriptLink("js/plugins/pace/pace.min.js")
+</body>
+</html>

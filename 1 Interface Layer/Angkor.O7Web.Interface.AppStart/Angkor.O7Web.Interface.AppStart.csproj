@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{ADA3E972-2BF5-44A1-9629-DAD33E5FFBE9}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Angkor.O7Web.Interface.AppStart</RootNamespace>
+    <AssemblyName>Angkor.O7Web.Interface.AppStart</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Angkor.O7Framework.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Domain">
+      <HintPath>..\Angkor.O7Web.Interface.Advisory\Bin\Angkor.O7Framework.Domain.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Infrastructure">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Angkor.O7Framework.Web">
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Web.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Castle.Core.4.0.0\lib\net45\Castle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AppStart\AdvisoryAppStart.cs" />
+    <Compile Include="AppStart\CommonAppStart.cs" />
+    <Compile Include="Controller\Security\AuthenticationStartController.cs" />
+    <Compile Include="Filter\PrivilegeAccessFilter.cs" />
+    <Compile Include="AppStart\FinantialAppStart.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AppStart\SecurityAppStart.cs" />
+    <Compile Include="AppStart\SharedAppStart.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\2 Comunication Layer\Angkor.O7Web.Comunication\Angkor.O7Web.Comunication.csproj">
+      <Project>{D84D16E6-372D-4082-9A1C-DAD26EED7536}</Project>
+      <Name>Angkor.O7Web.Comunication</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\2 Domain Layer\Angkor.O7Web.Domain.Common\Angkor.O7Web.Domain.Common.csproj">
+      <Project>{9C6779FB-7CC4-4891-AE05-6AD0E07C2CE2}</Project>
+      <Name>Angkor.O7Web.Domain.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\2 Domain Layer\Angkor.O7Web.Domain.Security\Angkor.O7Web.Domain.Security.csproj">
+      <Project>{F4793CCD-CFB9-4AFE-A223-4F181C247B88}</Project>
+      <Name>Angkor.O7Web.Domain.Security</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Angkor.O7Web.Interface.Advisory.Controller\Angkor.O7Web.Interface.Advisory.Controller.csproj">
+      <Project>{91855736-58F0-4595-A8FA-BE54C30E6AE8}</Project>
+      <Name>Angkor.O7Web.Interface.Advisory.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Angkor.O7Web.Interface.Finantial.Controller\Angkor.O7Web.Interface.Finantial.Controller.csproj">
+      <Project>{107472F1-2362-4C1F-8A3B-24F019113C25}</Project>
+      <Name>Angkor.O7Web.Interface.Finantial.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Angkor.O7Web.Interface.Security.Controller\Angkor.O7Web.Interface.Security.Controller.csproj">
+      <Project>{AEFDF061-0BBE-4BBF-9A49-B4B40111AAD6}</Project>
+      <Name>Angkor.O7Web.Interface.Security.Controller</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Angkor.O7Web.Interface.SharedSource.Controller\Angkor.O7Web.Interface.SharedSource.Controller.csproj">
+      <Project>{00A48F50-12F3-4B04-B208-019FE38A7C5B}</Project>
+      <Name>Angkor.O7Web.Interface.SharedSource.Controller</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,43 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O7ERP | Administración</title>
+    @Html.StyleLink("css/bootstrap.min.css")
+    @Html.StyleLink("font-awesome/css/font-awesome.css")
+    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
+    @Html.StyleLink("css/plugins/toastr/toastr.min.css")
+    @Html.StyleLink("css/animate.css")
+    @Html.StyleLink("css/style.css")
+    <style>
+        #toast-container > .toast-warning:before {
+            content: "\f071";
+        }
+    </style>
+</head>
+
+<body class="gray-bg">
+
+    <div class="middle-box text-center loginscreen animated fadeInDown">
+        <div>
+            <div>
+                <h1 class="logo-name">O7</h1>
+            </div>
+            <h3>Bienvenido al O7ERP</h3>
+            <p>Versión web 1.0</p>
+            
+            <p class="m-t">
+                <small>Desarrollado por AngkorGroup S.A.C &copy; 2016 - @DateTime.Now.Year</small>
+            </p>
+        </div>
+    </div>
+
+    <!-- Mainly scripts -->
+    @Html.JavaScriptLink("js/jquery-2.1.1.js")
+    @Html.JavaScriptLink("js/bootstrap.min.js")
+    @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
+    @Html.JavaScriptLink("js/plugins/toastr/toastr.min.js")    
+</body>
+
+</html>

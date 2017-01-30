@@ -1,0 +1,169 @@
+﻿@{
+    ViewBag.Title = "Trabajador";
+    ViewBag.Section = "Actividades";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@section styles_link {    
+    @Html.StyleLink("css/plugins/daterangepicker/daterangepicker-bs3.css")
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />    
+}
+
+@section scripts_link {    
+    @Html.JavaScriptLink("js/plugins/moment/moment.min.js")
+    @Html.JavaScriptLink("js/plugins/moment/moment-es.js")
+    @Html.JavaScriptLink("js/plugins/daterangepicker/daterangepicker.js")
+    @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+}
+
+@section section_script {
+    moment.locale('es');
+    
+    $("#reportrange").daterangepicker({
+        format: "DD/MM/YYYY hh:mm",        
+        opens: 'right',
+        drops: 'down',
+        buttonClasses: ['btn', 'btn-sm'],
+        applyClass: 'btn-primary',
+        cancelClass: 'btn-default',
+        separator: ' to ',
+        locale: {
+            applyLabel: 'Aceptar',
+            cancelLabel: 'Cancelar',
+            fromLabel: 'Desde',
+            toLabel: 'Hasta'
+        }
+    }, function(start, end, label) {
+        $("#reportrange span").html(start.format("DD/MM/YYYY")+" - "+end.format("DD/MM/YYYY"));
+    });
+    
+    function displayResult(item) {
+        $("#authCCOId").val(item.value);
+        console.log(item.value);
+        console.log(item.text);        
+    }
+
+    $.ajax({ method: "POST", url: "/Advisory/Activity/ListCostCenter", async: false })
+            .done(function (result) {
+                result = result.replace(/Description/g, "name");                
+                result = result.replace(/Id/g, "id");
+                var ccoResult = jQuery.parseJSON(result);                
+                $("#authCCO").typeahead({
+                    source: ccoResult,
+                    onSelect: displayResult
+                });
+        });    
+    
+    var table = $("#activityWorker").DataTable({
+        searching: false,
+        dom: 'Bfrtip',
+        columns: [{ data: "WorkerId", width: "10%" },
+                  { data: "Worker", width: "20%" },
+                  { data: "CenterCostId", width: "10%" },
+                  { data: "CenterCost", width: "20%" },
+                  { data: "Title", width: "20%" },
+                  { data: "Date", width: "10%" },
+                  { data: "Period", width: "10%" }],
+        language: {
+            url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")"
+        }        
+    });       
+    
+    $("#lnkBuscar").on("click", function () {
+        var dates = $("#reportrange span").text().split("-");
+        var startAct = "";
+        var endAct = "";
+        if(dates.length > 1) {
+            startAct = dates[0];
+            endAct = dates[1];
+        }
+        $.ajax({method: "POST", url: "/Advisory/Activity/GetReportActivities", data: { workerId: $("#txtWorkerId").val(), workerName: $("#txtWorkerName").val(), 
+            workerLastName: $("#txtWorkerLastName").val(), workerSecondLastName: $("#txtWorkerSecondLastName").val(), 
+            costCenterId: $("#authCCOId").val(), startActivity: startAct, endActivity: endAct} })
+                .done(function (result) {
+                    var reportJson = jQuery.parseJSON(result);
+                    periodsResult = jQuery.parseJSON(result);
+                    table.clear().rows.add(periodsResult).draw();
+                    $('.collapse-link').click();
+                });
+    });
+    
+}
+
+<div class="col-lg-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-title">
+            <h5>Filtros de busqueda</h5>
+            <div class="ibox-tools">
+                <a id="lnkBuscar">Buscar&nbsp;<i class="fa fa-search"></i></a>
+                <a class="collapse-link">
+                    <i class="fa fa-chevron-up"></i>
+                </a>
+            </div>
+        </div>
+        <div class="ibox-content">
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <label class="col-md-1 col-md-offset-1 control-label">Código</label>
+                    <div class="col-md-4">
+                        <input id="txtWorkerId" class="form-control" type="text" />
+                    </div>
+                    <label class="col-md-1 col-md-offset-1 control-label">Nombres</label>
+                    <div class="col-md-4">
+                        <input id="txtWorkerName" class="form-control" type="text" />
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Apellido paterno</label>
+                    <div class="col-md-4">
+                        <input id="txtWorkerLastName" class="form-control" type="text" />
+                    </div>
+                    <label class="col-md-2 control-label">Apellido materno</label>
+                    <div class="col-md-4">
+                        <input id="txtWorkerSecondLastName" class="form-control" type="text" />
+                    </div>
+                </div>
+                <div class="hr-line-dashed"></div>
+                <div class="form-group">
+                    <label class="col-md-1 col-md-offset-1 control-label">Duración</label>
+                    <div class="col-md-4">
+                        <div id="reportrange" class="form-control">
+                            <i class="fa fa-calendar"></i>
+                            <span></span>
+                        </div>
+                    </div>
+                    <label class="col-md-2 control-label">Centro de costo</label>
+                    <div class="col-md-4">
+                        <input id="authCCO" class="form-control" type="text" data-provide="typeahead" />
+                        <input id="authCCOId" type="hidden"/>
+                    </div>                 
+                </div>
+            </div>
+            
+        </div>        
+    </div>
+</div>
+<div class="col-lg-12">
+    <div class="ibox float-e-margins">
+        <div class="ibox-content">
+            <div class="table-responsive">
+                <table id="activityWorker" class="table table-striped table-bordered table-hover" style="width:100% !important;">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Código</th>
+                            <th>Centro Costo</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Periodo</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
