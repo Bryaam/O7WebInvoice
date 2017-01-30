@@ -125,6 +125,13 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
+        public JsonResult GetInvoiceDetailView(string documentType, string documentId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetInvoiceDetail(User.Company, User.Branch, documentType, documentId);
+            return new O7JsonResult(response);
+        }
+
         public FileResult GeneratePDF(string documentType, string documentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);

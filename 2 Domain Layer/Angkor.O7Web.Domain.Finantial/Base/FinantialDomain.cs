@@ -117,6 +117,11 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response GetInvoice(string companyId, string branchId, string documentType, string documentId);
 
+
+        public abstract O7Response GetInvoiceHeadView(string companyId, string branchId, string documentType, string documentId);
+
+        public abstract O7Response GetInvoiceDetailView(string companyId, string branchId, string documentType, string documentId);
+
         public abstract O7Response GetInvoiceDetail(string companyId, string branchId, string documentType, string documentId);
 
         public abstract O7Response documentInformation(string companyId, string branchId, string documentType);

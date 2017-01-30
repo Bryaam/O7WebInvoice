@@ -68,6 +68,7 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<ClientCountry>("o7express_package_cliente.lov_pais", parameters, ClientCountryMapper.Class);
         }
 
+
         public virtual List<ClientType> DocumentType(string clientType)
         {
             var parameters = O7DbParameterCollection.Make;
@@ -571,6 +572,27 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<int>("finantial_invoice.update_invoice", parameters);
 
         }
+
+        public virtual List<InvoiceHeadView> GetInvoiceHeadView(string companyId, string branchId, string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
+            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
+            return DataAccess.ExecuteFunction<InvoiceHeadView>("finantial_invoice.view_invoicehead", parameters, InvoiceHeadViewMapper.Class);
+        }
+
+        public virtual List<InvoiceDetailView> GetInvoiceDetailView(string companyId, string branchId, string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
+            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
+            return DataAccess.ExecuteFunction<InvoiceDetailView>("finantial_invoice.view_invoicedetail", parameters, InvoiceDetailViewMapper.Class);
+        }
+
 
         public virtual List<InvoiceEdit> GetInvoice(string companyId, string branchId, string documentType, string documentId)
         {
