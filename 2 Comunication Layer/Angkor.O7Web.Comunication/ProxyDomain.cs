@@ -30,13 +30,7 @@ namespace Angkor.O7Web.Comunication
             var argFlow = new object[] { login };
             return O7DomainInstanceMaker.MakeInstance<FinantialFlow, BasicFlow>(argDomain, argFlow);
         }
-
-        public InvoiceDomain InvoiceDomain(string login, string password)
-        {
-            var argDomain = new object[] { login, password };
-            var argFlow = new object[] { login };
-            return O7DomainInstanceMaker.MakeInstance<InvoiceDomain, BasicFlow>(argDomain, argFlow);
-        }
+        
 
 
     }

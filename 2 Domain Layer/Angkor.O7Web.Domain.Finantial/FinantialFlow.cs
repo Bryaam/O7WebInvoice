@@ -271,16 +271,15 @@ namespace Angkor.O7Web.Domain.Finantial
 
         public override O7Response GetInvoiceHeadView(string companyId, string branchId, string documentType, string documentId)
         {
-            var result = FinantialDataService.GetInvoiceHeadView(companyId, branchId, documentType, documentId);
-            var seriesSerialized = O7JsonSerealizer.Serialize(result);
-            return O7SuccessResponse.MakeResponse(seriesSerialized);
+            var head = FinantialDataService.GetInvoiceHeadView(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(head);
+ 
         }
 
         public override O7Response GetInvoiceDetailView(string companyId, string branchId, string documentType, string documentId)
         {
-            var result = FinantialDataService.GetInvoiceDetailView(companyId, branchId, documentType, documentId);
-            var seriesSerialized = O7JsonSerealizer.Serialize(result);
-            return O7SuccessResponse.MakeResponse(seriesSerialized);
+            var detail = FinantialDataService.GetInvoiceDetailView(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(detail);
         }
 
 

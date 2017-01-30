@@ -59,9 +59,11 @@
     <Compile Include="InvoiceClient.cs" />
     <Compile Include="InvoiceDetail.cs" />
     <Compile Include="InvoiceDetails.cs" />
+    <Compile Include="InvoiceDetailView.cs" />
     <Compile Include="InvoiceDocumentType.cs" />
     <Compile Include="InvoiceDocumentCount.cs" />
     <Compile Include="InvoiceEdit.cs" />
+    <Compile Include="InvoiceHeadView.cs" />
     <Compile Include="InvoiceSeries.cs" />
     <Compile Include="InvoiceTax.cs" />
     <Compile Include="InvoiceTypeAhead.cs" />
