@@ -49,9 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Base\FinantialDomain.cs" />
-    <Compile Include="Base\InvoiceDomain.cs" />
     <Compile Include="FinantialFlow.cs" />
-    <Compile Include="InvoiceFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

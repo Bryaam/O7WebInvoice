@@ -51,8 +51,9 @@ namespace Angkor.O7Web.Common.Finantial.Entity
 
         public string impVta { get; set; }
         public string impIGV { get; set; }
-        public string impPer { get; set; }
         public string impTot { get; set; }
+        public string impPer { get; set; }
+        
 
 
     }
