@@ -90,7 +90,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         }
 
 
-        public JsonResult Insert_Invoice(string documentType, string serie,
+        public void Insert_Invoice(string documentType, string serie,
                                             string currency, string documentDate,
                                             string documentExpiration, string clienteCode
                                             , string codTax, string clientName
@@ -120,7 +120,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                              donate, documentTypeRef,
                                              documentIdRef, documentOc,
                                              guiRem, addressId, serieExtRef, nroDoceExt);
-            return new O7JsonResult(response);
+       
         }
 
         public JsonResult InsertDetailInvoice(string documentType, string documentId,
@@ -312,7 +312,171 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var response = domain.Perceptions();
             return new O7JsonResult(response);
         }
-        public JsonResult UpdateInvoiceHead(string documentType, string documentId,
+
+        [HttpPost]
+        [ActionName("Insert")]
+        public ActionResult InsertInvoice()
+        {
+            var documentType = Request.Form["documentType"];
+            var documentId = Request.Form["documentId"];
+            var serie = Request.Form["serie"];
+            var currency = Request.Form["currency"];
+            var documentDate = Request.Form["documentDate"];
+            var documentExpiration = Request.Form["documentExpiration"];
+            var clienteCode = Request.Form["clienteCode"];
+            var codTax = Request.Form["codTax"];
+            var clientName = Request.Form["clientName"];
+            var invoiceAddress = Request.Form["invoiceAddress"];
+            var clientId = Request.Form["clientId"];
+            var glosa = Request.Form["glosa"];
+            var sellType = Request.Form["sellType"];
+            var language = Request.Form["language"];
+            var condSell = Request.Form["condSell"];
+            var payment = Request.Form["payment"];
+            var bussinessline = Request.Form["bussinessline"];
+            var finantialcod = Request.Form["finantialcod"];
+            var telephone = Request.Form["telephone"];
+            var seller = Request.Form["seller"];
+            var employeeId = Request.Form["employeeId"];
+            var perception = Request.Form["perception"];
+            var donate = Request.Form["donate"];
+            var documentTypeRef = Request.Form["documentTypeRef"];
+            var documentIdRef = Request.Form["documentIdRef"];
+            var documentOC = Request.Form["documentOC"];
+            var guiRem = Request.Form["guiRem"];
+            var addressId = Request.Form["addressId"];
+            var serieExtRef = Request.Form["serieExtRef"];
+            var nroExtRef = Request.Form["nroExtRef"];
+            var jDetaill = InsertDetail();
+
+            Insert_Invoice(documentType, serie,
+                currency, documentDate,
+                documentExpiration, clienteCode
+                , codTax,  clientName
+                , invoiceAddress, clientId, glosa,
+                sellType, language,
+                condSell, payment,
+                bussinessline, finantialcod,
+                telephone, seller,
+                employeeId, perception,
+                donate, documentTypeRef,
+                documentIdRef, documentOC,
+                guiRem, addressId,
+                serieExtRef, nroExtRef);
+
+            for (var i = 0; i < jDetaill.Count; i++)
+            {
+                var detail = jDetaill[i];
+
+                InsertDetailInvoice(User.Company, User.Branch, detail.conceptId,
+                    detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
+            }
+
+            return Show(documentType, documentId);
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public ActionResult EditInvoice()
+        {
+            var documentType = Request.Form["documentType"];
+            var documentId = Request.Form["documentId"];
+            var currency = Request.Form["currency"];
+            var documentDate = Request.Form["documentDate"];
+            var documentExpiration = Request.Form["documentExpiration"];
+            var clienteCode = Request.Form["clienteCode"];
+            var codTax = Request.Form["codTax"];
+            var clientName = Request.Form["clientName"];
+            var invoiceAddress = Request.Form["invoiceAddress"];
+            var clientId = Request.Form["clientId"];
+            var glosa = Request.Form["glosa"];
+            var sellType = Request.Form["sellType"];
+            var language = Request.Form["language"];
+            var condSell = Request.Form["condSell"];
+            var payment = Request.Form["payment"];
+            var bussinessline = Request.Form["bussinessline"];
+            var finantialcod = Request.Form["finantialcod"];
+            var telephone = Request.Form["telephone"];
+            var seller = Request.Form["seller"];
+            var employeeId = Request.Form["employeeId"];
+            var perception = Request.Form["perception"];
+            var donate = Request.Form["donate"];
+            var documentTypeRef = Request.Form["documentTypeRef"];
+            var documentIdRef = Request.Form["documentIdRef"];
+            var documentOC = Request.Form["documentOC"];
+            var guiRem = Request.Form["guiRem"];
+            var addressId = Request.Form["addressId"];
+            var serieExtRef = Request.Form["serieExtRef"];
+            var nroExtRef = Request.Form["nroExtRef"];
+            var jDetaill = InsertDetail();
+
+            UpdateInvoiceHead(documentType, documentId,
+                currency, documentDate,
+                documentExpiration, clienteCode
+                , codTax,"18", clientName
+                , invoiceAddress, clientId, glosa,
+                sellType, language,
+                condSell, payment,
+                bussinessline, finantialcod,
+                telephone, seller,
+                employeeId, perception,
+                donate, documentTypeRef,
+                documentIdRef, documentOC,
+                guiRem, addressId,
+                serieExtRef, nroExtRef);
+
+            DeleteDetailsInvoice(documentType, documentId);
+            for (var i = 0; i < jDetaill.Count; i++)
+            {
+                var detail = jDetaill[i];
+
+                InsertDetailInvoice(User.Company, User.Branch,detail.conceptId,
+                    detail.commentary,detail.amount,detail.price,detail.taxId, perception,detail.ccoId);
+            }
+
+            return Show(documentType, documentId);
+        }
+
+        private List<InvoiceDetail> InsertDetail()
+        {
+            var keys = Request.Form.AllKeys;
+            var count = -1;
+            foreach (var key in keys)
+            {
+                if (key.Contains("conceptId_")) count++;
+            }
+            var result = new List<InvoiceDetail>();
+            for (int i = 0; i <= count; i++)
+            {
+                result.Add(make_entity(i));
+            }
+            return result;
+        }
+
+        private InvoiceDetail make_entity(int count)
+        {
+            return new InvoiceDetail
+            {
+                documentType = "",
+                documentId = "",
+                detailId = "",
+                conceptId = Request.Form["conceptId_" + count],
+
+                taxId = Request.Form["taxId_" + count],
+                taxPorc = "",
+
+                ccoId = Request.Form["ccoId_" + count],
+
+                amount = Request.Form["cantidad_" + count],
+
+                price = Request.Form["unitValue" + count],
+
+                commentary = Request.Form["observacion_" + count],
+                conceptContent = "",
+                ccoContent = ""
+            };
+        }
+        public void UpdateInvoiceHead(string documentType, string documentId,
             string currency, string documentDate,
             string documentExpiration, string clienteCode
             , string codTax, string porTax, string clientName
@@ -343,7 +507,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                         documentIdRef, documentOC,
                                         guiRem, addressId,
                                         serieExtRef, nroExtRef);
-            return new O7JsonResult(response);
+            //return new O7JsonResult(response);
         }
 
         public JsonResult DeleteInvoice(string documentType, string documentId)
