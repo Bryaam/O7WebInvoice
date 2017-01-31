@@ -67,6 +67,7 @@
     <Compile Include="InvoiceSeries.cs" />
     <Compile Include="InvoiceTax.cs" />
     <Compile Include="InvoiceTypeAhead.cs" />
+    <Compile Include="LogFE.cs" />
     <Compile Include="ProductDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleValue.cs" />
