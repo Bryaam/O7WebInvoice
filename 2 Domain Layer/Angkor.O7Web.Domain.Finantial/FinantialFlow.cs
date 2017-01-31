@@ -390,14 +390,14 @@ namespace Angkor.O7Web.Domain.Finantial
                                     string conceptId, string observacion,
                                     string cantidad, string unitValue,
                                     string taxId, string perception,
-                                    string ccoId)
+                                    string ccoId, string flgfin)
         {
             var invoices = FinantialDataService.AddInvoiceDetail(companyId, branchId,
                                      documentType, documentId,
                                      conceptId, observacion,
                                      cantidad, unitValue,
                                      taxId, perception,
-                                     ccoId);
+                                     ccoId, flgfin);
             var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
             return O7SuccessResponse.MakeResponse(invoicesSerialized);
         }

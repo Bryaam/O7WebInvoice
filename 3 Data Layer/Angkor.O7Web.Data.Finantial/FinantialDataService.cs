@@ -701,7 +701,7 @@ namespace Angkor.O7Web.Data.Finantial
                                     string conceptId, string observacion,
                                     string cantidad, string unitValue,
                                     string taxId, string perception,
-                                    string ccoId
+                                    string ccoId,string flgfin
                                                 )
         {
             var parameters = O7DbParameterCollection.Make;
@@ -716,6 +716,7 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_cod_imp", taxId));
             parameters.Add(O7Parameter.Make("p_perc", perception));
             parameters.Add(O7Parameter.Make("p_cen_cos", ccoId));
+            parameters.Add(O7Parameter.Make("p_fin", flgfin));
             return DataAccess.ExecuteFunction<int>("finantial_invoice.insert_row_det_factura", parameters) == 1;
         }
 

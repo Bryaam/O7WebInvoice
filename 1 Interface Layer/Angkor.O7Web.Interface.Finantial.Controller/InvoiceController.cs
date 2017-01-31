@@ -148,7 +148,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                     string conceptId, string observacion,
                                     string cantidad, string unitValue,
                                     string taxId, string perception,
-                                    string ccoId)
+                                    string ccoId,string flgfin)
         {
 
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
@@ -157,7 +157,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                      conceptId, observacion,
                                      cantidad, unitValue,
                                      taxId, perception,
-                                     ccoId);
+                                     ccoId,flgfin);
         }
 
         public JsonResult ClientDefaultValues(string clientId)
@@ -387,12 +387,16 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                 guiRem, addressId,
                 serieExtRef, nroExtRef);
 
+            string p_fin="false";
+
             for (var i = 0; i < jDetaill.Count; i++)
             {
+                if (i == (jDetaill.Count - 1))
+                    p_fin = "true";
                 var detail = jDetaill[i];
 
                 InsertDetailInvoice(documentType, documentId.ToString(), detail.conceptId,
-                    detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
+                    detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId, p_fin);
             }
 
             return View("Show", new { documentType = documentType, documentId = documentId.ToString() });//Show(documentType, documentId.ToString());
@@ -450,12 +454,17 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                 serieExtRef, nroExtRef);
 
             DeleteDetailsInvoice(documentType, documentId);
+
+
+            string p_fin = "false";
             for (var i = 0; i < jDetaill.Count; i++)
             {
+                if (i == (jDetaill.Count - 1))
+                    p_fin = "true";
                 var detail = jDetaill[i];
 
                 InsertDetailInvoice(documentType, documentId, detail.conceptId,
-                detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
+                detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId,p_fin);
             }
             return View("Index");
             //return Show(documentType, documentId);

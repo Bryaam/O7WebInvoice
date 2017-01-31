@@ -154,7 +154,7 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             string conceptId, string observacion,
             string cantidad, string unitValue,
             string taxId, string perception,
-            string ccoId);
+            string ccoId,string flgfin);
 
         public abstract O7Response GetLogFE(string companyId, string branchId,
             string documentSerie, string documentExt);
