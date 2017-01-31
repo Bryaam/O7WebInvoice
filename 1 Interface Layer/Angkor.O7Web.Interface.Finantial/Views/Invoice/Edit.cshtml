@@ -480,7 +480,7 @@
 
     var clientCode = parentRow.children('td').eq(0).text();
 
-    $("#clientCode").html(clientCode);
+    $("#clientCode").val(clientCode);
 
     $.ajax({ method: "GET", url: "/Finantial/Invoice/GetInvoiceAdresses", data: {clientId: clientCode } })
     .done(function (result) {
@@ -1156,7 +1156,7 @@
                                                             <input id="clientCode" class="hidden" name="clienteCode">
                                                             <input id="invoiceId" class="hidden">
                                                             <label id="docLabel" class="pull-left form-separation"> DNI/RUC </label>
-                                                            <input disabled="disabled" type="text" class="form-control emulate-label" id="docInput" name="ClientId" required>
+                                                            <input readonly type="text" class="form-control emulate-label" id="docInput" name="ClientId" required>
                                                             <label class="pull-left form-separation"> Teléfono </label>
                                                             <input type="text" class="form-control" id="phoneInput" name="telephone" required>
                                                         </div>
@@ -1295,11 +1295,11 @@
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Tipo </label>
-                                                        <input id="serNumber" disabled="disabled" type="text" class="form-control emulate-label pull-right typeInput docFlgTrigger" name="documentTypeRef">
+                                                        <input id="serNumber" readonly type="text" class="form-control emulate-label pull-right typeInput docFlgTrigger" name="documentTypeRef">
                                                     </div>
                                                     <div class="col-lg-3">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Nro. Int.</label>
-                                                        <input id="nroInt" disabled="disabled" type="text" class="form-control emulate-label typeInput docFlgTrigger" name="documentIdRef">
+                                                        <input id="nroInt" readonly type="text" class="form-control emulate-label typeInput docFlgTrigger" name="documentIdRef">
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Ser. </label>
@@ -1316,7 +1316,7 @@
                                                         <div class="input-group m-b">
                                                             <span class="input-group-btn">
                                                                 <button disabled="disabled" id="botonBuscarCliente" type="button" class="btn btn btn-primary pull-left"> <i class="fa fa-search"></i> Buscar</button>
-                                                            </span> <input disabled="disabled" type="text" class="form-control emulate-label">
+                                                            </span> <input readonly type="text" class="form-control emulate-label">
                                                         </div>
                                                     </div>
                                                 </div>

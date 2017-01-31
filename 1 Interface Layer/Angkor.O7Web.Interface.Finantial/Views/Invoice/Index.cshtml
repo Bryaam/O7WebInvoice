@@ -22,7 +22,7 @@
             window.location.href = url;
         }
         function detail(invoiceSerie, invoiceNumber) {
-            var url = "./GeneratePDF?documentType=" + invoiceSerie + "&documentId=" + invoiceNumber;
+            var url = "./Show?documentType=" + invoiceSerie + "&documentId=" + invoiceNumber;
             window.location.href = url;
         }
 
@@ -44,66 +44,66 @@
     dom: 'Bfrtip',
     buttons: [{
     text: 'Agregar',
-    action: function ( e, dt, node, config ) {
-    window.location.href = './Insert';
-    }
-    }],
+        action: function ( e, dt, node, config ) {
+            window.location.href = './Insert';
+        }
+        }],
     columns:[{ data: "DocumentType", width: "7%" },
-    { data: "Serie", width: "10%" },
-    { data: "ClientCode", width: "5%" },
-    { data: "ClientName", width: "20%" },
-    { data: "ClientDoc", width: "5%" },
-    { data: "Date", width: "10%" },
-    { data: "Currency", width: "2%" },
-    { data: "Amount", width: "2%" },
-    { orderable: false,
-    className: "text-center",
-    render: function(data, type, full, meta){
-    var invoiceSerie = $.trim(full.DocumentType.split("-")[0]);
-    var invoiceNumber = $.trim(full.DocumentType.split("-")[1]);
-    var invoiceId = '"'+invoiceSerie+'",'+'"'+invoiceNumber+'"';
-    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
-    var buttonEdit = full.State == "1" ? "<button type='button' class='btn btn-outline btn-success' onclick='update("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;" : "<button type='button' class='btn btn-outline btn-success' disabled onclick='update("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
-    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete ("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-    return buttonSearch + buttonEdit + buttonDelete;
-    },
-    width: "15%"
-    }],
+        { data: "Serie", width: "10%" },
+        { data: "ClientCode", width: "5%" },
+        { data: "ClientName", width: "20%" },
+        { data: "ClientDoc", width: "5%" },
+        { data: "Date", width: "10%" },
+        { data: "Currency", width: "2%" },
+        { data: "Amount", width: "2%" },
+        { orderable: false,
+        className: "text-center",
+        render: function(data, type, full, meta){
+            var invoiceSerie = $.trim(full.DocumentType.split("-")[0]);
+            var invoiceNumber = $.trim(full.DocumentType.split("-")[1]);
+            var invoiceId = '"'+invoiceSerie+'",'+'"'+invoiceNumber+'"';
+            var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail("+invoiceId+");'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
+            var buttonEdit = full.State == "1" ? "<button type='button' class='btn btn-outline btn-success' onclick='update("+invoiceId+");'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;" : "<button type='button' class='btn btn-outline btn-success' disabled onclick='update("+invoiceId+");'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
+            var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete ("+invoiceId+");'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+            return buttonSearch + buttonEdit + buttonDelete;
+        },
+        width: "15%"
+        }],
     language: {
-    url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")"
-    }
+            url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")"
+        }
     });
 
     $("#chkInvoiceType").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#chkDocumentType").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $.ajax({ method: "GET", url: "/Finantial/Invoice/Invoices_Populate", async: false })
     .done(function (result) {
-    var objResult = jQuery.parseJSON(result);
-    tblInvoices.clear().rows.add(objResult).draw();
+        var objResult = jQuery.parseJSON(result);
+        tblInvoices.clear().rows.add(objResult).draw();
     }).fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
 
     $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").attr("data-toggle", "modal").attr("data-target", "#mdlInsert");
 
     $.ajax({ method: "GET", url: "/Finantial/Settings/DocumentTypes" })
     .done(function (result) {
-    var objResult = jQuery.parseJSON(result);
-    var documentType = $("#chkInvoiceType");
-    $.each(objResult, function (index, value) {
-    documentType.append("<option value='"+value.Value+"'>"+value.Content+"</option>");
-    });
-    documentType.trigger("chosen:updated");
+        var objResult = jQuery.parseJSON(result);
+        var documentType = $("#chkInvoiceType");
+        $.each(objResult, function (index, value) {
+            documentType.append("<option value='"+value.Value+"'>"+value.Content+"</option>");
+        });
+        documentType.trigger("chosen:updated");
     }).fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
 }
 

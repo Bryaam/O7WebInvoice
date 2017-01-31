@@ -52,6 +52,8 @@
     <Compile Include="ClientType.cs" />
     <Compile Include="ClientView.cs" />
     <Compile Include="ClientZone.cs" />
+    <Compile Include="InvoiceHeadView.cs" />
+    <Compile Include="InvoiceDetailView.cs" />
     <Compile Include="DetailInvoicePDF.cs" />
     <Compile Include="GenericListValue.cs" />
     <Compile Include="HeadInvoicePDF.cs" />

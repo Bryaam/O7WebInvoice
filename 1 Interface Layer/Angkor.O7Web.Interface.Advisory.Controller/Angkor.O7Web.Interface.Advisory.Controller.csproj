@@ -33,10 +33,6 @@
     <Reference Include="Angkor.O7Framework.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Angkor.O7Framework.Domain, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Domain.dll</HintPath>
-    </Reference>
     <Reference Include="Angkor.O7Framework.Infrastructure">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
     </Reference>

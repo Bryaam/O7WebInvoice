@@ -29,6 +29,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Angkor.O7Framework.Common">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>

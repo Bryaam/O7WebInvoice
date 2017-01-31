@@ -111,7 +111,7 @@
                                                             <input id="clientCode" class="hidden" name="clienteCode">
                                                             <input id="invoiceId" class="hidden">
                                                             <label id="docLabel" class="pull-left form-separation"> DNI/RUC </label>
-                                                            <input disabled="disabled" type="text" class="form-control emulate-label" id="docInput" name="ClientId" required>
+                                                            <input readonly type="text" class="form-control emulate-label" id="docInput" name="ClientId" required>
                                                             <label class="pull-left form-separation"> Teléfono </label>
                                                             <input type="text" class="form-control" id="phoneInput" name="telephone" required>
                                                         </div>
@@ -210,7 +210,7 @@
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label id="perceptionLabel" style="left:inherit" class="form-label-separation typeInput">Percepción</label>
-                                                            <select id="perception" class="form-control" name="perception" required></select>
+                                                            <select id="perception" class="form-control" name="perception"></select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
@@ -242,11 +242,11 @@
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Tipo </label>
-                                                        <input id="serNumber" disabled="disabled" type="text" class="form-control emulate-label pull-right typeInput docFlgTrigger" name="documentTypeRef">
+                                                        <input id="serNumber" readonly type="text" class="form-control emulate-label pull-right typeInput docFlgTrigger" name="documentTypeRef">
                                                     </div>
                                                     <div class="col-lg-3">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Nro. Int.</label>
-                                                        <input id="nroInt" disabled="disabled" type="text" class="form-control emulate-label typeInput docFlgTrigger" name="documentIdRef">
+                                                        <input id="nroInt" readonly type="text" class="form-control emulate-label typeInput docFlgTrigger" name="documentIdRef">
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Ser. </label>
@@ -262,8 +262,8 @@
                                                         <label style="left:inherit" class="form-label-separation">Trabajador</label>
                                                         <div class="input-group m-b">
                                                             <span class="input-group-btn">
-                                                                <button disabled="disabled" id="botonBuscarCliente" type="button" class="btn btn btn-primary pull-left"> <i class="fa fa-search"></i> Buscar</button>
-                                                            </span> <input disabled="disabled" type="text" class="form-control emulate-label">
+                                                                <button disabled id="botonBuscarCliente" type="button" class="btn btn btn-primary pull-left"> <i class="fa fa-search"></i> Buscar</button>
+                                                            </span> <input readonly type="text" class="form-control emulate-label">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -429,7 +429,7 @@
 
 @section section_script {
 
-    $("#btnSubmit").click(function(){
+    /*$("#btnSubmit").click(function(){
         swal({
         title: "Confirmación",
         text: "¿Crear documento?",
@@ -439,10 +439,10 @@
         confirmButtonText: "Sí",
         closeOnConfirm: false
         }, function () {
-            swal("Deleted!", "Documento de pago creado exitosamente.", "success");
+            swal("Creado", "Documento de Venta creado exitosamente.", "success");
             $("#formInvoice").submit();
         });
-    });
+    });*/
 
     $("#tableProducts").on('change',function(){
         calculate_total();
@@ -788,7 +788,7 @@
 
             var clientCode = parentRow.children('td').eq(0).text();
 
-            $("#clientCode").html(clientCode);
+            $("#clientCode").val(clientCode);
 
             $.ajax({ method: "GET", url: "/Finantial/Invoice/GetInvoiceAdresses", data: {clientId: clientCode } })
             .done(function (result) {
@@ -1114,8 +1114,8 @@
         dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
         dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
         dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
-        dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"' name='conceptId_"+itemNum+"'>";
-        dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"' name='ccoId_"+itemNum+"'>";
+        dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
+        dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
         dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
         dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
         dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
@@ -1132,21 +1132,37 @@
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     $('#item_concept_'+itemNum).typeahead({
-                        source: jsonResult
+                        source: jsonResult,
+                        afterSelect: function(){
+                            var type_value = $('#item_concept_'+itemNum).typeahead("getActive");
+                            //console.log(type_value);
+                            //console.log("-------------------");
+                            $('#item_concept_value_'+itemNum).val(type_value);
+                        }
                     });
                 }
             })
             .fail(function (result) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
-
+        $('#item_concept_'+itemNum).change(function(){
+            var type_value = $(this).typeahead("getActive");
+            $("#item_concept_value_0").val(type_value.Value);
+            console.log(type_value);
+            console.log(itemNum);
+            console.log("mierda");
+        });
 
         $.ajax({ method: "GET", url: "/Finantial/Invoice/GetCenterCost", async: false })
             .done(function (result) {
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     $('#item_cost_center_'+itemNum).typeahead({
-                        source: jsonResult
+                        source: jsonResult,
+                        afterSelect: function(){
+                            var type_value = $('#item_cost_center_'+itemNum).typeahead("getActive");
+                            $('#item_cost_center_value_'+itemNum).val(type_value);
+                        }
                     });
                 }
             })

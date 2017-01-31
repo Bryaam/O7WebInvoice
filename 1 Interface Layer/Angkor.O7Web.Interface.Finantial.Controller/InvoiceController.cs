@@ -1,11 +1,13 @@
 ﻿// O7ERP Web created by felix_dev
 
+using System.Collections.Generic;
 using System.Web.Mvc;
 using Angkor.O7Framework.Web.Base;
 using Angkor.O7Framework.Web.WebResult;
 using Angkor.O7Web.Comunication;
 using Angkor.O7Framework.Common.Model;
 using System.IO;
+using Angkor.O7Web.Common.Finantial.Entity;
 
 namespace Angkor.O7Web.Interface.Finantial.Controller
 {
@@ -42,6 +44,53 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["documentId"] = invoiceNumber;
             return View();
         }
+        public ActionResult Show(string documentType, string documentId)
+        {
+
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetInvoiceHeadView(User.Company, User.Branch, documentType, documentId);
+            var head = ((O7SuccessResponse<List<InvoiceHeadView>>) response).Value1;//new O7JsonResult(response);
+
+            ViewData["documentType"] = head[0].documentType;
+            ViewData["documentId"] = head[0].documentId;
+            ViewData["documentSerie"] = head[0].documentSerie;
+            ViewData["documentExt"] = head[0].documentExt;
+            ViewData["clientCode"] = head[0].clientCode;
+            ViewData["clientId"] = head[0].clientId;
+            ViewData["clientPhone"] = head[0].clientPhone;
+            ViewData["clientName"] = head[0].clientName;
+            ViewData["clientAddress"] = head[0].clientAddress;
+            ViewData["condSell"] = head[0].condSell;
+            ViewData["payment"] = head[0].payment;
+            ViewData["bussinessLine"] = head[0].bussinessLine;
+            ViewData["seller"] = head[0].seller;
+            ViewData["finantialCode"] = head[0].finantialCode;
+            ViewData["sellType"] = head[0].sellType;
+            ViewData["documentDate"] = head[0].documentDate;
+            ViewData["documentVenc"] = head[0].documentVenc;
+            ViewData["currency"] = head[0].currency;
+            ViewData["tax"] = head[0].tax;
+            ViewData["language"] = head[0].language;
+            ViewData["perception"] = head[0].perception;
+            ViewData["nroOc"] = head[0].nroOc;
+            ViewData["nroGuiRem"] = head[0].nroGuiRem;
+            ViewData["glosa"] = head[0].glosa;
+            ViewData["donate"] = head[0].donate;
+            ViewData["documentTypeRef"] = head[0].documentTypeRef;
+            ViewData["documentIdRef"] = head[0].documentIdRef;
+            ViewData["documentSerieRef"] = head[0].documentSerieRef;
+            ViewData["documentExtRef"] = head[0].documentExtRef;
+            ViewData["impBase"] = head[0].impBase;
+            ViewData["impVta"] = head[0].impVta;
+            ViewData["impIGV"] = head[0].impIGV;
+            ViewData["impPerc"] = head[0].impPer;
+            ViewData["impTot"] = head[0].impTot;
+
+            var responseDetail = domain.GetInvoiceDetailView(User.Company, User.Branch, documentType, documentId);
+            var detail = ((O7SuccessResponse<List<InvoiceDetailView>>)responseDetail).Value1;//new O7JsonResult(response);
+            ViewData["detail"] = detail;
+            return View();
+        }
 
         public JsonResult Invoices_Populate(string filter)
         {
@@ -50,9 +99,8 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        [HttpPost]
-        [ActionName("Insert")]
-        public JsonResult Insert_Invoice(string documentType, string serie,
+
+        public int Insert_Invoice(string documentType, string serie,
                                             string currency, string documentDate,
                                             string documentExpiration, string clienteCode
                                             , string codTax, string clientName
@@ -68,6 +116,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                             string serieExtRef, string nroDoceExt)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+                
             var response = domain.AddInvoice(User.Company, User.Branch,
                                             documentType, serie,
                                              currency, documentDate,
@@ -82,15 +131,18 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                              donate, documentTypeRef,
                                              documentIdRef, documentOc,
                                              guiRem, addressId, serieExtRef, nroDoceExt);
-            return new O7JsonResult(response);
+            return ((O7SuccessResponse<int>)response).Value1;
+
+
         }
 
-        public JsonResult InsertDetailInvoice(string documentType, string documentId,
+        public void InsertDetailInvoice(string documentType, string documentId,
                                     string conceptId, string observacion,
                                     string cantidad, string unitValue,
                                     string taxId, string perception,
                                     string ccoId)
         {
+
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.AddInvoiceDetail(User.Company, User.Branch,
                                      documentType, documentId,
@@ -98,7 +150,6 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                      cantidad, unitValue,
                                      taxId, perception,
                                      ccoId);
-            return new O7JsonResult(response);
         }
 
         public JsonResult ClientDefaultValues(string clientId)
@@ -136,18 +187,20 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        public FileResult GeneratePDF(string documentType, string documentId)
+        public JsonResult GetInvoiceDetailView(string documentType, string documentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.GeneratePDF(User.Company, User.Branch, documentType, documentId);
-            return File(((O7SuccessResponse<Stream>)response).Value1, "application/pdf", documentType + "-" + documentId + ".pdf");
+            var response = domain.GetInvoiceDetail(User.Company, User.Branch, documentType, documentId);
+            return new O7JsonResult(response);
         }
 
-        public JsonResult GenerateReporte(string documentType, string documentId)
+     
+        public FileResult GenerateReporte(string documentType, string documentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.GenerateReporte(User.Company, User.Branch, documentType, documentId);
-            return new O7JsonResult(response);
+            return File(((O7SuccessResponse<Stream>)response).Value1, "application/pdf", documentType + "-" + documentId + ".pdf");
+
         }
 
 
@@ -172,11 +225,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        public JsonResult DeleteDetailsInvoice(string documentType, string documentId)
+        public void DeleteDetailsInvoice(string documentType, string documentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.DeleteDetailInvoice(User.Company, User.Branch, documentType, documentId);
-            return new O7JsonResult(response);
+  
         }
 
         public JsonResult GetCondSells()
@@ -274,8 +327,172 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         }
 
         [HttpPost]
+        [ActionName("Insert")]
+        public ActionResult InsertInvoice()
+        {
+            var documentType = Request.Form["documentType"];
+            var serie = Request.Form["serie"];
+            var currency = Request.Form["currency"];
+            var documentDate = Request.Form["documentDate"];
+            var documentExpiration = Request.Form["documentExpiration"];
+            var clienteCode = Request.Form["clienteCode"];
+            var codTax = Request.Form["codTax"];
+            var clientName = Request.Form["clientName"];
+            var invoiceAddress = Request.Form["invoiceAddress"];
+            var clientId = Request.Form["clientId"];
+            var glosa = Request.Form["glosa"];
+            var sellType = Request.Form["sellType"];
+            var language = Request.Form["language"];
+            var condSell = Request.Form["condSell"];
+            var payment = Request.Form["payment"];
+            var bussinessline = Request.Form["bussinessline"];
+            var finantialcod = Request.Form["finantialcod"];
+            var telephone = Request.Form["telephone"];
+            var seller = Request.Form["seller"];
+            var employeeId = Request.Form["employeeId"];
+            var perception = Request.Form["perception"];
+            var donate = Request.Form["donate"];
+            var documentTypeRef = Request.Form["documentTypeRef"];
+            var documentIdRef = Request.Form["documentIdRef"];
+            var documentOC = Request.Form["documentOC"];
+            var guiRem = Request.Form["guiRem"];
+            var addressId = Request.Form["addressId"];
+            var serieExtRef = Request.Form["serieExtRef"];
+            var nroExtRef = Request.Form["nroExtRef"];
+            var jDetaill = InsertDetail();
+
+           
+
+
+            var documentId=Insert_Invoice(documentType, serie,
+                currency, documentDate,
+                documentExpiration, clienteCode
+                , codTax,  clientName
+                , invoiceAddress, clientId, glosa,
+                sellType, language,
+                condSell, payment,
+                bussinessline, finantialcod,
+                telephone, seller,
+                employeeId, perception,
+                donate, documentTypeRef,
+                documentIdRef, documentOC,
+                guiRem, addressId,
+                serieExtRef, nroExtRef);
+
+            for (var i = 0; i < jDetaill.Count; i++)
+            {
+                var detail = jDetaill[i];
+
+                InsertDetailInvoice(documentType, documentId.ToString(), detail.conceptId,
+                    detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
+            }
+
+            return View("Show", new { documentType = documentType, documentId = documentId.ToString() });//Show(documentType, documentId.ToString());
+            // Show(string documentType, string documentId)
+        }
+
+        [HttpPost]
         [ActionName("Edit")]
-        public JsonResult UpdateInvoiceHead(string documentType, string documentId,
+        public ActionResult EditInvoice()
+        {
+            var documentType = Request.Form["documentType"];
+            var documentId = Request.Form["documentId"];
+            var currency = Request.Form["currency"];
+            var documentDate = Request.Form["documentDate"];
+            var documentExpiration = Request.Form["documentExpiration"];
+            var clienteCode = Request.Form["clienteCode"];
+            var codTax = Request.Form["codTax"];
+            var clientName = Request.Form["clientName"];
+            var invoiceAddress = Request.Form["invoiceAddress"];
+            var clientId = Request.Form["clientId"];
+            var glosa = Request.Form["glosa"];
+            var sellType = Request.Form["sellType"];
+            var language = Request.Form["language"];
+            var condSell = Request.Form["condSell"];
+            var payment = Request.Form["payment"];
+            var bussinessline = Request.Form["bussinessline"];
+            var finantialcod = Request.Form["finantialcod"];
+            var telephone = Request.Form["telephone"];
+            var seller = Request.Form["seller"];
+            var employeeId = Request.Form["employeeId"];
+            var perception = Request.Form["perception"];
+            var donate = Request.Form["donate"];
+            var documentTypeRef = Request.Form["documentTypeRef"];
+            var documentIdRef = Request.Form["documentIdRef"];
+            var documentOC = Request.Form["documentOC"];
+            var guiRem = Request.Form["guiRem"];
+            var addressId = Request.Form["addressId"];
+            var serieExtRef = Request.Form["serieExtRef"];
+            var nroExtRef = Request.Form["nroExtRef"];
+            var jDetaill = InsertDetail();
+
+            UpdateInvoiceHead(documentType, documentId,
+                currency, documentDate,
+                documentExpiration, clienteCode
+                , codTax,"18", clientName
+                , invoiceAddress, clientId, glosa,
+                sellType, language,
+                condSell, payment,
+                bussinessline, finantialcod,
+                telephone, seller,
+                employeeId, perception,
+                donate, documentTypeRef,
+                documentIdRef, documentOC,
+                guiRem, addressId,
+                serieExtRef, nroExtRef);
+
+            DeleteDetailsInvoice(documentType, documentId);
+            for (var i = 0; i < jDetaill.Count; i++)
+            {
+                var detail = jDetaill[i];
+
+                InsertDetailInvoice(documentType, documentId, detail.conceptId,
+                detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
+            }
+            return View("Index");
+            //return Show(documentType, documentId);
+        }
+
+        private List<InvoiceDetail> InsertDetail()
+        {
+            var keys = Request.Form.AllKeys;
+            var count = -1;
+            foreach (var key in keys)
+            {
+                if (key.Contains("conceptId_")) count++;
+            }
+            var result = new List<InvoiceDetail>();
+            for (int i = 0; i <= count; i++)
+            {
+                result.Add(make_entity(i));
+            }
+            return result;
+        }
+
+        private InvoiceDetail make_entity(int count)
+        {
+            return new InvoiceDetail
+            {
+                documentType = "",
+                documentId = "",
+                detailId = "",
+                conceptId = Request.Form["conceptId_" + count],
+
+                taxId = Request.Form["taxId_" + count],
+                taxPorc = "",
+
+                ccoId = Request.Form["ccoId_" + count],
+
+                amount = Request.Form["cantidad_" + count],
+
+                price = Request.Form["unitValue_" + count],
+
+                commentary = Request.Form["observacion_" + count],
+                conceptContent = "",
+                ccoContent = ""
+            };
+        }
+        public void UpdateInvoiceHead(string documentType, string documentId,
             string currency, string documentDate,
             string documentExpiration, string clienteCode
             , string codTax, string porTax, string clientName
@@ -306,6 +523,14 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                         documentIdRef, documentOC,
                                         guiRem, addressId,
                                         serieExtRef, nroExtRef);
+            //return new O7JsonResult(response);
+        }
+
+        public JsonResult DeleteInvoice(string documentType, string documentId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.AnularInvoice(User.Company, User.Branch,
+                                         documentType, documentId);
             return new O7JsonResult(response);
         }
 

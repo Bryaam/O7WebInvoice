@@ -34,9 +34,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>
     </Reference>
-    <Reference Include="Angkor.O7Framework.Domain">
-      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Domain.dll</HintPath>
-    </Reference>
     <Reference Include="Angkor.O7Framework.Infrastructure">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
     </Reference>
