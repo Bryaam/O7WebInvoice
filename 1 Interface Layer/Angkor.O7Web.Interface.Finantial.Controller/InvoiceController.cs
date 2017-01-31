@@ -21,6 +21,10 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         public ActionResult Insert()
         {
             return View();
+            /*
+            ViewData["action"] = "1";
+            return View("Management");
+            */
         }
 
         public ActionResult Index()
@@ -30,6 +34,12 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 
         public ActionResult Edit(string invoiceSerie, string invoiceNumber)
         {
+            /*
+            ViewData["action"] = "2";
+            ViewData["idClient"] = invoiceSerie;
+            ViewData["documentId"] = invoiceNumber;
+            return View("Management");
+            */
             ViewData["documentType"] = invoiceSerie;
             ViewData["documentId"] = invoiceNumber;
             return View();
@@ -91,7 +101,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         }
 
 
-        public void Insert_Invoice(string documentType, string serie,
+        public int Insert_Invoice(string documentType, string serie,
                                             string currency, string documentDate,
                                             string documentExpiration, string clienteCode
                                             , string codTax, string clientName
@@ -107,6 +117,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                             string serieExtRef, string nroDoceExt)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+                
             var response = domain.AddInvoice(User.Company, User.Branch,
                                             documentType, serie,
                                              currency, documentDate,
@@ -121,15 +132,18 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                              donate, documentTypeRef,
                                              documentIdRef, documentOc,
                                              guiRem, addressId, serieExtRef, nroDoceExt);
-       
+            return ((O7SuccessResponse<int>)response).Value1;
+
+
         }
 
-        public JsonResult InsertDetailInvoice(string documentType, string documentId,
+        public void InsertDetailInvoice(string documentType, string documentId,
                                     string conceptId, string observacion,
                                     string cantidad, string unitValue,
                                     string taxId, string perception,
                                     string ccoId)
         {
+
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.AddInvoiceDetail(User.Company, User.Branch,
                                      documentType, documentId,
@@ -137,7 +151,6 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                      cantidad, unitValue,
                                      taxId, perception,
                                      ccoId);
-            return new O7JsonResult(response);
         }
 
         public JsonResult ClientDefaultValues(string clientId)
@@ -213,11 +226,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        public JsonResult DeleteDetailsInvoice(string documentType, string documentId)
+        public void DeleteDetailsInvoice(string documentType, string documentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.DeleteDetailInvoice(User.Company, User.Branch, documentType, documentId);
-            return new O7JsonResult(response);
+  
         }
 
         public JsonResult GetCondSells()
@@ -319,7 +332,6 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         public ActionResult InsertInvoice()
         {
             var documentType = Request.Form["documentType"];
-            var documentId = Request.Form["documentId"];
             var serie = Request.Form["serie"];
             var currency = Request.Form["currency"];
             var documentDate = Request.Form["documentDate"];
@@ -350,7 +362,10 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var nroExtRef = Request.Form["nroExtRef"];
             var jDetaill = InsertDetail();
 
-            Insert_Invoice(documentType, serie,
+           
+
+
+            var documentId=Insert_Invoice(documentType, serie,
                 currency, documentDate,
                 documentExpiration, clienteCode
                 , codTax,  clientName
@@ -369,11 +384,12 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             {
                 var detail = jDetaill[i];
 
-                InsertDetailInvoice(User.Company, User.Branch, detail.conceptId,
+                InsertDetailInvoice(documentType, documentId.ToString(), detail.conceptId,
                     detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
             }
 
-            return Show(documentType, documentId);
+            return View("Show", new { documentType = documentType, documentId = documentId.ToString() });//Show(documentType, documentId.ToString());
+            // Show(string documentType, string documentId)
         }
 
         [HttpPost]
@@ -431,11 +447,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             {
                 var detail = jDetaill[i];
 
-                InsertDetailInvoice(User.Company, User.Branch,detail.conceptId,
-                    detail.commentary,detail.amount,detail.price,detail.taxId, perception,detail.ccoId);
+                InsertDetailInvoice(documentType, documentId, detail.conceptId,
+                detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId);
             }
-
-            return Show(documentType, documentId);
+            return View("Index");
+            //return Show(documentType, documentId);
         }
 
         private List<InvoiceDetail> InsertDetail()
@@ -470,7 +486,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 
                 amount = Request.Form["cantidad_" + count],
 
-                price = Request.Form["unitValue" + count],
+                price = Request.Form["unitValue_" + count],
 
                 commentary = Request.Form["observacion_" + count],
                 conceptContent = "",

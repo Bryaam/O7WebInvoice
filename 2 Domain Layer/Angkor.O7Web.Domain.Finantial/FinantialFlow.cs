@@ -372,8 +372,8 @@ namespace Angkor.O7Web.Domain.Finantial
                                              donate, documentTypeRef,
                                              documentIdRef, documentOc,
                                              guiRem, addressId, serieExtRef, nroDoceExt);
-            var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
-            return O7SuccessResponse.MakeResponse(invoicesSerialized);
+           // var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
+            return O7SuccessResponse.MakeResponse(invoices);
         }
 
         public override O7Response AddInvoiceDetail(string companyId, string branchId,

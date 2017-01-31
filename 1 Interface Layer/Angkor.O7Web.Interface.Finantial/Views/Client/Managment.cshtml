@@ -35,11 +35,11 @@
     $("#hddCountInvoicer").val("0");
 
     $("#dpckRegister").datepicker({
-    format: "dd/mm/yyyy"
+        format: "dd/mm/yyyy"
     });
 
     $("#chkDepartment").chosen({
-    width: "100%"
+        width: "100%"
     });
     var action = $("#txtAction").val();
     var numFieldFilled = 0;
@@ -63,25 +63,25 @@
     { data: "Contact", width: "8%" }],
     language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
     initComplete: function( settings, json ) {
-    var btnAddReciber = $("#tblReciber_wrapper .dt-button");
+        var btnAddReciber = $("#tblReciber_wrapper .dt-button");
 
-    btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
-    btnAddReciber.on("click", function () {
-    var reciber_count = parseInt($("#hddCountReciber").val());
-    var totalFilled = 0;
-    var row = {};
-    row.Address = "<input id='it_1_"+reciber_count+"' class='form-control' style='width:100%' name='txtReciberAddress_"+reciber_count+"'>";
-    row.CodPostal = "<input id='it_2_"+reciber_count+"' class='form-control' style='width:100%' name='txtReciberPostal_"+reciber_count+"'>";
-    row.Department = "<input id='it_3_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberDepartment_"+reciber_count+"'>";
-    row.Province = "<input id='it_4_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberProvince_"+reciber_count+"'>";
-    row.District = "<input id='it_5_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberDistrict_"+reciber_count+"'>";
-    row.Country = "<input id='it_6_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberCountry_"+reciber_count+"'>";
-    row.City = "<input id='it_7_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberCity_"+reciber_count+"'>";
-    row.Zone = "<input id='it_8_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberZone_"+reciber_count+"'>";
-    row.Route = "<input id='it_9_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberRoute_"+reciber_count+"'>";
-    row.Phone = "<input id='it_10_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberPhone_"+reciber_count+"'>";
-    row.Fax = "<input id='it_11_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberFax_"+reciber_count+"'>";
-    row.Contact = "<input id='it_12_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberContact_"+reciber_count+"'>";
+        btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
+        btnAddReciber.on("click", function () {
+        var reciber_count = parseInt($("#hddCountReciber").val());
+        var totalFilled = 0;
+        var row = {};
+        row.Address = "<input id='it_1_"+reciber_count+"' class='form-control' style='width:100%' name='txtReciberAddress_"+reciber_count+"'>";
+        row.CodPostal = "<input id='it_2_"+reciber_count+"' class='form-control' style='width:100%' name='txtReciberPostal_"+reciber_count+"'>";
+        row.Department = "<input id='it_3_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberDepartment_"+reciber_count+"'>";
+        row.Province = "<input id='it_4_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberProvince_"+reciber_count+"'>";
+        row.District = "<input id='it_5_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberDistrict_"+reciber_count+"'>";
+        row.Country = "<input id='it_6_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberCountry_"+reciber_count+"'>";
+        row.City = "<input id='it_7_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberCity_"+reciber_count+"'>";
+        row.Zone = "<input id='it_8_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberZone_"+reciber_count+"'>";
+        row.Route = "<input id='it_9_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberRoute_"+reciber_count+"'>";
+        row.Phone = "<input id='it_10_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberPhone_"+reciber_count+"'>";
+        row.Fax = "<input id='it_11_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberFax_"+reciber_count+"'>";
+        row.Contact = "<input id='it_12_"+reciber_count+"' class='form-control pull-left' style='width: 100%;' name='txtReciberContact_"+reciber_count+"'>";
     var rowCollection = [];
     rowCollection.push(row);
     tblReciber.rows.add(rowCollection).draw();

@@ -18,6 +18,8 @@
 
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
     @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")
+
+    @Html.StyleLink("css/plugins/sweetalert/sweetalert.css")    
     <style type="text/css">
         body {
             padding-right: 0 !important;
@@ -78,14 +80,10 @@
     </style>
 }
 
-<h2>InvoiceProcess</h2>
-
-
 <div class="tabs-container">
-    <form id="formInvoice" action="#" method="post" class="">
+    <form id="formInvoice" method="post" class="">
         <div class="tab-content">
             <div id="tab-1" class="tab-pane active">
-                
                 <div class="panel-body">
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
@@ -110,26 +108,25 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-sm-3">
-                                                            <label id="clientCode" class="hidden"></label>
+                                                            <input id="clientCode" class="hidden" name="clienteCode">
+                                                            <input id="invoiceId" class="hidden">
                                                             <label id="docLabel" class="pull-left form-separation"> DNI/RUC </label>
-                                                            <input disabled="disabled" type="text" class="form-control emulate-label" id="docInput" name="ClientId">
+                                                            <input readonly type="text" class="form-control emulate-label" id="docInput" name="ClientId" required>
                                                             <label class="pull-left form-separation"> Teléfono </label>
-                                                            <input type="text" class="form-control" id="phoneInput">
+                                                            <input type="text" class="form-control" id="phoneInput" name="telephone" required>
                                                         </div>
                                                         <div class="col-sm-8">
                                                             <label class="pull-left form-separation"> Nombre </label>
-                                                            <input type="text" class="form-control" id="nameInput">
-                                                            <label class="pull-left form-separation"> Email </label>
-                                                            <input type="text" class="form-control" id="mailInput">
+                                                            <input type="text" class="form-control" id="nameInput" name="clientName" required>
                                                         </div>
                                                     </div>
                                                     <div class=row>
                                                         <div class="col-sm-11">
                                                             <label class="pull-left form-separation"> Dirección</label>
-                                                            <input id="dirInput" class="form-control hidden" type="text" />
-                                                            <input id="dirInputContent" class="form-control hidden" type="text" />
+                                                            <input id="dirInput" class="form-control hidden" type="text" name="addressId">
+                                                            <input id="dirInputContent" class="form-control hidden" type="text" name="invoiceAddress" required>
                                                             <select class="form-control" id="dirInputSelect"></select>
-                                                            <label style="margin-top: 30px;margin-bottom: -30px;"> <input id="clienteOcasionalCB" type="checkbox" class="i-checks"> Cliente ocasional </label>
+                                                            <label style="margin-top: 30px;margin-bottom: -30px;"> <input id="clienteOcasionalCB" type="checkbox" class="i-checks" name=""> Cliente ocasional </label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -137,20 +134,19 @@
                                             <div class="col-lg-4">
                                                 <div class="col-sm-5">
                                                     <label style="left:inherit" class="form-label-separation">Condición de la venta</label>
-                                                    <select id="condVenta" class="form-control"></select>
+                                                    <select id="condVenta" class="form-control" name="condSell" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Forma de pago</label>
-                                                    <select id="formaPago" class="form-control"></select>
+                                                    <select id="formaPago" class="form-control" name="payment" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Vendedor</label>
-                                                    <select id="vendedor" class="form-control"></select>
-
+                                                    <select id="vendedor" class="form-control" name="seller" required></select>
                                                 </div>
                                                 <div class="col-sm-5">
                                                     <label style="left:inherit" class="form-label-separation">Tipo de venta</label>
-                                                    <select id="tipoVenta" class="form-control"></select>
+                                                    <select id="tipoVenta" class="form-control" name="sellType" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Código Financiero</label>
-                                                    <select id="codFinanciero" class="form-control"></select>
+                                                    <select id="codFinanciero" class="form-control" name="finantialcod" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Línea de negocio</label>
-                                                    <select id="lineaNegocio" class="form-control"></select>
+                                                    <select id="lineaNegocio" class="form-control" name="bussinessline" required></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,24 +170,24 @@
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Tipo de Doc.</label>
-                                                            <select id="invoiceType" class="form-control"></select>
+                                                            <select id="invoiceType" class="form-control" name="documentType" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Serie Externo</label>
-                                                            <select id="idSerieExterno" class="form-control"></select>
+                                                            <select id="idSerieExterno" class="form-control" name="serie" required></select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div id="data_1" class="col-sm-4">
                                                             <label class="pull-left form-separation"> Fecha de Documento </label>
                                                             <div class="input-group date">
-                                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="fechaDoc" type="text" class="form-control currentDateDefault">
+                                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="fechaDoc" type="text" class="form-control currentDateDefault" name="documentDate" required>
                                                             </div>
                                                         </div>
                                                         <div id="data_1" class="col-sm-4">
                                                             <label class="pull-left form-separation"> Fecha de vencimiento </label>
                                                             <div class="input-group date">
-                                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="fechaVenc" type="text" class="form-control currentDateDefault">
+                                                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="fechaVenc" type="text" class="form-control currentDateDefault" name="documentExpiration" required>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-2"></div>
@@ -199,32 +195,32 @@
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Moneda</label>
-                                                            <select id="currency" class="form-control"></select>
+                                                            <select id="currency" class="form-control" name="currency" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Idioma</label>
-                                                            <select id="language" class="form-control"></select>
+                                                            <select id="language" class="form-control" name="language" required></select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Impuesto</label>
                                                             <input id="taxeNumber" type="hidden" />
-                                                            <select id="taxe" class="form-control"></select>
+                                                            <select id="taxe" class="form-control" name="codTax" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
-                                                            <label id="perceptionLabel" style="left:inherit" class="form-label-separation typeInput" >Percepción</label>
-                                                            <select id="perception" class="form-control"></select>
+                                                            <label id="perceptionLabel" style="left:inherit" class="form-label-separation typeInput">Percepción</label>
+                                                            <select id="perception" class="form-control" name="perception"></select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <label class="pull-left form-separation"> Número O/C </label>
-                                                            <input id="nroOC" type="text" class="form-control">
+                                                            <input id="nroOC" type="text" class="form-control" name="documentOc">
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label class="pull-left form-separation"> Nro guía remisión </label>
-                                                            <input id="nroGuiaRem" type="text" class="form-control">
+                                                            <input id="nroGuiaRem" type="text" class="form-control" name="guiRem">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -232,7 +228,7 @@
                                             <div class="col-lg-6">
                                                 <div class="text-center">
                                                     <label class="pull-left form-separation"> Glosa </label>
-                                                    <textarea id="glosa" class="form-control" rows="5"></textarea>
+                                                    <textarea id="glosa" class="form-control" rows="5" name="glosa"></textarea>
                                                 </div>
                                                 <label style="left:inherit" class="form-label-separation"><input id="donacionCB" type="checkbox" class="i-checks"> Donación</label>
                                                 <div class="row">
@@ -246,19 +242,19 @@
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Tipo </label>
-                                                        <input id="serNumber" disabled="disabled" type="text" class="form-control emulate-label pull-right typeInput docFlgTrigger" />
+                                                        <input id="serNumber" readonly type="text" class="form-control emulate-label pull-right typeInput docFlgTrigger" name="documentTypeRef">
                                                     </div>
                                                     <div class="col-lg-3">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Nro. Int.</label>
-                                                        <input id="nroInt" disabled="disabled" type="text" class="form-control emulate-label typeInput docFlgTrigger" />
+                                                        <input id="nroInt" readonly type="text" class="form-control emulate-label typeInput docFlgTrigger" name="documentIdRef">
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Ser. </label>
-                                                        <input id="nroDocRef" type="text" class="form-control typeInput docFlgTrigger">
+                                                        <input id="nroDocRef" type="text" class="form-control typeInput docFlgTrigger" name="serieExtRef">
                                                     </div>
                                                     <div class="col-lg-2">
                                                         <label class="pull-left form-separation typeInput docFlgTrigger"> Nro. Ext. </label>
-                                                        <input id="nroDocRefExt" type="text" class="form-control typeInput docFlgTrigger">
+                                                        <input id="nroDocRefExt" type="text" class="form-control typeInput docFlgTrigger" name="nroDoceExt">
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -266,8 +262,8 @@
                                                         <label style="left:inherit" class="form-label-separation">Trabajador</label>
                                                         <div class="input-group m-b">
                                                             <span class="input-group-btn">
-                                                                <button disabled="disabled" id="botonBuscarCliente" type="button" class="btn btn btn-primary pull-left"> <i class="fa fa-search"></i> Buscar</button>
-                                                            </span> <input disabled="disabled" type="text" class="form-control emulate-label">
+                                                                <button disabled id="botonBuscarCliente" type="button" class="btn btn btn-primary pull-left"> <i class="fa fa-search"></i> Buscar</button>
+                                                            </span> <input readonly type="text" class="form-control emulate-label">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -323,17 +319,9 @@
                             </div>
                         </div>
                         <div class="row text-center" style="margin-top: 50px;">
-                            <div class="col-sm-3">
-                                <button id="btnCrearFactura" type="button" class="btn btn btn-primary">Generar Factura</button>
-                            </div>
-                            <div class="col-sm-3">
-                                <button id="btnFacturacionE" type="button" class="btn btn btn-primary" disabled>Facturación Electrónica</button>
-                            </div>
-                            <div class="col-sm-3">
-                                <button id="btnPDF" type="button" class="btn btn btn-primary" disabled> <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Generar PDF</button>
-                            </div>
-                            <div class="col-sm-3">
-                                <button id="btnFacturacionM" type="button" class="btn btn btn-primary" disabled>Facturación Manual</button>
+                            <div class="ibox-footer text-right">
+                                <button class="btn btn-white"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
+                                <button id="btnSubmit" class="btn btn-primary" type="submit">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -426,6 +414,8 @@
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
 
+    @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
+
     <script>
         var currentDate = new Date();
         var month = currentDate.getMonth() + 1;
@@ -438,6 +428,21 @@
 
 
 @section section_script {
+
+    /*$("#btnSubmit").click(function(){
+        swal({
+        title: "Confirmación",
+        text: "¿Crear documento?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Sí",
+        closeOnConfirm: false
+        }, function () {
+            swal("Creado", "Documento de Venta creado exitosamente.", "success");
+            $("#formInvoice").submit();
+        });
+    });*/
 
     $("#tableProducts").on('change',function(){
         calculate_total();
@@ -693,7 +698,7 @@
     //Fin Tab 4
 
     //Inicio de data dummy
-    var dataClient = {"ClientCode" :"666", "ClientType" :"Natural", "DocumentNumber" : "6688", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
+   /* var dataClient = {"ClientCode" :"666", "ClientType" :"Natural", "DocumentNumber" : "6688", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
     var dataClient2 = {"ClientCode" :"6662", "ClientType" :"Natural2", "DocumentNumber" : "6688222", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
 
     var dataSetClient = [];
@@ -706,7 +711,7 @@
     dataUnit.price = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' id='item_price_"+1+"'>";
 
     var dataSet = [];
-    dataSet.push(dataUnit);
+    dataSet.push(dataUnit);*/
 
     //Fin de data dummy
 
@@ -783,7 +788,7 @@
 
             var clientCode = parentRow.children('td').eq(0).text();
 
-            $("#clientCode").html(clientCode);
+            $("#clientCode").val(clientCode);
 
             $.ajax({ method: "GET", url: "/Finantial/Invoice/GetInvoiceAdresses", data: {clientId: clientCode } })
             .done(function (result) {
@@ -1006,30 +1011,30 @@
     function insertInvoiceDetail(idInvoice, tipoDoc, perception){
         tableProduct.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
 
-        var curData = this.data();
-        var concept = $('#item_concept_' + curData.item).val();
-        var comment = $('#item_comment_' + curData.item).val();
-        var costCenter = $('#item_cost_center_' + curData.item).val();
-        var taxe = $('#item_tax_' + curData.item).val();
-        var price = $('#item_price_' + curData.item).val();
-        var amount = $('#item_amount_' + curData.item).val();
-        var subtotal = $('#item_subtotal_' + curData.item).val();
+            var curData = this.data();
+            var concept = $('#item_concept_' + curData.item).val();
+            var comment = $('#item_comment_' + curData.item).val();
+            var costCenter = $('#item_cost_center_' + curData.item).val();
+            var taxe = $('#item_tax_' + curData.item).val();
+            var price = $('#item_price_' + curData.item).val();
+            var amount = $('#item_amount_' + curData.item).val();
+            var subtotal = $('#item_subtotal_' + curData.item).val();
 
-        var typeConcept = $('#item_concept_' + curData.item);
-        var typeCostCenter = $('#item_cost_center_' + curData.item);
+            var typeConcept = $('#item_concept_' + curData.item);
+            var typeCostCenter = $('#item_cost_center_' + curData.item);
 
-        var conceptSource = typeConcept.data('typeahead').source;
-        var costCenterSource = typeCostCenter.data('typeahead').source;
+            var conceptSource = typeConcept.data('typeahead').source;
+            var costCenterSource = typeCostCenter.data('typeahead').source;
 
-        var conceptValue = getCodeByName(conceptSource, concept);
-        var costCenterValue = getCodeByName(costCenterSource, costCenter);
+            var conceptValue = getCodeByName(conceptSource, concept);
+            var costCenterValue = getCodeByName(costCenterSource, costCenter);
 
-        $.ajax({ method: "POST", url: "/Finantial/Invoice/InsertDetailInvoice", data: { documentType: tipoDoc, documentId: idInvoice, conceptId: conceptValue, observacion: comment, cantidad: amount, unitValue: price, taxId: taxe, perception: perception, ccoId: costCenterValue} })
-            .done(function (result) {
-            })
-            .fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
+            $.ajax({ method: "POST", url: "/Finantial/Invoice/InsertDetailInvoice", data: { documentType: tipoDoc, documentId: idInvoice, conceptId: conceptValue, observacion: comment, cantidad: amount, unitValue: price, taxId: taxe, perception: perception, ccoId: costCenterValue} })
+                .done(function (result) {
+                })
+                .fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                });
         });
     }
 
@@ -1104,15 +1109,16 @@
 
     // Crear dataset
     function create_dataset(){
+        var dataUnit = {"porc":"5"};
         dataUnit.item = itemNum;
-        dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"'>";
-        dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"'>";
-        dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"'>";
-        dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"'>";
-        dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"'>";
+        dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
+        dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
+        dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
+        dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
+        dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
         dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
         dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
-        dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"'></select>"
+        dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
 
         var dataSet = [];
         dataSet.push(dataUnit);
@@ -1126,21 +1132,37 @@
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     $('#item_concept_'+itemNum).typeahead({
-                        source: jsonResult
+                        source: jsonResult,
+                        afterSelect: function(){
+                            var type_value = $('#item_concept_'+itemNum).typeahead("getActive");
+                            //console.log(type_value);
+                            //console.log("-------------------");
+                            $('#item_concept_value_'+itemNum).val(type_value);
+                        }
                     });
                 }
             })
             .fail(function (result) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
-
+        $('#item_concept_'+itemNum).change(function(){
+            var type_value = $(this).typeahead("getActive");
+            $("#item_concept_value_0").val(type_value.Value);
+            console.log(type_value);
+            console.log(itemNum);
+            console.log("mierda");
+        });
 
         $.ajax({ method: "GET", url: "/Finantial/Invoice/GetCenterCost", async: false })
             .done(function (result) {
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     $('#item_cost_center_'+itemNum).typeahead({
-                        source: jsonResult
+                        source: jsonResult,
+                        afterSelect: function(){
+                            var type_value = $('#item_cost_center_'+itemNum).typeahead("getActive");
+                            $('#item_cost_center_value_'+itemNum).val(type_value);
+                        }
                     });
                 }
             })
