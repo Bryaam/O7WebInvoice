@@ -56,7 +56,7 @@ namespace Angkor.O7Web.Common.Finantial.Entity
 
         public string estado { get; set; }
 
-        public string estadoDes { get; set; }
+        public string estadoDesc { get; set; }
 
 
     }

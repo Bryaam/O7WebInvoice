@@ -47,7 +47,7 @@ namespace Angkor.O7Web.Data.Finantial.DataMapper
                 impTot = Source.GetValue<string>(32),
                 impPer = Source.GetValue<string>(33),
                 estado= Source.GetValue<string>(34),
-                estadoDes = Source.GetValue<string>(35),
+                estadoDesc = Source.GetValue<string>(35),
 
 
             };

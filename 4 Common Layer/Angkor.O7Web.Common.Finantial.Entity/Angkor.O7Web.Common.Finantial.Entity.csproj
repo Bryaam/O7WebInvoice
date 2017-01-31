@@ -52,6 +52,7 @@
     <Compile Include="ClientType.cs" />
     <Compile Include="ClientView.cs" />
     <Compile Include="ClientZone.cs" />
+    <Compile Include="LogFE.cs" />
     <Compile Include="DetailInvoicePDF.cs" />
     <Compile Include="GenericListValue.cs" />
     <Compile Include="HeadInvoicePDF.cs" />
@@ -67,7 +68,6 @@
     <Compile Include="InvoiceSeries.cs" />
     <Compile Include="InvoiceTax.cs" />
     <Compile Include="InvoiceTypeAhead.cs" />
-    <Compile Include="LogFE.cs" />
     <Compile Include="ProductDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleValue.cs" />
