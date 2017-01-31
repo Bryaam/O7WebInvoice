@@ -50,8 +50,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataMapper\InvoiceDetailViewMapper.cs" />
-    <Compile Include="DataMapper\InvoiceHeadViewMapper.cs" />
     <Compile Include="DataMapper\AddressEntryMapper.cs" />
     <Compile Include="DataMapper\AddressFactMapper.cs" />
     <Compile Include="DataMapper\ClientCountryMapper.cs" />
@@ -72,9 +70,11 @@
     <Compile Include="DataMapper\InvoiceClientMapper.cs" />
     <Compile Include="DataMapper\InvoiceDetailMapper.cs" />
     <Compile Include="DataMapper\InvoiceDetailsMapper.cs" />
+    <Compile Include="DataMapper\InvoiceDetailViewMapper.cs" />
     <Compile Include="DataMapper\InvoiceDocumentCountMapper.cs" />
     <Compile Include="DataMapper\InvoiceDocumentTypeMapper.cs" />
     <Compile Include="DataMapper\InvoiceGenericListMapper.cs" />
+    <Compile Include="DataMapper\InvoiceHeadViewMapper.cs" />
     <Compile Include="DataMapper\InvoiceMapper.cs" />
     <Compile Include="DataMapper\InvoiceSeriesMapper.cs" />
     <Compile Include="DataMapper\InvoiceTaxMapper.cs" />

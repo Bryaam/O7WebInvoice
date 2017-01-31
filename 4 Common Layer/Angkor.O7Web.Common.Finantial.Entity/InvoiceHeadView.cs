@@ -54,6 +54,8 @@ namespace Angkor.O7Web.Common.Finantial.Entity
         public string impPer { get; set; }
         public string impTot { get; set; }
 
+        public string estado { get; set; }
+
 
     }
 }

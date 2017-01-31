@@ -75,6 +75,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["impIGV"] = head[0].impIGV;
             ViewData["impPerc"] = head[0].impPer;
             ViewData["impTot"] = head[0].impTot;
+            ViewData["estado"] = head[0].estado;
 
             var responseDetail = domain.GetInvoiceDetailView(User.Company, User.Branch, documentType, documentId);
             var detail = ((O7SuccessResponse<List<InvoiceDetailView>>)responseDetail).Value1;//new O7JsonResult(response);

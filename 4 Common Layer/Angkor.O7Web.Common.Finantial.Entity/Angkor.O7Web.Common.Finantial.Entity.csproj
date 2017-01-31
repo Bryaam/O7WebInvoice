@@ -52,8 +52,6 @@
     <Compile Include="ClientType.cs" />
     <Compile Include="ClientView.cs" />
     <Compile Include="ClientZone.cs" />
-    <Compile Include="InvoiceHeadView.cs" />
-    <Compile Include="InvoiceDetailView.cs" />
     <Compile Include="DetailInvoicePDF.cs" />
     <Compile Include="GenericListValue.cs" />
     <Compile Include="HeadInvoicePDF.cs" />
@@ -61,9 +59,11 @@
     <Compile Include="InvoiceClient.cs" />
     <Compile Include="InvoiceDetail.cs" />
     <Compile Include="InvoiceDetails.cs" />
+    <Compile Include="InvoiceDetailView.cs" />
     <Compile Include="InvoiceDocumentType.cs" />
     <Compile Include="InvoiceDocumentCount.cs" />
     <Compile Include="InvoiceEdit.cs" />
+    <Compile Include="InvoiceHeadView.cs" />
     <Compile Include="InvoiceSeries.cs" />
     <Compile Include="InvoiceTax.cs" />
     <Compile Include="InvoiceTypeAhead.cs" />
