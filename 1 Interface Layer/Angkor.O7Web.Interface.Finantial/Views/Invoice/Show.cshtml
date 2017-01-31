@@ -159,31 +159,25 @@
             $.ajax({ method: "POST", url: "/Finantial/Invoice/DeleteInvoice", data:{documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
                 .done(function (result) {
                     var jsonResult = jQuery.parseJSON(result);
-                    if (!jQuery.isEmptyObject(jsonResult)) {
-                        if(jsonResult == 0){
-                            swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
-                        } else {
-                            swal("Eliminado!", "Tu factura se anuló", "success");
-                        }
+                    if(jsonResult == 0){
+                        swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
+                    } else {
+                        swal("Eliminado!", "Tu factura se anuló", "success");
                     }
                 }).fail(function (result) {
                     swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                 });
         });
     });
 
     $('#btnPDF').click(function () {
          var url = "./GenerateReporte?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
-            window.location.href = url;       
+         window.location.href = url;       
     });
 
     $('#btnEditar').click(function () {
-        $.ajax({ method: "POST", url: "/Finantial/Invoice/Edit", data:{documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
-        .done(function (result) {
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
+        var url = "./Edit?invoiceSerie=" + '@ViewBag.documentType' + "&invoiceNumber=" + '@ViewBag.documentId';
+        window.location.href = url;
     });
 
 }
@@ -196,78 +190,72 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Código: </label>
-                            <div class="col-md-8">
+                            <label class="col-md-5 control-label">Código: </label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.clientCode</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">DNI/RUC: </label>
-                            <div class="col-md-8">
+                            <label class="col-md-5 control-label">DNI/RUC: </label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.clientId</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-4 control-label">Teléfono: </label>
-                            <div class="col-md-8">
+                            <label class="col-md-5 control-label">Teléfono: </label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.clientPhone</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-8">
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Nombre: </label>
-                            <div class="col-md-10">
-                                <p class="form-control-static">@ViewBag.clientName</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Dirección: </label>
-                            <div class="col-md-10">
-                                <p class="form-control-static">@ViewBag.clientAddress</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="col-md-6 control-label">Condición de la venta</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Condición de la venta</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.condSell</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Línea de negocio</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Línea de negocio</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.bussinessLine</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Vendedor</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Vendedor</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.seller</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Forma de pago</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Nombre: </label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.clientName</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Dirección: </label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.clientAddress</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Forma de pago</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.payment</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Código Financiero</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Código Financiero</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.finantialCode</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Tipo de venta</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Tipo de venta</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.sellType</p>
                             </div>
                         </div>
@@ -286,93 +274,77 @@
             </div>
             <div class="ibox-content">
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Fecha de Documento</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Fecha de Documento</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.documentDate</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Fecha de Vencimiento</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static">@ViewBag.documentVenc</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="col-md-6 control-label">Moneda</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Moneda</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.currency</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Impuesto</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Impuesto</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.tax</p>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-md-4">
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Idioma</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static">@ViewBag.language</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label class="col-md-6 control-label">Percepción</label>
-                            <div class="col-md-6">
-                                <p class="form-control-static">@ViewBag.perception</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="form-group">
-                            <label class="col-md-6 control-label">Nro. orden de compra</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Nro. orden de compra</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.nroOc</p>
                             </div>
                         </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Documento referencia</label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.documentTypeRef - @ViewBag.documentIdRef - @ViewBag.documentSerieRef - @ViewBag.documentExtRef</p>
+                            </div>
+                        </div>
                     </div>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-md-6 control-label">Nro. guía de remisión</label>
-                            <div class="col-md-6">
+                            <label class="col-md-5 control-label">Fecha de Vencimiento</label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.documentVenc</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Idioma</label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.language</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Percepción</label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.perception</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Nro. guía de remisión</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.nroGuiRem</p>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-5 control-label">Donación</label>
+                            <div class="col-md-7">
+                                <p class="form-control-static">@ViewBag.donate</p>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="form-group">
-                            <label class="col-md-2 control-label">Glosa</label>
-                            <div class="col-md-10">
+                            <label class="col-md-5 control-label">Glosa</label>
+                            <div class="col-md-7">
                                 <p class="form-control-static">@ViewBag.glosa</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-2 control-label">Donación</label>
-                            <div class="col-md-10">
-                                <p class="form-control-static">@ViewBag.donate</p>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-md-4 control-label">Documento referencia</label>
-                            <div class="col-md-8">
-                                <p class="form-control-static">@ViewBag.documentTypeRef - @ViewBag.documentIdRef - @ViewBag.documentSerieRef - @ViewBag.documentExtRef</p>
                             </div>
                         </div>
                     </div>
@@ -432,27 +404,18 @@
                         </div>
                     </div>
                 </div>
+                <div class="hr-line-dashed"></div>
+                <div class="row">
+                    <div class="col-sm-12 text-right">
+                        <button id="btnAtras" type="button" class="btn btn btn-default"><i class="fa fa-mail-reply" aria-hidden="true"></i> Atrás</button>
+                        <button id="btnAnular" type="button" class="btn btn btn-primary"><i class="fa fa-close" aria-hidden="true"></i> Anular</button>
+                        <button id="btnPDF" type="button" class="btn btn btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Imprimir</button>
+                        <button id="btnEditar" type="button" class="btn btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</button>
+                        <button id="btnSUNAT" type="button" class="btn btn btn-primary"><i class="fa fa-institution" aria-hidden="true"></i> Sunat</button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row" style="margin-top: 50px;">
-    <div class="col-sm-2">
-    </div>
-    <div class="col-sm-2">
-        <button id="btnAtras" type="button" class="btn btn btn-primary">Atrás</button>
-    </div>
-    <div class="col-sm-2">
-        <button id="btnAnular" type="button" class="btn btn btn-primary">Anular</button>
-    </div>
-    <div class="col-sm-2">
-        <button id="btnPDF" type="button" class="btn btn btn-primary"> <i class="fa fa-file-pdf-o" aria-hidden="true"></i> Imprimir</button>
-    </div>
-    <div class="col-sm-2">
-        <button id="btnEditar" type="button" class="btn btn btn-primary">Editar</button>
-    </div>
-    <div class="col-sm-2">
-        <button id="btnSUNAT" type="button" class="btn btn btn-primary">SUNAT</button>
-    </div>
-</div>
