@@ -552,6 +552,15 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
+        public JsonResult SendSunat(string documentType, string documentId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.sendSunat(User.Company, User.Branch,
+                                         documentType, documentId);
+            return new O7JsonResult(response);
+        }
+
+
 
 
 
