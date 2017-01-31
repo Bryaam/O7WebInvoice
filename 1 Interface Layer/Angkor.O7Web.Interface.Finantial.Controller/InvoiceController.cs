@@ -86,6 +86,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["impPerc"] = head[0].impPer;
             ViewData["impTot"] = head[0].impTot;
             ViewData["estado"] = head[0].estado;
+            ViewData["estadoDesc"] = head[0].estadoDesc;
 
             var responseDetail = domain.GetInvoiceDetailView(User.Company, User.Branch, documentType, documentId);
             var detail = ((O7SuccessResponse<List<InvoiceDetailView>>)responseDetail).Value1;//new O7JsonResult(response);
@@ -552,6 +553,15 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                                          documentType, documentId);
             return new O7JsonResult(response);
         }
+
+        public JsonResult SendSunat(string documentType, string documentId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.sendSunat(User.Company, User.Branch,
+                                         documentType, documentId);
+            return new O7JsonResult(response);
+        }
+
 
 
 

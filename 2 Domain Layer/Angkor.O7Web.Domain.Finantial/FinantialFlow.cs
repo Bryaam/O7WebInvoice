@@ -342,6 +342,15 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(invoicesSerialized);
         }
 
+        public override O7Response sendSunat(string companyId, string branchId,
+                                        string documentType, string documentId)
+        {
+            var invoices = FinantialDataService.sendSunat(companyId, branchId,
+                                         documentType, documentId);
+            var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
+            return O7SuccessResponse.MakeResponse(invoicesSerialized);
+        }
+
         public override O7Response GetLogFE(string companyId, string branchId,
                                         string documentSerie, string documentExt)
         {

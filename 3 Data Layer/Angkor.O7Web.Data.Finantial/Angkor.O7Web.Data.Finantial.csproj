@@ -67,6 +67,7 @@
     <Compile Include="DataMapper\DetailInvoicePDFMapper.cs" />
     <Compile Include="DataMapper\HeadInvoicePDFMapper.cs" />
     <Compile Include="DataMapper\InvoiceBasicInformationMapper.cs" />
+    <Compile Include="DataMapper\LogFEMapper.cs" />
     <Compile Include="DataMapper\InvoiceClientMapper.cs" />
     <Compile Include="DataMapper\InvoiceDetailMapper.cs" />
     <Compile Include="DataMapper\InvoiceDetailsMapper.cs" />

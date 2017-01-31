@@ -585,6 +585,18 @@ namespace Angkor.O7Web.Data.Finantial
 
         }
 
+        public virtual int sendSunat(string companyId, string branchId,
+                                      string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
+            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
+            return DataAccess.ExecuteFunction<int>("finantial_invoice.sendSunat", parameters);
+
+        }
+
         public virtual List<InvoiceHeadView> GetInvoiceHeadView(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;
