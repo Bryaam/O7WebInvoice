@@ -163,35 +163,36 @@
     });
 
     $('#btnAnular').click(function () {
-    swal({
-    title: "¿Estás seguro?",
-    text: "No podrás recuperar esta factura",
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#DD6B55",
-    confirmButtonText: "Sí",
-    cancelButtonText: "Cancelar",
-    closeOnConfirm: false
-    }, function () {
-    $.ajax({ method: "POST", url: "/Finantial/Invoice/DeleteInvoice", data:{documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-    if(jsonResult == 0){
-    swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
-    } else {
-    swal({
-    title: "Anulado",
-    text: "Tu factura se anuló correctamente",
-    type: "success",
-    confirmButtonText: "Continuar"
-    }, function () {
-    location.reload();
-    });
-    }
-    }).fail(function (result) {
-    swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
-    });
-    });
+        swal({
+            title: "¿Estás seguro?",
+            text: "No podrás recuperar esta factura",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            cancelButtonText: "Cancelar",
+            closeOnConfirm: false
+            }, function () {
+                $.ajax({ method: "POST", url: "/Finantial/Invoice/DeleteInvoice", data:{documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+                .done(function (result) {
+                    var jsonResult = jQuery.parseJSON(result);
+                    if(jsonResult == 0){
+                        swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
+                    } else {
+                        swal({
+                            title: "Anulado",
+                            text: "Tu factura se anuló correctamente",
+                            type: "success",
+                            confirmButtonText: "Continuar"
+                            }, function () {
+                                location.reload();
+                        });
+                    }
+                })
+                .fail(function (result) {
+                    swal("No se eliminó", "Tu factura no se anuló, ocurrió un error.", "error");
+                });
+            });
     });
 
     $('#btnPDF').click(function () {
@@ -207,54 +208,68 @@
     window.location.href = url;
     });
 
-    $('#btnSunat').click(function () {
+    function reloadFELogTable(){
+        $.ajax({ method: "GET", url: "/Finantial/Invoice/GetFELog", data: {documentSerie: '@ViewBag.documentSerie', documentExt: '@ViewBag.documentExt'} })
+        .done(function (result) {
+            var jsonResult = jQuery.parseJSON(result);
 
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetFELog", data: {documentSerie: '@ViewBag.documentSerie', documentExt: '@ViewBag.documentExt'} })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
+            if ( !jQuery.isEmptyObject(jsonResult) ) {
+                $.each(jsonResult, function (index, value) {
+                    var dataUnit = {};
+                    dataUnit.status = value.estado;
+                    dataUnit.description = value.descripcion;
+                    dataUnit.date = value.fecha;
 
-    if ( !jQuery.isEmptyObject(jsonResult) ) {
-    $.each(jsonResult, function (index, value) {
-    var dataUnit = {};
-    dataUnit.status = value.estado;
-    dataUnit.description = value.descripcion;
-    dataUnit.date = value.fecha;
+                    var dataSet = [];
+                    dataSet.push(dataUnit);
 
-    var dataSet = [];
-    dataSet.push(dataUnit);
-
-    tableSunat.rows.add(dataSet).draw();
-    });
+                    tableSunat.rows.add(dataSet).draw();
+                });
+            }
+        })
+        .fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
     }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
-    });
 
     $('#btnSunat').click(function () {
-
-    $.ajax({ method: "POST", url: "/Finantial/Invoice/SendSunat", data: {documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-
-    if ( !jQuery.isEmptyObject(jsonResult) ) {
-    $.each(jsonResult, function (index, value) {
-    var dataUnit = {};
-    dataUnit.status = value.estado;
-    dataUnit.description = value.descripcion;
-    dataUnit.date = value.fecha;
-
-    var dataSet = [];
-    dataSet.push(dataUnit);
-
-    tableSunat.rows.add(dataSet).draw();
+        reloadFELogTable();
     });
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+
+    $('#btnSendSunat').click(function () {
+        swal({
+            title: "¿Estás seguro?",
+            text: "Esta factura se reenviará a Sunat",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            cancelButtonText: "Cancelar",
+            closeOnConfirm: false
+            }, function () {
+                $.ajax({ method: "GET", url: "/Finantial/Invoice/SendSunat", data: {documentType: '@ViewBag.documentType', documentId: '@ViewBag.documentId'} })
+                .done(function (result) {
+                    var jsonResult = jQuery.parseJSON(result);
+
+                    if(jsonResult == 0){
+                        swal("No se reenvió", "Su factura no se reenvió a Sunat, ocurrió un error.", "error");
+                    } else {
+                        swal({
+                            title: "Reenviado",
+                            text: "Su factura se reenvió correctamente",
+                            type: "success",
+                            confirmButtonText: "Continuar",
+                            closeOnConfirm: true,
+                            }, function () {
+                                reloadFELogTable();
+                        });
+                    }
+                })
+                .fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                });  
+        });
+        
     });
 
 }
@@ -495,7 +510,10 @@
                         {
                             <button id="btnEditar" type="button" class="btn btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</button>
                         }
-                        <button id="btnSunat" type="button" class="btn btn btn-primary" data-toggle="modal" data-target="#modalSunat"><i class="fa fa-institution" aria-hidden="true"></i> Sunat</button>
+                        @if (ViewBag.estado != "1")
+                        {
+                            <button id="btnSunat" type="button" class="btn btn btn-primary" data-toggle="modal" data-target="#modalSunat"><i class="fa fa-institution" aria-hidden="true"></i> Sunat</button>
+                        }
                     </div>
                 </div>
             </div>
@@ -510,7 +528,7 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title" id="sunatModalLabel">Enviar factura a sunat</h4>
+                <h4 class="modal-title" id="sunatModalLabel">Reenviar factura a sunat</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -519,7 +537,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-                <button type="button" class="btn btn-primary" id="btnSendSunat">Aceptar</button>
+                <button type="button" class="btn btn-primary" id="btnSendSunat">Reenviar</button>
             </div>
         </div>
     </div>
