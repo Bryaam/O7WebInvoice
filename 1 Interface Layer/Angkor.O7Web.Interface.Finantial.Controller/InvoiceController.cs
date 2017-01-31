@@ -399,7 +399,9 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                     detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId, p_fin);
             }
 
-            return View("Show", new { documentType = documentType, documentId = documentId.ToString() });//Show(documentType, documentId.ToString());
+            return RedirectToAction("Show", new { documentType = documentType, documentId = documentId.ToString() });
+
+            //return View("Show", new { documentType = documentType, documentId = documentId.ToString() });//Show(documentType, documentId.ToString());
             // Show(string documentType, string documentId)
         }
 

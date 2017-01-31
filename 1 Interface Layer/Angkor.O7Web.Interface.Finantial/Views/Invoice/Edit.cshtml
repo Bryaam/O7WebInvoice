@@ -151,7 +151,7 @@
     $('#clienteOcasionalCB').on('ifChecked', function(){
     $('#botonBuscarCliente').hide();
     $('#codInput').hide();
-    $('#docInput').prop('disabled',false);
+    $('#docInput').prop('readonly',false);
     $('#docInput').removeClass('emulate-label');
     $('#codLabel').hide();
     $('.typeInput').hide();
@@ -175,11 +175,19 @@
     $('#clienteOcasionalCB').on('ifUnchecked', function(){
     $('#botonBuscarCliente').show();
     $('#codInput').show();
-    $('#docInput').prop('disabled',true);
+    $('#docInput').prop('readonly',true);
     $('#docInput').addClass('emulate-label');
     $('#codLabel').show();
     $('.typeInput').show();
     $('#typeLabel').show();
+
+    $('#docInput').val('');
+    $('#nameInput').val('');
+    $('#phoneInput').val('');
+    $('#mailInput').val('');
+    $('#clientCode').html('');
+    $('#dirInput').val("");
+    $('#dirInputContent').val("");
 
     $('#dirInputContent').addClass("hidden");
     $('#dirInputSelect').removeClass("hidden");
@@ -799,7 +807,8 @@
     //create_dataset();
 
     $('#botonAgregarProducto').click(function(){
-    create_dataset();
+    var rowsCount = $("#tableProducts tr").length;
+    create_dataset(rowsCount);
     });
 
     $('#tableProducts tbody').on( 'click', 'a.delete', function () {
@@ -833,14 +842,15 @@
     return name;
     }
     var itemNum = 0;
-    function create_dataset(){
+    function create_dataset(rowsCount){
+    var itemNum = rowsCount - 1 ;
     var dataUnit = {"porc":"5"};
     dataUnit.item = itemNum;
     dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
     dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
     dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
-    dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"' name='conceptId_"+itemNum+"'>";
-    dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"' name='ccoId_"+itemNum+"'>";
+    dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
+    dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
     dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
     dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
     dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
@@ -878,6 +888,11 @@
     })
     .fail(function (result) {
     toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+    });
+
+    $(".autocomplete-reference").change(function(){
+        var type_value = $(this).typeahead("getActive");
+        $(this).parent().find(".autocomplete-reference-value").val(type_value.Value);
     });
 
     $("#item_tax_" + itemNum).chosen({
@@ -1015,67 +1030,91 @@
     });
     }
 
-    function edit_product_line(jsonResult, iDoc){
-    var itemNum = jsonResult.length;
-    $.each(jsonResult, function (index, value) {
-    var subtotal = value.price * value.amount;
-    var dataUnit = {"porc":"5"};
-    dataUnit.item = itemNum;
-    dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
-    dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
-    dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
-    dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"' name='conceptId_"+itemNum+"'>";
-    dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"' name='ccoId_"+itemNum+"'>";
-    dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
-    dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
-    dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
+    function edit_product_line(jsonResult, iDoc) {
+        //var itemNum = jsonResult.length;
+        var itemNum = 0;
+        $.each(jsonResult, function(index, value) {
+            var subtotal = value.price * value.amount;
+            var dataUnit = {
+                "porc": "5"
+            };
+            dataUnit.item = itemNum;
+            dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='"+value.amount +"' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
+            dataUnit.comment = "<input class='form-control input-add_product' value='"+value.commentary +"' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
+            dataUnit.price = "<input class='form-control pull-left input-add_product' value='"+value.price +"' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
+            dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' value='"+value.conceptContent +"' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' value='"+value.conceptId +"' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
+            dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='"+value.ccoContent +"' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' value='"+value.ccoId +"' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
+            dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
+            dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
+            dataUnit.tax = "<select class='form-control' value='"+value.taxPorc +"' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
 
-    var dataSet = [];
-    dataSet.push(dataUnit);
+            var dataSet = [];
+            dataSet.push(dataUnit);
 
-    tableProduct.rows.add(dataSet).draw();
+            tableProduct.rows.add(dataSet).draw();
+/*CORREGIR
+            var type_value_concept = $('#item_concept_' + itemNum).typeahead("getActive");
+            var type_value_cost_center = $('#item_cost_center_' + itemNum).typeahead("getActive");
 
-    var currentPerception = $("#perception").val();
+            $('#item_concept_val_' + itemNum).val(type_value_concept.Value);
+            $('#item_cost_center_val_' + itemNum).val(type_value_cost_center.Value);
+    */
+            var currentPerception = $("#perception").val();
 
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetConcepts", data: { ratePerception: currentPerception }, async: false })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    $('#item_concept_'+itemNum).typeahead({
-    source: jsonResult
-    });
+            $.ajax({
+                    method: "GET",
+                    url: "/Finantial/Invoice/GetConcepts",
+                    data: {
+                        ratePerception: currentPerception
+                    },
+                    async: false
+                })
+                .done(function(result) {
+                    var jsonResult = jQuery.parseJSON(result);
+                    if (!jQuery.isEmptyObject(jsonResult)) {
+                        $('#item_concept_' + itemNum).typeahead({
+                            source: jsonResult
+                        });
 
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+                    }
+                })
+                .fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
 
 
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetCenterCost", async: false })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    $('#item_cost_center_'+itemNum).typeahead({
-    source: jsonResult
-    });
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+            $.ajax({
+                    method: "GET",
+                    url: "/Finantial/Invoice/GetCenterCost",
+                    async: false
+                })
+                .done(function(result) {
+                    var jsonResult = jQuery.parseJSON(result);
+                    if (!jQuery.isEmptyObject(jsonResult)) {
+                        $('#item_cost_center_' + itemNum).typeahead({
+                            source: jsonResult
+                        });
+                    }
+                })
+                .fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
 
-    $("#item_tax_" + itemNum).chosen({
-    width: "100%",
-    disable_search: true
-    });
+            $("#item_tax_" + itemNum).chosen({
+                width: "100%",
+                disable_search: true
+            });
 
-    initialize_combo_ajax("#item_tax_" + itemNum,"/Finantial/Invoice/GetTaxes", false);
-    update_chosen_select("#item_tax_" + itemNum, value.taxId);
+            initialize_combo_ajax("#item_tax_" + itemNum, "/Finantial/Invoice/GetTaxes", false);
+            update_chosen_select("#item_tax_" + itemNum, value.taxId);
 
-    itemNum++;
+            itemNum++;
 
-    });
+        });
     }
 
     //--------------------------------------------------------------------------------EDIT
@@ -1215,7 +1254,8 @@
                                                     <div class="row">
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Tipo de Doc.</label>
-                                                            <select id="invoiceType" class="form-control" name="documentType" required></select>
+                                                            <input value='@ViewBag.documentType' name="documentType" hidden>
+                                                            <select id="invoiceType" class="form-control" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label style="left:inherit" class="form-label-separation">Serie Externo</label>

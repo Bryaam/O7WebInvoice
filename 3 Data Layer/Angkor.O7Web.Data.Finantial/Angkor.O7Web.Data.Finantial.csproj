@@ -78,6 +78,7 @@
     <Compile Include="DataMapper\InvoiceMapper.cs" />
     <Compile Include="DataMapper\InvoiceSeriesMapper.cs" />
     <Compile Include="DataMapper\InvoiceTaxMapper.cs" />
+    <Compile Include="DataMapper\LogFEMapper.cs" />
     <Compile Include="DataMapper\ProductDetailsMapper.cs" />
     <Compile Include="DataMapper\SingleValueMapper.cs" />
     <Compile Include="DataMapper\TypeAheadMapper.cs" />

@@ -460,7 +460,7 @@
     $('#clienteOcasionalCB').on('ifChecked', function(){
         $('#botonBuscarCliente').hide();
         $('#codInput').hide();
-        $('#docInput').prop('disabled',false);
+        $('#docInput').prop('readonly',false);
         $('#docInput').removeClass('emulate-label');
         $('#codLabel').hide();
         $('.typeInput').hide();
@@ -484,11 +484,19 @@
     $('#clienteOcasionalCB').on('ifUnchecked', function(){
         $('#botonBuscarCliente').show();
         $('#codInput').show();
-        $('#docInput').prop('disabled',true);
+        $('#docInput').prop('readonly',true);
         $('#docInput').addClass('emulate-label');
         $('#codLabel').show();
         $('.typeInput').show();
         $('#typeLabel').show();
+
+        $('#docInput').val('');
+        $('#nameInput').val('');
+        $('#phoneInput').val('');
+        $('#mailInput').val('');
+        $('#clientCode').html('');
+        $('#dirInput').val("");
+        $('#dirInputContent').val("");
 
         $('#dirInputContent').addClass("hidden");
         $('#dirInputSelect').removeClass("hidden");
@@ -1114,8 +1122,8 @@
         dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
         dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
         dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
-        dataUnit.concept = "<input class='form-control input-add_product' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
-        dataUnit.cost_center = "<input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product' value='' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
+        dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
+        dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
         dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
         dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
         dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
@@ -1132,25 +1140,16 @@
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     $('#item_concept_'+itemNum).typeahead({
-                        source: jsonResult,
-                        afterSelect: function(){
-                            var type_value = $('#item_concept_'+itemNum).typeahead("getActive");
-                            //console.log(type_value);
-                            //console.log("-------------------");
-                            $('#item_concept_value_'+itemNum).val(type_value);
-                        }
+                        source: jsonResult
                     });
                 }
             })
             .fail(function (result) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
-        $('#item_concept_'+itemNum).change(function(){
+        $(".autocomplete-reference").change(function(){
             var type_value = $(this).typeahead("getActive");
-            $("#item_concept_value_0").val(type_value.Value);
-            console.log(type_value);
-            console.log(itemNum);
-            console.log("mierda");
+            $(this).parent().find(".autocomplete-reference-value").val(type_value.Value);
         });
 
         $.ajax({ method: "GET", url: "/Finantial/Invoice/GetCenterCost", async: false })
@@ -1158,11 +1157,7 @@
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     $('#item_cost_center_'+itemNum).typeahead({
-                        source: jsonResult,
-                        afterSelect: function(){
-                            var type_value = $('#item_cost_center_'+itemNum).typeahead("getActive");
-                            $('#item_cost_center_value_'+itemNum).val(type_value);
-                        }
+                        source: jsonResult
                     });
                 }
             })
