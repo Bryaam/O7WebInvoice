@@ -100,6 +100,13 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
+        public JsonResult GetFELog(string documentSerie,string documentExt)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetLogFE(User.Company, User.Branch, documentSerie, documentExt);
+            return new O7JsonResult(response);
+        }
+
 
         public int Insert_Invoice(string documentType, string serie,
                                             string currency, string documentDate,

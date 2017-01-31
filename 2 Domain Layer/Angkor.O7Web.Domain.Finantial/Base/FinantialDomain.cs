@@ -156,6 +156,9 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             string taxId, string perception,
             string ccoId);
 
+        public abstract O7Response GetLogFE(string companyId, string branchId,
+            string documentSerie, string documentExt);
+
         public abstract O7Response SellTypes();
 
         public abstract O7Response Payments(string cod_sell);

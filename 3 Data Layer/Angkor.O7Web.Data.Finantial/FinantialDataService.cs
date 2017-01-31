@@ -595,6 +595,16 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceHeadView>("finantial_invoice.view_invoicehead", parameters, InvoiceHeadViewMapper.Class);
         }
 
+        public virtual List<LogFE> GetLogFE(string companyId, string branchId, string documentSerie, string documentExt)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_serie", documentSerie));
+            parameters.Add(O7Parameter.Make("p_nrodoce", documentExt));
+            return DataAccess.ExecuteFunction<LogFE>("finantial_invoice.getlogfe", parameters, LogFEMapper.Class);
+        }
+
         public virtual List<InvoiceDetailView> GetInvoiceDetailView(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;
