@@ -150,6 +150,7 @@
     <Content Include="Views\Client\Index.cshtml" />
     <Content Include="Views\Client\Managment.cshtml" />
     <Content Include="Scripts\jquery-3.1.1.min.map" />
+    <Content Include="Views\Invoice\Show.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
