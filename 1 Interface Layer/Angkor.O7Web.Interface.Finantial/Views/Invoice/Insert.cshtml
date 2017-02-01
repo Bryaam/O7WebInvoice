@@ -104,7 +104,7 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-8">
+                                            <div class="col-lg-7">
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-sm-3">
@@ -131,7 +131,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4">
+                                            <div class="col-lg-5">
                                                 <div class="col-sm-5">
                                                     <label style="left:inherit" class="form-label-separation">Condición de la venta</label>
                                                     <select id="condVenta" class="form-control" name="condSell" required></select>
@@ -430,21 +430,20 @@
 @section section_script {
 
     /*$("#btnSubmit").click(function(){
-        swal({
-        title: "Confirmación",
-        text: "¿Crear documento?",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Sí",
-        closeOnConfirm: false
-        }, function () {
-            swal("Creado", "Documento de Venta creado exitosamente.", "success");
-            $("#formInvoice").submit();
-        });
-    });*/
-
-    $("#tableProducts").on('change',function(){
+            swal({
+            title: "Confirmación",
+            text: "¿Crear documento?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            closeOnConfirm: false
+            }, function () {
+                swal("Creado", "Documento de Venta creado exitosamente.", "success");
+                $("#formInvoice").submit();
+            });
+        });*/
+    $("#tableProducts").on('change', function() {
         calculate_total();
     });
 
@@ -457,10 +456,10 @@
         autoclose: true
     });
 
-    $('#clienteOcasionalCB').on('ifChecked', function(){
+    $('#clienteOcasionalCB').on('ifChecked', function() {
         $('#botonBuscarCliente').hide();
         $('#codInput').hide();
-        $('#docInput').prop('readonly',false);
+        $('#docInput').prop('readonly', false);
         $('#docInput').removeClass('emulate-label');
         $('#codLabel').hide();
         $('.typeInput').hide();
@@ -481,10 +480,10 @@
         $('#perception_chosen').hide();
     });
 
-    $('#clienteOcasionalCB').on('ifUnchecked', function(){
+    $('#clienteOcasionalCB').on('ifUnchecked', function() {
         $('#botonBuscarCliente').show();
         $('#codInput').show();
-        $('#docInput').prop('readonly',true);
+        $('#docInput').prop('readonly', true);
         $('#docInput').addClass('emulate-label');
         $('#codLabel').show();
         $('.typeInput').show();
@@ -526,168 +525,200 @@
     });
 
     $("#tipoVenta").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#vendedor").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#formaPago").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#lineaNegocio").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#invoiceType").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#idSerieExterno").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#currency").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#language").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#taxe").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#perception").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
     //ComboBox Tab1
 
-    initialize_combo_ajax("#condVenta","/Finantial/Invoice/GetCondSells");
-    initialize_combo_ajax("#tipoVenta","/Finantial/Invoice/GetSellTypes");
-    initialize_combo_ajax("#codFinanciero","/Finantial/Invoice/GetFinantialCodes");
-    initialize_combo_ajax("#vendedor","/Finantial/Invoice/GetSellers");
-    initialize_combo_ajax("#lineaNegocio","/Finantial/Invoice/GetBussinessLine");
+    initialize_combo_ajax("#condVenta", "/Finantial/Invoice/GetCondSells");
+    initialize_combo_ajax("#tipoVenta", "/Finantial/Invoice/GetSellTypes");
+    initialize_combo_ajax("#codFinanciero", "/Finantial/Invoice/GetFinantialCodes");
+    initialize_combo_ajax("#vendedor", "/Finantial/Invoice/GetSellers");
+    initialize_combo_ajax("#lineaNegocio", "/Finantial/Invoice/GetBussinessLine");
 
-    $("#condVenta").change(function(){
-    var condition = $(this).val();
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetPayments", data: {cond_sell: condition} })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-    //console.log(result);
-    //console.log(jsonResult);
-    console.log("Actualiza");
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    populate_combo_box("#formaPago", jsonResult);
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+    $("#condVenta").change(function() {
+        var condition = $(this).val();
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/GetPayments",
+                data: {
+                    cond_sell: condition
+                }
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                //console.log(result);
+                //console.log(jsonResult);
+                console.log("Actualiza");
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    populate_combo_box("#formaPago", jsonResult);
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     });
 
+    $("#perception").change(function(){
+        calculate_total();
+    });
 
     //Fin ComboBox Tab1
 
     //ComboBox Tab2
 
-    initialize_combo_ajax("#invoiceType","/Finantial/Invoice/GetDocumentTypes",false);
+    initialize_combo_ajax("#invoiceType", "/Finantial/Invoice/GetDocumentTypes", false);
     $("#invoiceType").val("");
     $("#invoiceType").trigger("chosen:updated");
 
-    initialize_combo_ajax("#currency","/Finantial/Invoice/GetCurrencies");
-    initialize_combo_ajax("#language","/Finantial/Invoice/GetLanguages");
-    initialize_combo_ajax("#taxe","/Finantial/Invoice/GetTaxes", false);
+    initialize_combo_ajax("#currency", "/Finantial/Invoice/GetCurrencies");
+    initialize_combo_ajax("#language", "/Finantial/Invoice/GetLanguages");
+    initialize_combo_ajax("#taxe", "/Finantial/Invoice/GetTaxes", false);
     $("#taxe").val("");
     $("#taxe").trigger("chosen:updated");
 
-    $("#taxe").change(function(){
-    var selectedVal = $("#taxe option:selected").text();
-    var selectedNumber = selectedVal.split(" ").pop();
-    $("#taxeNumber").val(selectedNumber.split("%")[0]);
+    $("#taxe").change(function() {
+        var selectedVal = $("#taxe option:selected").text();
+        var selectedNumber = selectedVal.split(" ").pop();
+        $("#taxeNumber").val(selectedNumber.split("%")[0]);
     });
 
-    $("#dirInputSelect").change(function(){
-    $("#dirInputContent").val($("#dirInputSelect option:selected").text());
-    $("#dirInput").val($("#dirInputSelect").val());
+    $("#dirInputSelect").change(function() {
+        $("#dirInputContent").val($("#dirInputSelect option:selected").text());
+        $("#dirInput").val($("#dirInputSelect").val());
     });
 
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetPerception", async: false })
-    .done(function (result) {
-    //console.log(result);
-    var jsonResult = jQuery.parseJSON(result);
+    $.ajax({
+            method: "GET",
+            url: "/Finantial/Invoice/GetPerception",
+            async: false
+        })
+        .done(function(result) {
+            //console.log(result);
+            var jsonResult = jQuery.parseJSON(result);
 
-    combo_box = $("#perception");
-    $.each(jsonResult, function (index, value) {
-    combo_box.append("<option>"+value.Value+"</option>");
-    });
-    combo_box.trigger("chosen:updated");
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+            combo_box = $("#perception");
+            $.each(jsonResult, function(index, value) {
+                combo_box.append("<option>" + value.Value + "</option>");
+            });
+            combo_box.trigger("chosen:updated");
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
     $("#perception").val("");
     $("#perception").trigger("chosen:updated");
 
-    $("#invoiceType").change(function(){
-    var invoice = $(this).val();
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetSeries", data: {doctype: invoice} })
-    .done(function (result) {
-    //console.log(result);
-    var jsonResult = jQuery.parseJSON(result);
+    $("#invoiceType").change(function() {
+        var invoice = $(this).val();
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/GetSeries",
+                data: {
+                    doctype: invoice
+                }
+            })
+            .done(function(result) {
+                //console.log(result);
+                var jsonResult = jQuery.parseJSON(result);
 
-    combo_box = $("#idSerieExterno");
-    combo_box.empty();
-    combo_box.trigger("chosen:updated");
-    var default_value;
-    $.each(jsonResult, function (index, value) {
-    combo_box.append("<option>"+value.Value+"</option>");
-    if(value.Default == "true")
-    default_value = value.Value;
-    });
-    combo_box.val(default_value);
-    combo_box.trigger("chosen:updated");
+                combo_box = $("#idSerieExterno");
+                combo_box.empty();
+                combo_box.trigger("chosen:updated");
+                var default_value;
+                $.each(jsonResult, function(index, value) {
+                    combo_box.append("<option>" + value.Value + "</option>");
+                    if (value.Default == "true")
+                        default_value = value.Value;
+                });
+                combo_box.val(default_value);
+                combo_box.trigger("chosen:updated");
 
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     });
 
-    $("#invoiceType").change(function(){
-    var docType = $(this).val();
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/DocumentFlg", data: {documentType: docType} })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    if(jsonResult[0].Content == "N"){
-    $(".docFlgTrigger").hide();
-    $("#serNumber").val("");
-    $("#nroInt").val("");
-    $("#nroDocRef").val("");
-    $("#nroDocRefExt").val("");
-    }
-    else{
-    $(".docFlgTrigger").show();
-    }
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+    $("#invoiceType").change(function() {
+        var docType = $(this).val();
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/DocumentFlg",
+                data: {
+                    documentType: docType
+                }
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    if (jsonResult[0].Content == "N") {
+                        $(".docFlgTrigger").hide();
+                        $("#serNumber").val("");
+                        $("#nroInt").val("");
+                        $("#nroDocRef").val("");
+                        $("#nroDocRefExt").val("");
+                    } else {
+                        $(".docFlgTrigger").show();
+                    }
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     });
 
     //calculate_expiration_date("#formaPago");
@@ -699,273 +730,371 @@
 
     //Tab 4
 
-    $("#btnCrearFactura").click(function(){
+    $("#btnCrearFactura").click(function() {
         getInvoiceHeader();
     });
 
     //Fin Tab 4
 
     //Inicio de data dummy
-   /* var dataClient = {"ClientCode" :"666", "ClientType" :"Natural", "DocumentNumber" : "6688", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
-    var dataClient2 = {"ClientCode" :"6662", "ClientType" :"Natural2", "DocumentNumber" : "6688222", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
+    /* var dataClient = {"ClientCode" :"666", "ClientType" :"Natural", "DocumentNumber" : "6688", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
+     var dataClient2 = {"ClientCode" :"6662", "ClientType" :"Natural2", "DocumentNumber" : "6688222", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
 
-    var dataSetClient = [];
-    dataSetClient.push(dataClient);
-    dataSetClient.push(dataClient2);
+     var dataSetClient = [];
+     dataSetClient.push(dataClient);
+     dataSetClient.push(dataClient2);
 
-    var dataUnit = {"item":"1","concept":"observacion","desc":"descripcion","price":"8","tax":"18","porc":"5"};
-    dataUnit.amount = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' value='' id='item_amount_"+1+"'>";
-    dataUnit.comment = "<input class='form-control' value='' id='item_comment_"+1+"'>";
-    dataUnit.price = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' id='item_price_"+1+"'>";
+     var dataUnit = {"item":"1","concept":"observacion","desc":"descripcion","price":"8","tax":"18","porc":"5"};
+     dataUnit.amount = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' value='' id='item_amount_"+1+"'>";
+     dataUnit.comment = "<input class='form-control' value='' id='item_comment_"+1+"'>";
+     dataUnit.price = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' id='item_price_"+1+"'>";
 
-    var dataSet = [];
-    dataSet.push(dataUnit);*/
+     var dataSet = [];
+     dataSet.push(dataUnit);*/
 
     //Fin de data dummy
 
 
     var tableClients = $('#seleccionarCliente').DataTable({
-    "bPaginate": false,
-    "bLengthChange": false,
-    "bFilter": true,
-    "bInfo": false,
-    "bAutoWidth": false,
-    "searching" : false,
-    "paging": true,
-    columns: [
-    { title: "Cod.", data: "ClientCode"},
-    { title: "Nombre", data: "ClientName"},
-    { title: "RUC/DNI", data: "DocumentNumber"},
-    { title: "Teléfono", data: "ClientPhone"},
-    { title: "Email", data: "ClientEmail"}
-    ]
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false,
+        "searching": false,
+        "paging": true,
+        columns: [{
+                title: "Cod.",
+                data: "ClientCode"
+            },
+            {
+                title: "Nombre",
+                data: "ClientName"
+            },
+            {
+                title: "RUC/DNI",
+                data: "DocumentNumber"
+            },
+            {
+                title: "Teléfono",
+                data: "ClientPhone"
+            },
+            {
+                title: "Email",
+                data: "ClientEmail"
+            }
+        ]
     });
     //Tabla de Facturas
     var tableSeries = $('#seleccionarSerie').DataTable({
-    "bPaginate": false,
-    "bLengthChange": false,
-    "bFilter": true,
-    "bInfo": false,
-    "bAutoWidth": false,
-    "searching" : false,
-    "paging": true,
-    columns:[
-    { title: "Documento", data: "DocumentType", width: "12%" },
-    { title: "Serie", data: "Serie", width: "10%" },
-    { title: "Cod. Cliente", data: "ClientCode", width: "5%" },
-    { title: "Razón Social", data: "ClientName", width: "8%" },
-    { title: "RUC/DNI", data: "ClientDoc", width: "5%" },
-    { title: "Fecha", data: "Date", width: "10%" },
-    { title: "Moneda", data: "Currency", width: "5%" },
-    { title: "Importe", data: "Amount", width: "5%" },
-    ]
+        "bPaginate": false,
+        "bLengthChange": false,
+        "bFilter": true,
+        "bInfo": false,
+        "bAutoWidth": false,
+        "searching": false,
+        "paging": true,
+        columns: [{
+                title: "Documento",
+                data: "DocumentType",
+                width: "12%"
+            },
+            {
+                title: "Serie",
+                data: "Serie",
+                width: "10%"
+            },
+            {
+                title: "Cod. Cliente",
+                data: "ClientCode",
+                width: "5%"
+            },
+            {
+                title: "Razón Social",
+                data: "ClientName",
+                width: "8%"
+            },
+            {
+                title: "RUC/DNI",
+                data: "ClientDoc",
+                width: "5%"
+            },
+            {
+                title: "Fecha",
+                data: "Date",
+                width: "10%"
+            },
+            {
+                title: "Moneda",
+                data: "Currency",
+                width: "5%"
+            },
+            {
+                title: "Importe",
+                data: "Amount",
+                width: "5%"
+            },
+        ]
     });
 
-    $('#seleccionarCliente tbody').on( 'click', 'tr', function () {
-    if ( $(this).hasClass('selected') ) {
-    $(this).removeClass('selected');
-    }
-    else {
-    tableClients.$('tr.selected').removeClass('selected');
-    $(this).addClass('selected');
-    }
-    } );
+    $('#seleccionarCliente tbody').on('click', 'tr', function() {
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        } else {
+            tableClients.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
 
-    $('#seleccionarSerie tbody').on( 'click', 'tr', function () {
-    if ( $(this).hasClass('selected') ) {
-    $(this).removeClass('selected');
-    }
-    else {
-    tableSeries.$('tr.selected').removeClass('selected');
-    $(this).addClass('selected');
-    }
-    } );
+    $('#seleccionarSerie tbody').on('click', 'tr', function() {
+        if ($(this).hasClass('selected')) {
+            $(this).removeClass('selected');
+        } else {
+            tableSeries.$('tr.selected').removeClass('selected');
+            $(this).addClass('selected');
+        }
+    });
 
 
-    $('#modalClientOk').click( function () {
+    $('#modalClientOk').click(function() {
         var parentRow = $('.selected');
 
-        if(parentRow.val() != undefined){
+        if (parentRow.val() != undefined) {
             $("#codInput").val(parentRow.children('td').eq(0).text());
             //$(".typeInput").val(parentRow.children('td').eq(1).text());
             $("#docInput").val(parentRow.children('td').eq(2).text());
             $("#nameInput").val(parentRow.children('td').eq(1).text());
             $("#phoneInput").val(parentRow.children('td').eq(3).text());
             $("#mailInput").val(parentRow.children('td').eq(4).text());
-            tableClients.row('.selected').remove().draw( false );
+            tableClients.row('.selected').remove().draw(false);
 
             var clientCode = parentRow.children('td').eq(0).text();
 
             $("#clientCode").val(clientCode);
 
-            $.ajax({ method: "GET", url: "/Finantial/Invoice/GetInvoiceAdresses", data: {clientId: clientCode } })
-            .done(function (result) {
-            var jsonResult = jQuery.parseJSON(result);
-            if (!jQuery.isEmptyObject(jsonResult)) {
-            populate_combo_box("#dirInputSelect", jsonResult);
-            $("#dirInputSelect").val("");
-            $("#dirInputSelect").trigger("chosen:updated");
-            }
-            })
-            .fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
+            $.ajax({
+                    method: "GET",
+                    url: "/Finantial/Invoice/GetInvoiceAdresses",
+                    data: {
+                        clientId: clientCode
+                    }
+                })
+                .done(function(result) {
+                    var jsonResult = jQuery.parseJSON(result);
+                    if (!jQuery.isEmptyObject(jsonResult)) {
+                        populate_combo_box("#dirInputSelect", jsonResult);
+                        $("#dirInputSelect").val("");
+                        $("#dirInputSelect").trigger("chosen:updated");
+                    }
+                })
+                .fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
 
             //Pedir el codigo (Usuario) segun cada caso para poder actualizar los chosen
 
-            $.ajax({ method: "GET", url: "/Finantial/Invoice/ClientDefaultValues", data: {clientId: clientCode } })
-                .done(function (result) {
-                var jsonResult = jQuery.parseJSON(result);
-
-                if (!jQuery.isEmptyObject(jsonResult)) {
-                    update_chosen_select("#taxe",jsonResult[0].TaxId);
-                    update_chosen_select("#currency",jsonResult[0].CurrencyId);
-                    update_chosen_select("#tipoVenta",jsonResult[0].TypeSell);
-                    update_chosen_select("#condVenta",jsonResult[0].CondSell);
-                    update_chosen_select("#formaPago",jsonResult[0].Payment);
-                    update_chosen_select("#vendedor",jsonResult[0].Seller);
-                    update_chosen_select("#codFinanciero",jsonResult[0].FinantialCode);
-                    update_chosen_select("#lineaNegocio",jsonResult[0].BussinessLine);
-                    update_chosen_select("#language",jsonResult[0].Language);
-
-                    if(jsonResult[0].FlgPer == "N"){
-                        $('#perception_chosen').hide();
-                        $('#perceptionLabel').hide();
-                    update_chosen_select("#perception","");
-                    } else{
-                        $('#perception_chosen').show();
-                        $('#perceptionLabel').show();
+            $.ajax({
+                    method: "GET",
+                    url: "/Finantial/Invoice/ClientDefaultValues",
+                    data: {
+                        clientId: clientCode
                     }
+                })
+                .done(function(result) {
+                    var jsonResult = jQuery.parseJSON(result);
 
-                    var condition = $("#condVenta").val();
-                    $.ajax({ method: "GET", url: "/Finantial/Invoice/GetPayments", data: {cond_sell: condition} })
-                        .done(function (result) {
-                            var jsonResult = jQuery.parseJSON(result);
-                            if (!jQuery.isEmptyObject(jsonResult)) {
-                                populate_combo_box("#formaPago", jsonResult);
-                            }
-                        })
-                        .fail(function (result) {
-                            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                        });
+                    if (!jQuery.isEmptyObject(jsonResult)) {
+                        update_chosen_select("#taxe", jsonResult[0].TaxId);
+                        update_chosen_select("#currency", jsonResult[0].CurrencyId);
+                        update_chosen_select("#tipoVenta", jsonResult[0].TypeSell);
+                        update_chosen_select("#condVenta", jsonResult[0].CondSell);
+                        update_chosen_select("#formaPago", jsonResult[0].Payment);
+                        update_chosen_select("#vendedor", jsonResult[0].Seller);
+                        update_chosen_select("#codFinanciero", jsonResult[0].FinantialCode);
+                        update_chosen_select("#lineaNegocio", jsonResult[0].BussinessLine);
+                        update_chosen_select("#language", jsonResult[0].Language);
 
-                }
-            })
-            .fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
+                        if (jsonResult[0].FlgPer == "N") {
+                            $('#perception_chosen').hide();
+                            $('#perceptionLabel').hide();
+                            update_chosen_select("#perception", "");
+                        } else {
+                            $('#perception_chosen').show();
+                            $('#perceptionLabel').show();
+                        }
 
-    /*update_chosen_select("#condVenta","0002");
-    update_chosen_select("#"formaPago);
-    update_chosen_select("#vendedor");
-    update_chosen_select("#tipoVenta");
-    update_chosen_select("#codFinanciero");
-    update_chosen_select("#lineaNegocio"); */
-    }
+                        var condition = $("#condVenta").val();
+                        $.ajax({
+                                method: "GET",
+                                url: "/Finantial/Invoice/GetPayments",
+                                data: {
+                                    cond_sell: condition
+                                }
+                            })
+                            .done(function(result) {
+                                var jsonResult = jQuery.parseJSON(result);
+                                if (!jQuery.isEmptyObject(jsonResult)) {
+                                    populate_combo_box("#formaPago", jsonResult);
+                                }
+                            })
+                            .fail(function(result) {
+                                toastr.error(result.statusText, "Mensaje", {
+                                    positionClass: "toast-top-full-width"
+                                });
+                            });
+
+                    }
+                })
+                .fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
+
+            /*update_chosen_select("#condVenta","0002");
+            update_chosen_select("#"formaPago);
+            update_chosen_select("#vendedor");
+            update_chosen_select("#tipoVenta");
+            update_chosen_select("#codFinanciero");
+            update_chosen_select("#lineaNegocio"); */
+        }
     });
 
-    $('#modalSerieOk').click( function () {
-    var parentRow = $('.selected');
-    var invoiceDoc = parentRow.children('td').eq(0).text();
-    var invoiceSerie = parentRow.children('td').eq(1).text();
-    var invoiceParsed = invoiceDoc.split("-");
-    var invoiceSerieParsed = invoiceSerie.split("-");
-    $("#serNumber").val($.trim(invoiceParsed[0]));
-    $("#nroInt").val($.trim(invoiceParsed[1]));
-    $("#nroDocRef").val($.trim(invoiceSerieParsed[0]));
-    $("#nroDocRefExt").val($.trim(invoiceSerieParsed[1]));
-    tableSeries.row('.selected').remove().draw( false );
+    $('#modalSerieOk').click(function() {
+        var parentRow = $('.selected');
+        var invoiceDoc = parentRow.children('td').eq(0).text();
+        var invoiceSerie = parentRow.children('td').eq(1).text();
+        var invoiceParsed = invoiceDoc.split("-");
+        var invoiceSerieParsed = invoiceSerie.split("-");
+        $("#serNumber").val($.trim(invoiceParsed[0]));
+        $("#nroInt").val($.trim(invoiceParsed[1]));
+        $("#nroDocRef").val($.trim(invoiceSerieParsed[0]));
+        $("#nroDocRefExt").val($.trim(invoiceSerieParsed[1]));
+        tableSeries.row('.selected').remove().draw(false);
     });
 
 
     //Agregar un cliente a la tabla - Step 1
-    $('#btnFilter').click(function(){
-    var filterContent = $('#filterInput').val();
-    //tableClients.clear().rows.add(dataSetClient).draw();
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/Get_Clients", data: {filter: filterContent} })
-    .done(function (result) {
-    //console.log(result);
-    var jsonResult = jQuery.parseJSON(result);
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    tableClients.clear().rows.add(jsonResult).draw();
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+    $('#btnFilter').click(function() {
+        var filterContent = $('#filterInput').val();
+        //tableClients.clear().rows.add(dataSetClient).draw();
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/Get_Clients",
+                data: {
+                    filter: filterContent
+                }
+            })
+            .done(function(result) {
+                //console.log(result);
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    tableClients.clear().rows.add(jsonResult).draw();
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     });
 
     //Filtrar las series
-    $('#btnFilterSerie').click(function(){
-    var filterContent = $('#filterInputSerie').val();
-    //tableSeries.clear().rows.add(dataSetClient).draw();
-    $.ajax({ method: "GET", url: "/Finantial/Invoice/Invoices_Populate", data: {filter: filterContent} })
-    .done(function (result) {
-    //console.log(result);
-    var jsonResult = jQuery.parseJSON(result);
+    $('#btnFilterSerie').click(function() {
+        var filterContent = $('#filterInputSerie').val();
+        //tableSeries.clear().rows.add(dataSetClient).draw();
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/Invoices_Populate",
+                data: {
+                    filter: filterContent
+                }
+            })
+            .done(function(result) {
+                //console.log(result);
+                var jsonResult = jQuery.parseJSON(result);
 
-    tableSeries.clear().rows.add(jsonResult).draw();
+                tableSeries.clear().rows.add(jsonResult).draw();
 
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     });
-    });
 
-    function calculate_expiration_date(idElement){
-        $(idElement).change(function(){
+    function calculate_expiration_date(idElement) {
+        $(idElement).change(function() {
             var docType = $("#formaPago").val();
             var currDate = $("#fechaDoc").val();
             console.log(docType);
             console.log(currDate);
 
-            $.ajax({ method: "GET", url: "/Finantial/Invoice/GetExpirationDate", data: {payment: docType, documentDate: currDate} })
-                .done(function (result) {
+            $.ajax({
+                    method: "GET",
+                    url: "/Finantial/Invoice/GetExpirationDate",
+                    data: {
+                        payment: docType,
+                        documentDate: currDate
+                    }
+                })
+                .done(function(result) {
                     var jsonResult = jQuery.parseJSON(result);
                     console.log(jsonResult[0]);
                     $("#fechaVenc").val(jsonResult[0].Content);
                 })
-                .fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                .fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
                 });
         });
     }
 
 
     //Function que por request AJAX llena un comboBox
-    function initialize_combo_ajax(idSelect, url, async = true){
-    $.ajax({ method: "GET", url: url, async: async })
-    .done(function (result) {
-    var jsonResult = jQuery.parseJSON(result);
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    populate_combo_box(idSelect, jsonResult);
-    }
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+    function initialize_combo_ajax(idSelect, url, async = true) {
+        $.ajax({
+                method: "GET",
+                url: url,
+                async: async
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    populate_combo_box(idSelect, jsonResult);
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     }
 
     //Function que llena un comboBox
-    function populate_combo_box(idCombo, data){
-    combo_box = $(idCombo);
-    combo_box.empty();
-    combo_box.trigger("chosen:updated");
-    $.each(data, function (index, value) {
-    combo_box.append("<option value='"+value.Value+"'>"+value.Content+"</option>");
-    });
-    combo_box.trigger("chosen:updated");
+    function populate_combo_box(idCombo, data) {
+        combo_box = $(idCombo);
+        combo_box.empty();
+        combo_box.trigger("chosen:updated");
+        $.each(data, function(index, value) {
+            combo_box.append("<option value='" + value.Value + "'>" + value.Content + "</option>");
+        });
+        combo_box.trigger("chosen:updated");
     }
 
     //Function que hace update a un chosen select
-    function update_chosen_select(chosenId, value){
-    var chosenElement = $(chosenId);
-    //chosenElement.attr("disabled", true);
-    chosenElement.val(value);
-    chosenElement.trigger("chosen:updated");
+    function update_chosen_select(chosenId, value) {
+        var chosenElement = $(chosenId);
+        //chosenElement.attr("disabled", true);
+        chosenElement.val(value);
+        chosenElement.trigger("chosen:updated");
     }
 
-    function getInvoiceHeader(){
+    function getInvoiceHeader() {
         var ClientCode = $("#clientCode").html();
         var ClientID = $("#docInput").val();
         var ClientPhone = $("#phoneInput").val();
@@ -1001,23 +1130,59 @@
         var Trabajador = "";
 
 
-        $.ajax({ method: "POST", url: "/Finantial/Invoice/Insert_Invoice", data: { documentType: TipoDoc,  serie: SerieExterno, currency: Currency,  documentDate: FechaDoc, documentExpiration: FechaVenc,  clienteCode: ClientCode,  codTax: Taxe,  clientName: ClientName,  invoiceAddress: ClientAddressContent,  clientId: ClientID,  glosa: Glosa, sellType: TipoVenta,  language: Language, condSell: CondVenta,  payment: FormaPago, bussinessline: LineaNegocio,  finantialcod: CodFinanciero, telephone: ClientPhone,  seller: Vendedor, employeeId: Trabajador,  perception: Perception, donate: Donacion,  documentTypeRef: SerieNumber, documentIdRef: NroInt, documentOc: NroOC, guiRem: NroGuiaRemision, addressId: ClientAddressValue, serieExtRef: NroDocRef, nroDoceExt: NroDocRefExt } })
-            .done(function (result) {
-                insertInvoiceDetail(result,TipoDoc,Perception);
+        $.ajax({
+                method: "POST",
+                url: "/Finantial/Invoice/Insert_Invoice",
+                data: {
+                    documentType: TipoDoc,
+                    serie: SerieExterno,
+                    currency: Currency,
+                    documentDate: FechaDoc,
+                    documentExpiration: FechaVenc,
+                    clienteCode: ClientCode,
+                    codTax: Taxe,
+                    clientName: ClientName,
+                    invoiceAddress: ClientAddressContent,
+                    clientId: ClientID,
+                    glosa: Glosa,
+                    sellType: TipoVenta,
+                    language: Language,
+                    condSell: CondVenta,
+                    payment: FormaPago,
+                    bussinessline: LineaNegocio,
+                    finantialcod: CodFinanciero,
+                    telephone: ClientPhone,
+                    seller: Vendedor,
+                    employeeId: Trabajador,
+                    perception: Perception,
+                    donate: Donacion,
+                    documentTypeRef: SerieNumber,
+                    documentIdRef: NroInt,
+                    documentOc: NroOC,
+                    guiRem: NroGuiaRemision,
+                    addressId: ClientAddressValue,
+                    serieExtRef: NroDocRef,
+                    nroDoceExt: NroDocRefExt
+                }
+            })
+            .done(function(result) {
+                insertInvoiceDetail(result, TipoDoc, Perception);
                 $("#btnCrearFactura").prop('disabled', true);
                 $("#btnFacturacionE").prop('disabled', false);
                 $("#btnPDF").prop('disabled', false);
                 $("#btnFacturacionM").prop('disabled', false);
             })
-            .fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
             });
 
 
     }
 
-    function insertInvoiceDetail(idInvoice, tipoDoc, perception){
-        tableProduct.rows().every( function ( rowIdx, tableLoop, rowLoop ) {
+    function insertInvoiceDetail(idInvoice, tipoDoc, perception) {
+        tableProduct.rows().every(function(rowIdx, tableLoop, rowLoop) {
 
             var curData = this.data();
             var concept = $('#item_concept_' + curData.item).val();
@@ -1037,11 +1202,26 @@
             var conceptValue = getCodeByName(conceptSource, concept);
             var costCenterValue = getCodeByName(costCenterSource, costCenter);
 
-            $.ajax({ method: "POST", url: "/Finantial/Invoice/InsertDetailInvoice", data: { documentType: tipoDoc, documentId: idInvoice, conceptId: conceptValue, observacion: comment, cantidad: amount, unitValue: price, taxId: taxe, perception: perception, ccoId: costCenterValue} })
-                .done(function (result) {
+            $.ajax({
+                    method: "POST",
+                    url: "/Finantial/Invoice/InsertDetailInvoice",
+                    data: {
+                        documentType: tipoDoc,
+                        documentId: idInvoice,
+                        conceptId: conceptValue,
+                        observacion: comment,
+                        cantidad: amount,
+                        unitValue: price,
+                        taxId: taxe,
+                        perception: perception,
+                        ccoId: costCenterValue
+                    }
                 })
-                .fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                .done(function(result) {})
+                .fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
                 });
         });
     }
@@ -1057,41 +1237,64 @@
         "bInfo": false,
         "bAutoWidth": false,
         "paging": true,
-        columns: [
-            { title: "Concepto", data: "concept"},
-            { title: "Comentario", data: "comment"},
-            { title: "Centro de costos", data: "cost_center"},
-            { title: "Impuesto", data: "tax"},
-            { title: "Valor Unitario", data: "price"},
-            { title: "Cantidad", data: "amount"},
-            { title: "Subtotal", data: "subtotal"},
-            { title: "", data: "delete"}
+        columns: [{
+                title: "Concepto",
+                data: "concept"
+            },
+            {
+                title: "Comentario",
+                data: "comment"
+            },
+            {
+                title: "Centro de costos",
+                data: "cost_center"
+            },
+            {
+                title: "Impuesto",
+                data: "tax"
+            },
+            {
+                title: "Valor Unitario",
+                data: "price"
+            },
+            {
+                title: "Cantidad",
+                data: "amount"
+            },
+            {
+                title: "Subtotal",
+                data: "subtotal"
+            },
+            {
+                title: "",
+                data: "delete"
+            }
         ]
     });
 
-    tableProduct.page.len( 5 ).draw();
+    tableProduct.page.len(5).draw();
 
 
 
     //create_dataset();
 
-    $('#botonAgregarProducto').click(function(){
+    $('#botonAgregarProducto').click(function() {
         create_dataset();
     });
 
-    $('#tableProducts tbody').on( 'click', 'a.delete', function () {
+    $('#tableProducts tbody').on('click', 'a.delete', function() {
         tableProduct
-        .row( $(this).parents('tr') )
-        .remove()
-        .draw();
+            .row($(this).parents('tr'))
+            .remove()
+            .draw();
 
         calculate_total();
-    } );
+    });
 
-    function getCodeByName(source, name){
-        var code = "" ;
-        $.each( source, function( key, value ) {
-            if(name === value.name){
+    function getCodeByName(source, name) {
+        var code = "";
+        $.each(source, function(key, value) {
+            if (name === value.name) {
                 code = value.Value;
                 return false;
             }
@@ -1100,33 +1303,35 @@
     }
 
     // Verificar que todos los campos esten completos
-    function verify_complete(){
-        var amount = $('#item_amount_'+(itemNum-1)).val();
-        var comment = $('#item_comment_'+(itemNum-1)).val();
-        var price = $('#item_price_'+(itemNum-1)).val();
-        var concept = $('#item_concept_'+(itemNum-1)).val();
-        var cost_center = $('#item_cost_center_'+(itemNum-1)).val();
-        var tax = $('#item_tax_'+(itemNum-1)).val();
+    function verify_complete() {
+        var amount = $('#item_amount_' + (itemNum - 1)).val();
+        var comment = $('#item_comment_' + (itemNum - 1)).val();
+        var price = $('#item_price_' + (itemNum - 1)).val();
+        var concept = $('#item_concept_' + (itemNum - 1)).val();
+        var cost_center = $('#item_cost_center_' + (itemNum - 1)).val();
+        var tax = $('#item_tax_' + (itemNum - 1)).val();
 
         console.log(tax)
 
-        if (amount != "" && comment != "" && price != "" && concept != "" && cost_center != "" && tax != null){
-            $('#botonAgregarProducto').prop( "disabled", false );
+        if (amount != "" && comment != "" && price != "" && concept != "" && cost_center != "" && tax != null) {
+            $('#botonAgregarProducto').prop("disabled", false);
         }
     }
 
     // Crear dataset
-    function create_dataset(){
-        var dataUnit = {"porc":"5"};
+    function create_dataset() {
+        var dataUnit = {
+            "porc": "5"
+        };
         dataUnit.item = itemNum;
-        dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_"+itemNum+"' name='cantidad_"+itemNum+"'>";
-        dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_"+itemNum+"' name='observacion_"+itemNum+"'>";
-        dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_"+itemNum+"' name='unitValue_"+itemNum+"'>";
-        dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' style='width:100%' id='item_concept_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' style='width:100%' id='item_concept_value_"+itemNum+"' name='conceptId_"+itemNum+"'>";
-        dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_"+itemNum+"'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_"+itemNum+"' name='ccoId_"+itemNum+"'>";
+        dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
+        dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
+        dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
+        dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' style='width:100%' id='item_concept_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' style='width:100%' id='item_concept_value_" + itemNum + "' name='conceptId_" + itemNum + "'>";
+        dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_" + itemNum + "' name='ccoId_" + itemNum + "'>";
         dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
-        dataUnit.subtotal = "<p id='item_subtotal_"+itemNum+"'>0</p>";
-        dataUnit.tax = "<select class='form-control' id='item_tax_"+itemNum+"' name='taxId_"+itemNum+"'></select>"
+        dataUnit.subtotal = "<p id='item_subtotal_" + itemNum + "'>0</p>";
+        dataUnit.tax = "<select class='form-control' id='item_tax_" + itemNum + "' name='taxId_" + itemNum + "'></select>"
 
         var dataSet = [];
         dataSet.push(dataUnit);
@@ -1135,34 +1340,49 @@
 
         var currentPerception = $("#perception").val();
 
-        $.ajax({ method: "GET", url: "/Finantial/Invoice/GetConcepts", data: { ratePerception: currentPerception }, async: false })
-            .done(function (result) {
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/GetConcepts",
+                data: {
+                    ratePerception: currentPerception
+                },
+                async: false
+            })
+            .done(function(result) {
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
-                    $('#item_concept_'+itemNum).typeahead({
+                    $('#item_concept_' + itemNum).typeahead({
                         source: jsonResult
                     });
                 }
             })
-            .fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
             });
-        $(".autocomplete-reference").change(function(){
+        $(".autocomplete-reference").change(function() {
             var type_value = $(this).typeahead("getActive");
             $(this).parent().find(".autocomplete-reference-value").val(type_value.Value);
         });
 
-        $.ajax({ method: "GET", url: "/Finantial/Invoice/GetCenterCost", async: false })
-            .done(function (result) {
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/GetCenterCost",
+                async: false
+            })
+            .done(function(result) {
                 var jsonResult = jQuery.parseJSON(result);
                 if (!jQuery.isEmptyObject(jsonResult)) {
-                    $('#item_cost_center_'+itemNum).typeahead({
+                    $('#item_cost_center_' + itemNum).typeahead({
                         source: jsonResult
                     });
                 }
             })
-            .fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
             });
 
         $("#item_tax_" + itemNum).chosen({
@@ -1170,55 +1390,48 @@
             disable_search: true
         });
 
-        initialize_combo_ajax("#item_tax_" + itemNum,"/Finantial/Invoice/GetTaxes", false);
+        initialize_combo_ajax("#item_tax_" + itemNum, "/Finantial/Invoice/GetTaxes", false);
         update_chosen_select("#item_tax_" + itemNum, $("#taxe").val());
 
         itemNum++;
 
-        $('#botonAgregarProducto').prop( "disabled", true );
-        $('.input-add_product').bind('keyup',verify_complete);
+        $('#botonAgregarProducto').prop("disabled", true);
+        $('.input-add_product').bind('keyup', verify_complete);
 
     }
 
     // Calcular total de productos
-    function calculate_total(){
+    function calculate_total() {
         var sellValue = 0.0;
         var totalTax = 0.0;
         var totalPorc = 0.0;
 
-        tableProduct.rows().every(function(rowIdx,tableLoop,rowLoop){
+        tableProduct.rows().every(function(rowIdx, tableLoop, rowLoop) {
             var curData = this.data();
-            var price = $('#item_price_'+curData.item).val();
-            var amount = $('#item_amount_'+curData.item).val();
-            var tax =  $('#item_tax_'+curData.item+' :selected').text();
-            
+            var price = $('#item_price_' + curData.item).val();
+            var amount = $('#item_amount_' + curData.item).val();
+            var taxVal = $('#item_tax_' + curData.item + ' :selected').text().split("-");
+            var tax = $.trim(taxVal[1].split("%")[0]);
             var porc = 0;
-            if ($("#perception").is(":visible")){
-                porc = $('#perception').text();
-                
+
+            if ($("#perceptionLabel").css("display") == "inline-block") {   
+                porc = $('#perception :selected').text();
             }
 
-            console.log(porc);
+            var curSubTotal = price * amount;
 
-            tax = 18;
-            console.log(tax);
-
-            var curSubTotal = price*amount;
-
-            $('#item_subtotal_'+curData.item).text(curSubTotal);
+            $('#item_subtotal_' + curData.item).text(curSubTotal);
 
             sellValue += curSubTotal;
-            totalTax += curSubTotal*tax/100;
-            totalPorc += curSubTotal*porc/100;
+            totalTax += curSubTotal * tax / 100;
+            totalPorc += curSubTotal * porc / 100;
         })
 
         $('#venta').text(sellValue);
         $('#impuesto').text(totalTax);
-        $('#totalValor').text(sellValue+totalTax);
+        $('#totalValor').text(sellValue + totalTax);
         $('#percepcionImport').text(totalPorc);
-        $('#totalACobrar').text(sellValue+totalTax+totalPorc);
+        $('#totalACobrar').text(sellValue + totalTax + totalPorc);
     }
-
-
 
 }
