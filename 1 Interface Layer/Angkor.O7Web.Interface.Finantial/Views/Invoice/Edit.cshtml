@@ -1,6 +1,6 @@
 ﻿
 @{
-    ViewBag.Title = "Editar";
+    ViewBag.Title = "Edición del documento " + ViewBag.documentType + "-" + ViewBag.documentId;
     ViewBag.Section = "Facturación";
     Layout = "~/Views/_Layout.cshtml";
 }
@@ -161,7 +161,7 @@
         $('#nameInput').val('');
         $('#phoneInput').val('');
         $('#mailInput').val('');
-        $('#clientCode').html('');
+        $('#clientCode').val('99999999');
         $('#dirInput').val("");
         $('#dirInputContent').val("");
 
@@ -185,7 +185,7 @@
         $('#nameInput').val('');
         $('#phoneInput').val('');
         $('#mailInput').val('');
-        $('#clientCode').html('');
+        $('#clientCode').val('');
         $('#dirInput').val("");
         $('#dirInputContent').val("");
 
@@ -721,7 +721,8 @@
                 method: "GET",
                 url: "/Finantial/Invoice/Invoices_Populate",
                 data: {
-                    filter: filterContent
+                    filter: filterContent,
+                    clientCode: clientCodeFilter
                 }
             })
             .done(function(result) {

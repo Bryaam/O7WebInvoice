@@ -469,7 +469,7 @@
         $('#nameInput').val('');
         $('#phoneInput').val('');
         $('#mailInput').val('');
-        $('#clientCode').html('');
+        $('#clientCode').val('99999999');
         $('#dirInput').val("");
         $('#dirInputContent').val("");
 
@@ -493,7 +493,7 @@
         $('#nameInput').val('');
         $('#phoneInput').val('');
         $('#mailInput').val('');
-        $('#clientCode').html('');
+        $('#clientCode').val('');
         $('#dirInput').val("");
         $('#dirInputContent').val("");
 
@@ -609,6 +609,8 @@
     $("#perception").change(function(){
         calculate_total();
     });
+
+    $(".docFlgTrigger").hide();
 
     //Fin ComboBox Tab1
 
@@ -1004,12 +1006,14 @@
     //Filtrar las series
     $('#btnFilterSerie').click(function() {
         var filterContent = $('#filterInputSerie').val();
+        var clientCodeFilter = $('#clientCode').val();
         //tableSeries.clear().rows.add(dataSetClient).draw();
         $.ajax({
                 method: "GET",
                 url: "/Finantial/Invoice/Invoices_Populate",
                 data: {
-                    filter: filterContent
+                    filter: filterContent,
+                    clientCode: clientCodeFilter
                 }
             })
             .done(function(result) {
