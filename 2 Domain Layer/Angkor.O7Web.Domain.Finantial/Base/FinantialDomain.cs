@@ -93,7 +93,7 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             string ubigeoDep, string ubigeoProv, string ubigeoDist);
 
         // Inicio modificacion Invoice Gf
-        public abstract O7Response AllInvoices(string companyId, string branchId, string filter);
+        public abstract O7Response AllInvoices(string companyId, string branchId, string filter,string clientCode);
         public abstract O7Response Concepts(string companyId, string branchId, string percepcionTasa);
         public abstract O7Response Series(string companyId, string branchId, string docType);
         public abstract O7Response Cco(string companyId, string branchId);

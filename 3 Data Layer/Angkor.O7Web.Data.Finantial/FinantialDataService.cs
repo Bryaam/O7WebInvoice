@@ -401,13 +401,14 @@ namespace Angkor.O7Web.Data.Finantial
 
 
         // Inicio modificacion Invoice Gf
-        public virtual List<InvoiceBasicInformation> AllInvoices(string companyId, string branchId, string pFilter)
+        public virtual List<InvoiceBasicInformation> AllInvoices(string companyId, string branchId, string pFilter,string clientCode)
 
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_cia", companyId));
             parameters.Add(O7Parameter.Make("p_suc", branchId));
             parameters.Add(O7Parameter.Make("p_filter", pFilter));
+            parameters.Add(O7Parameter.Make("p_codcli", clientCode));
             return DataAccess.ExecuteFunction<InvoiceBasicInformation>("finantial_invoice.invoices", parameters, InvoiceBasicInformationMapper.Class);
         }
 
