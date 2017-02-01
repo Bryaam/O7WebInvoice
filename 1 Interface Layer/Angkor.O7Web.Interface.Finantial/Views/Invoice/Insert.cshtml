@@ -451,6 +451,7 @@
         });
     });
 
+
     $("#tableProducts").on('change', function() {
         calculate_total();
     });
@@ -598,6 +599,9 @@
     initialize_combo_ajax("#lineaNegocio", "/Finantial/Invoice/GetBussinessLine", false);
     $("#lineaNegocio").val("");
     $("#lineaNegocio").trigger("chosen:updated");
+
+    $('#perceptionLabel').hide();
+    $('#perception_chosen').hide();
 
     $("#condVenta").change(function() {
         var condition = $(this).val();
@@ -1049,8 +1053,6 @@
         $(idElement).change(function() {
             var docType = $("#formaPago").val();
             var currDate = $("#fechaDoc").val();
-            console.log(docType);
-            console.log(currDate);
 
             $.ajax({
                     method: "GET",
