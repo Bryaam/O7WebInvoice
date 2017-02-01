@@ -1224,7 +1224,6 @@
         $("#taxe").val(invoice.TaxId);
         $("#taxe").prop('disabled', true).trigger("chosen:updated");
         $("#nameInput").val(invoice.clientName);
-        update_chosen_select("#dirInputSelect", invoice.clientAddressId);
         $("#dirInputContent").val(invoice.clientAddressDescription);
         $("#dirInput").val(invoice.clientAddressId);
         $("#docInput").val(invoice.clientId);
@@ -1252,6 +1251,25 @@
                     positionClass: "toast-top-full-width"
                 });
             });
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Invoice/GetInvoiceAdresses",
+                data: {
+                    clientId: invoice.clientCode
+                }
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    populate_combo_box("#dirInputSelect", jsonResult);
+                    update_chosen_select("#dirInputSelect", invoice.clientAddressId);
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });        
         update_chosen_select("#formaPago", invoice.payment);
         update_chosen_select("#lineaNegocio", invoice.bussinessLine);
         update_chosen_select("#codFinanciero", invoice.finantialCode);

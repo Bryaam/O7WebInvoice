@@ -440,7 +440,7 @@
             closeOnConfirm: false
         }, function() {
             swal({
-                title: "Actualizado",
+                title: "Generado",
                 text: "Documento creado exitosamente",
                 type: "success",
                 confirmButtonText: "Continuar"
@@ -583,11 +583,21 @@
     });
     //ComboBox Tab1
 
-    initialize_combo_ajax("#condVenta", "/Finantial/Invoice/GetCondSells");
-    initialize_combo_ajax("#tipoVenta", "/Finantial/Invoice/GetSellTypes");
-    initialize_combo_ajax("#codFinanciero", "/Finantial/Invoice/GetFinantialCodes");
-    initialize_combo_ajax("#vendedor", "/Finantial/Invoice/GetSellers");
-    initialize_combo_ajax("#lineaNegocio", "/Finantial/Invoice/GetBussinessLine");
+    initialize_combo_ajax("#condVenta", "/Finantial/Invoice/GetCondSells", false);
+    $("#condVenta").val("");
+    $("#condVenta").trigger("chosen:updated");
+    initialize_combo_ajax("#tipoVenta", "/Finantial/Invoice/GetSellTypes", false);
+    $("#tipoVenta").val("");
+    $("#tipoVenta").trigger("chosen:updated");
+    initialize_combo_ajax("#codFinanciero", "/Finantial/Invoice/GetFinantialCodes", false);
+    $("#codFinanciero").val("");
+    $("#codFinanciero").trigger("chosen:updated");
+    initialize_combo_ajax("#vendedor", "/Finantial/Invoice/GetSellers", false);
+    $("#vendedor").val("");
+    $("#vendedor").trigger("chosen:updated");
+    initialize_combo_ajax("#lineaNegocio", "/Finantial/Invoice/GetBussinessLine", false);
+    $("#lineaNegocio").val("");
+    $("#lineaNegocio").trigger("chosen:updated");
 
     $("#condVenta").change(function() {
         var condition = $(this).val();
@@ -600,9 +610,6 @@
             })
             .done(function(result) {
                 var jsonResult = jQuery.parseJSON(result);
-                //console.log(result);
-                //console.log(jsonResult);
-                console.log("Actualiza");
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     populate_combo_box("#formaPago", jsonResult);
                 }
