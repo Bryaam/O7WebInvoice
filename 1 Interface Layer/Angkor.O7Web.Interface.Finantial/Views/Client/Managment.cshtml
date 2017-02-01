@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
-    @Html.StyleLink("css/plugins/iCheck/custom.css");
-    @Html.StyleLink("css/plugins/steps/jquery.steps.css");
+    @Html.StyleLink("css/plugins/iCheck/custom.css")
+    @Html.StyleLink("css/plugins/steps/jquery.steps.css")
     @Html.StyleLink("css/plugins/datapicker/datepicker3.css")
 }
 
@@ -134,6 +134,25 @@
                             afterSelect: function () {
                                 var country = $(countryAutocomplete).typeahead("getActive");
                                 $(countryId).val(country.id);
+    
+                               $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryEntry", data: { countryId: country.id }, async: false })
+                                    .done(function (resultValidation) {    
+                                        var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
+                                        if (objResultValidation == true) {
+                                            $(departmentAutocomplete).removeAttr("disabled");
+                                            $(provinceAutocomplete).removeAttr("disabled");
+                                            $(districtAutocomplete).removeAttr("disabled");
+                                            $(zoneAutocomplete).removeAttr("disabled");
+                                        } else {
+                                            $(departmentAutocomplete).attr("disabled", "disabled");
+                                            $(provinceAutocomplete).attr("disabled", "disabled");
+                                            $(districtAutocomplete).attr("disabled", "disabled");
+                                            $(zoneAutocomplete).attr("disabled", "disabled");
+                                        }
+                                    }).fail(function (result) {
+                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                                    });
+    
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
                                     .done(function (resultZone) {
                                         resultZone = resultZone.replace(/Description/g, 'name');
@@ -294,6 +313,25 @@
                             afterSelect: function () {
                                 var country = $(countryAutocomplete).typeahead("getActive");
                                 $(countryId).val(country.id);
+    
+                                $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryInvoicer", data: { countryId: country.id }, async: false })
+                                    .done(function (resultValidation) {
+                                        var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
+                                        if (objResultValidation == true) {
+                                            $(departmentAutocomplete).removeAttr("disabled");
+                                            $(provinceAutocomplete).removeAttr("disabled");
+                                            $(districtAutocomplete).removeAttr("disabled");
+                                            $(zoneAutocomplete).removeAttr("disabled");
+                                        } else {
+                                            $(departmentAutocomplete).attr("disabled", "disabled");
+                                            $(provinceAutocomplete).attr("disabled", "disabled");
+                                            $(districtAutocomplete).attr("disabled", "disabled");
+                                            $(zoneAutocomplete).attr("disabled", "disabled");
+                                        }
+                                    }).fail(function (result) {
+                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                                    });
+        
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
                                     .done(function (resultZone) {
                                         resultZone = resultZone.replace(/Description/g, 'name');
@@ -304,7 +342,8 @@
                                             afterSelect: function () {
                                                 var zone = $(zoneAutocomplete).typeahead("getActive");
                                                 $(zoneId).val(zone.id)
-                                            }});
+                                            }
+                                        });
                                     }).fail(function (result) {
                                         toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                                     });

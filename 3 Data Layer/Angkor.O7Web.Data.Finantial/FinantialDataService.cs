@@ -138,7 +138,22 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceDocumentCount>("O7EXPRESS_PACKAGE_SERIESF.get_seriesF", parameters, InvoiceDocumentCountMapper.Class);
         }
 
-        //Retorno ClientId
+        public virtual bool ValidateCountryInvoicer(string countryId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_country", countryId));
+
+            return DataAccess.ExecuteFunction<int>("crud_dir_fac.has_ubigeo", parameters) != 0;
+        }
+
+        public virtual bool ValidateCountryEntry(string countryId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_country", countryId));
+
+            return DataAccess.ExecuteFunction<int>("crud_dir_entrega.has_ubigeo", parameters) != 0;
+        }
+
         public virtual string AddClient(string companyId, string branchId, string typeClient, string businessName, string person, string stateClient,
             string ruc, string dni, string initialDate, string email, string country, string zone, string address, string codPost, string city, string phone,
             string ubigeoDep, string ubigeoProv, string ubigeoDist, string documentType)

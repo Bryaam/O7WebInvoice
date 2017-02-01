@@ -26,60 +26,97 @@
 }
 @section section_script {
     var tblInvoices = $("#tblInvoices").DataTable({
-    searching: false,
-    dom: 'Bfrtip',
-    buttons: [{ text: 'Agregar',
-    action: function ( e, dt, node, config ) {
-    window.location.href = './Insert';
-    }
-    }],
-    columns: [{ data: "ClientCode", width: "9%" },
-    { data: "ClientType", width: "9%" },
-    { data: "ClientOrigin", width: "9%" },
-    { data: "DocumentNumber", width: "11%" },
-    { data: "ClientName", width: "25%" },
-    { data: "ClientPhone", width: "11%" },
-    { data: "ClientEmail", width: "11%" },
-    {  orderable: false,
-    className: "text-center",
-    render: function(data, type, full, meta){
-    var invoiceId = '"'+full.ClientCode+'"';
-    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
-    var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='editClient("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
-    return buttonSearch + buttonEdit;
-    },
-    width: "15%"}],
-    language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" } ,
-    initComplete: function( settings, json ) {
-    $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").wrap("<div class='col-md-6' style='padding-left: 0px;'></div>");
+     searching: false,
+     dom: 'Bfrtip',
+     buttons: [{
+         text: 'Agregar',
+         action: function(e, dt, node, config) {
+             window.location.href = './Insert';
+         }
+     }],
+     columns: [{
+             data: "ClientCode",
+             width: "9%"
+         },
+         {
+             data: "ClientType",
+             width: "9%"
+         },
+         {
+             data: "ClientOrigin",
+             width: "9%"
+         },
+         {
+             data: "DocumentNumber",
+             width: "11%"
+         },
+         {
+             data: "ClientName",
+             width: "25%"
+         },
+         {
+             data: "ClientPhone",
+             width: "11%"
+         },
+         {
+             data: "ClientEmail",
+             width: "11%"
+         },
+         {
+             orderable: false,
+             className: "text-center",
+             render: function(data, type, full, meta) {
+                 var invoiceId = '"' + full.ClientCode + '"';
+                 var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
+                 var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='editClient(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
+                 return buttonSearch + buttonEdit;
+             },
+             width: "15%"
+         }
+     ],
+     language: {
+         url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")"
+     },
+     initComplete: function(settings, json) {
+         $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").wrap("<div class='col-md-6' style='padding-left: 0px;'></div>");
 
-    $(".dt-buttons").addClass("col-md-12").attr("style", "padding-left: 0px;");
+         $(".dt-buttons").addClass("col-md-12").attr("style", "padding-left: 0px;");
 
-    $("#tblInvoices_wrapper .dt-buttons").append('<div class="col-md-6"><div class="input-group col-md-12"><input id="txtFilterClient" class="form-control" type="text"><span class="input-group-btn"><a id="btnSearchClient" href="#" class="btn btn-primary" disabled="true">Buscar&nbsp;<i class="fa fa-search"></i></a></span></div></div>');
+         $("#tblInvoices_wrapper .dt-buttons").append('<div class="col-md-6"><div class="input-group col-md-12"><input id="txtFilterClient" class="form-control" type="text"><span class="input-group-btn"><a id="btnSearchClient" href="#" class="btn btn-primary" disabled="true">Buscar&nbsp;<i class="fa fa-search"></i></a></span></div></div>');
 
-    $("#txtFilterClient").keyup(function (event) {
-    var value = $("#txtFilterClient").val();
-    var btnSearch = $("#btnSearchClient");
-    if(value.length >= 3) {
-    btnSearch.removeAttr("disabled");
-    } else {
-    btnSearch.attr("disabled", "true");
-    }
-    });
+         $("#txtFilterClient").keyup(function(event) {
+             var value = $("#txtFilterClient").val();
+             var btnSearch = $("#btnSearchClient");
+             if (value.length >= 3) {
+                 btnSearch.removeAttr("disabled");
+             } else {
+                 btnSearch.attr("disabled", "true");
+             }
+         });
 
-    $("#btnSearchClient").on("click", function () {
-    $.ajax({ method: "GET", url: "/Finantial/Client/Client_Populate", data: { filter:$("#txtFilterClient").val() }, timeout: 70000})
-    .done(function (result) {
-    console.log(result);
-    var objResult = jQuery.parseJSON(result);
-    tblInvoices.clear().rows.add(objResult).draw();
-    })
-    .fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
-    });
-    }
-    });
+         $("#btnSearchClient").on("click", function() {
+             $.ajax({
+                     method: "GET",
+                     url: "/Finantial/Client/Client_Populate",
+                     data: {
+                         filter: $("#txtFilterClient").val()
+                     },
+                     timeout: 70000
+                 })
+                 .done(function(result) {
+                     console.log(result);
+                     var objResult = jQuery.parseJSON(result);
+                     tblInvoices.clear().rows.add(objResult).draw();
+                 })
+                .fail(function(result) {
+                    console.log(result);
+                     toastr.error(result.statusText, "Mensaje", {
+                         positionClass: "toast-top-full-width"
+                     });
+                 });
+         });
+     }
+ });
 }
 <div class="row">
     <div class="col-lg-12">

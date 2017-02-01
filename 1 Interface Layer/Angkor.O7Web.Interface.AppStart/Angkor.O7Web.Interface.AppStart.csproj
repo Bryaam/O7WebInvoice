@@ -37,6 +37,10 @@
     <Reference Include="Angkor.O7Framework.Infrastructure">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Angkor.O7Framework.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="Angkor.O7Framework.Web">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Web.dll</HintPath>
     </Reference>
@@ -60,6 +64,7 @@
     <Compile Include="AppStart\AdvisoryAppStart.cs" />
     <Compile Include="AppStart\CommonAppStart.cs" />
     <Compile Include="Controller\Security\AuthenticationStartController.cs" />
+    <Compile Include="Filter\EndSessionFilter.cs" />
     <Compile Include="Filter\PrivilegeAccessFilter.cs" />
     <Compile Include="AppStart\FinantialAppStart.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -18,6 +18,18 @@ namespace Angkor.O7Web.Domain.Finantial
         {
         }
 
+        public override O7Response ValidateCountryInvoicer(string countryId)
+        {
+            var client = FinantialDataService.ValidateCountryInvoicer(countryId);
+            return O7SuccessResponse.MakeResponse($"{client}");
+        }
+
+        public override O7Response ValidateCountryEntry(string countryId)
+        {
+            var client = FinantialDataService.ValidateCountryEntry(countryId);
+            return O7SuccessResponse.MakeResponse($"{client}");
+        }
+
         public override O7Response AllPostales()
         {
             var client = FinantialDataService.AllPostales();
