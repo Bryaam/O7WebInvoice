@@ -130,8 +130,15 @@
             confirmButtonText: "Sí",
             closeOnConfirm: false
         }, function() {
-            swal("Deleted!", "Documento de pago actualizado exitosamente.", "success");
-            $("#formInvoice").submit();
+            swal({
+                title: "Actualizado",
+                text: "Documento actualizado exitosamente",
+                type: "success",
+                confirmButtonText: "Continuar"
+                }, function () {
+                    $("#formInvoice").submit();
+            });
+            
         });
     });
 
@@ -1219,6 +1226,7 @@
         $("#nameInput").val(invoice.clientName);
         update_chosen_select("#dirInputSelect", invoice.clientAddressId);
         $("#dirInputContent").val(invoice.clientAddressDescription);
+        $("#dirInput").val(invoice.clientAddressId);
         $("#docInput").val(invoice.clientId);
         $("#glosa").val(invoice.glosa);
         update_chosen_select("#tipoVenta", invoice.typeSell);
@@ -1737,7 +1745,7 @@
                         <div class="row text-center" style="margin-top: 50px;">
                             <div class="ibox-footer text-right">
                                 <button class="btn btn-white"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
-                                <button id="btnSubmit" class="btn btn-primary" type="submit">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button id="btnSubmit" class="btn btn-primary" type="button">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>

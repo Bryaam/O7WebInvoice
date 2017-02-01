@@ -321,7 +321,7 @@
                         <div class="row text-center" style="margin-top: 50px;">
                             <div class="ibox-footer text-right">
                                 <button class="btn btn-white"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
-                                <button id="btnSubmit" class="btn btn-primary" type="submit">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+                                <button id="btnSubmit" class="btn btn-primary" type="button">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -429,8 +429,8 @@
 
 @section section_script {
 
-    /*$("#btnSubmit").click(function(){
-            swal({
+    $("#btnSubmit").click(function() {
+        swal({
             title: "Confirmación",
             text: "¿Crear documento?",
             type: "warning",
@@ -438,11 +438,19 @@
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Sí",
             closeOnConfirm: false
-            }, function () {
-                swal("Creado", "Documento de Venta creado exitosamente.", "success");
-                $("#formInvoice").submit();
+        }, function() {
+            swal({
+                title: "Actualizado",
+                text: "Documento creado exitosamente",
+                type: "success",
+                confirmButtonText: "Continuar"
+                }, function () {
+                    $("#formInvoice").submit();
             });
-        });*/
+
+        });
+    });
+
     $("#tableProducts").on('change', function() {
         calculate_total();
     });

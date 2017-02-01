@@ -469,7 +469,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                 InsertDetailInvoice(documentType, documentId, detail.conceptId,
                 detail.commentary, detail.amount, detail.price, detail.taxId, perception, detail.ccoId,p_fin);
             }
-            return View("Index");
+            return RedirectToAction("Show", new { documentType = documentType, documentId = documentId.ToString() });
             //return Show(documentType, documentId);
         }
 
