@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Utility;
 using Angkor.O7Framework.Web.Base;
+using Angkor.O7Framework.Web.HtmlHelper;
 using Angkor.O7Framework.Web.Model;
 using Angkor.O7Framework.Web.Security;
 using Angkor.O7Web.Common.Utility;
@@ -16,10 +17,17 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
     {
         private O7Authentication _authentication;
         private O7Cryptography _cryptography;
-        
+
         public SecurityController()
-        {            
+        {
             _cryptography = new O7Cryptography(Constant.CRYPTO_KEY);
+        }
+
+        public ActionResult Logout()
+        {
+            _authentication.RemoveUser();
+            _authentication.RemoveMenus();
+            return Redirect(LinkHelper.SourceLink("Security", "Signout"));
         }
 
         public ActionResult Access(string menuId, string credential)
@@ -34,7 +42,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var menus = domain.Menus(credentialCookie.CompanyId, credentialCookie.BranchId, menuId);
 
             var menusResult = menus as O7SuccessResponse<List<O7Menu>>;
-            if (menusResult == null) return null;            
+            if (menusResult == null) return null;
 
             _authentication.SetMenu(menusResult.Value1);
 
@@ -44,7 +52,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 
             modulesResult.Value1.Append("Url", credential.ToUriPath());
             _authentication.SetModule(modulesResult.Value1);
-            
+
             return RedirectToAction("Index", "Home");
         }
 

@@ -139,9 +139,9 @@ namespace Angkor.O7Web.Data.Finantial
         }
 
         //Retorno ClientId
-        public virtual string AddClient(string companyId, string branchId, string typeClient, string businessName, string person,
-                            string stateClient, string ruc, string dni, string initialDate, string email, string country, string zone, string address, string codPost,
-                            string city, string phone,string ubigeoDep, string ubigeoProv, string ubigeoDist, string documentType)
+        public virtual string AddClient(string companyId, string branchId, string typeClient, string businessName, string person, string stateClient,
+            string ruc, string dni, string initialDate, string email, string country, string zone, string address, string codPost, string city, string phone,
+            string ubigeoDep, string ubigeoProv, string ubigeoDist, string documentType)
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
@@ -164,52 +164,52 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_ubiprv", ubigeoProv));
             parameters.Add(O7Parameter.Make("p_ubidis", ubigeoDist));
             parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
-            
+
             return DataAccess.ExecuteFunction<string>("o7express_package_cliente.insert_client", parameters);
         }
 
         public virtual bool AddAddressFact(string companyId, string branchId, string codClient, string address, string codPostal,
-            string ubi1, string ubi2,string ubi3, string country, string city,string zone, string route, string phone, string fax, string contact)
+            string ubi1, string ubi2, string ubi3, string country, string city, string zone, string route, string phone, string fax, string contact)
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
             parameters.Add(O7Parameter.Make("p_branch", branchId));
             parameters.Add(O7Parameter.Make("p_codclie", codClient));
             parameters.Add(O7Parameter.Make("p_dir", address));
-            parameters.Add(O7Parameter.Make("p_cod_postal", codPostal));
+            //parameters.Add(O7Parameter.Make("p_cod_postal", codPostal));
             parameters.Add(O7Parameter.Make("p_ubi_1", ubi1));
             parameters.Add(O7Parameter.Make("p_ubi_2", ubi2));
             parameters.Add(O7Parameter.Make("p_ubi_3", ubi3));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_ciudad", city));
             parameters.Add(O7Parameter.Make("p_zona", zone));
-            parameters.Add(O7Parameter.Make("p_ruta", route));
+            //parameters.Add(O7Parameter.Make("p_ruta", route));
             parameters.Add(O7Parameter.Make("p_nro_tlf", phone));
-            parameters.Add(O7Parameter.Make("p_nro_fax", fax));
+            //parameters.Add(O7Parameter.Make("p_nro_fax", fax));
             parameters.Add(O7Parameter.Make("p_contacto", contact));
-            return DataAccess.ExecuteFunction<int>("CRUD_DIR_FACT.insert_dir_fact", parameters)==1;
+            return DataAccess.ExecuteFunction<int>("CRUD_DIR_FAC.insert_dir_fac", parameters) == 1;
         }
 
         public virtual bool AddAddressEntrega(string companyId, string branchId, string codClient, string address, string codPostal,
-            string ubi1, string ubi2, string ubi3, string country, string city,string zone, string route, string phone, string fax, string contact)
+            string ubi1, string ubi2, string ubi3, string country, string city, string zone, string route, string phone, string fax, string contact)
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
             parameters.Add(O7Parameter.Make("p_branch", branchId));
             parameters.Add(O7Parameter.Make("p_codclie", codClient));
             parameters.Add(O7Parameter.Make("p_dir", address));
-            parameters.Add(O7Parameter.Make("p_cod_postal", codPostal));
+            //parameters.Add(O7Parameter.Make("p_cod_postal", codPostal));
             parameters.Add(O7Parameter.Make("p_ubi_1", ubi1));
             parameters.Add(O7Parameter.Make("p_ubi_2", ubi2));
             parameters.Add(O7Parameter.Make("p_ubi_3", ubi3));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_ciudad", city));
             parameters.Add(O7Parameter.Make("p_zona", zone));
-            parameters.Add(O7Parameter.Make("p_ruta", route));
+            //parameters.Add(O7Parameter.Make("p_ruta", route));
             parameters.Add(O7Parameter.Make("p_nro_tlf", phone));
-            parameters.Add(O7Parameter.Make("p_nro_fax", fax));
+            //parameters.Add(O7Parameter.Make("p_nro_fax", fax));
             parameters.Add(O7Parameter.Make("p_contacto", contact));
-            return DataAccess.ExecuteFunction<int>("CRUD_DIR_ENTREGA.insert_dir_ent", parameters)==1;
+            return DataAccess.ExecuteFunction<int>("CRUD_DIR_ENTREGA.insert_dir_ent", parameters) == 1;
         }
 
         public virtual bool SavePrincipalAddressFact(string companyId, string branchId, string codClient, string dirFact)
@@ -242,19 +242,19 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_codcli", codClient));
             parameters.Add(O7Parameter.Make("p_coddir", codDir));
             parameters.Add(O7Parameter.Make("p_dir", address));
-            parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
+            //parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
             parameters.Add(O7Parameter.Make("p_ubi_1", ubigeoDep));
             parameters.Add(O7Parameter.Make("p_ubi_2", ubigeoProv));
             parameters.Add(O7Parameter.Make("p_ubi_3", ubigeoDist));
             parameters.Add(O7Parameter.Make("p_ciudad", city));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_zona", zone));
-            parameters.Add(O7Parameter.Make("p_ruta", route));
+            //parameters.Add(O7Parameter.Make("p_ruta", route));
             parameters.Add(O7Parameter.Make("p_nro_tlf", phone));
-            parameters.Add(O7Parameter.Make("p_nro_fax", fax));
+            //parameters.Add(O7Parameter.Make("p_nro_fax", fax));
             parameters.Add(O7Parameter.Make("p_contacto", contacto));
 
-            return DataAccess.ExecuteFunction<int>("O7EXPRESS_PACK.update_dir_ent", parameters) == 1;
+            return DataAccess.ExecuteFunction<int>("CRUD_DIR_ENTREGA.update_dir_ent", parameters) == 1;
         }
 
         public virtual bool UpdatePrincipalAddressFact(string companyId, string branchId, string codClient, string codDir, string route, string fax,
@@ -267,19 +267,19 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_codcli", codClient));
             parameters.Add(O7Parameter.Make("p_coddir", codDir));
             parameters.Add(O7Parameter.Make("p_dir", address));
-            parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
+            //parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
             parameters.Add(O7Parameter.Make("p_ubi_1", ubigeoDep));
             parameters.Add(O7Parameter.Make("p_ubi_2", ubigeoProv));
             parameters.Add(O7Parameter.Make("p_ubi_3", ubigeoDist));
             parameters.Add(O7Parameter.Make("p_ciudad", city));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_zona", zone));
-            parameters.Add(O7Parameter.Make("p_ruta", route));
+            //parameters.Add(O7Parameter.Make("p_ruta", route));
             parameters.Add(O7Parameter.Make("p_nro_tlf", phone));
-            parameters.Add(O7Parameter.Make("p_nro_fax", fax));
+            //parameters.Add(O7Parameter.Make("p_nro_fax", fax));
             parameters.Add(O7Parameter.Make("p_contacto", contacto));
 
-            return DataAccess.ExecuteFunction<int>("O7EXPRESS_PACK.update_dir_fact", parameters) == 1;
+            return DataAccess.ExecuteFunction<int>("CRUD_DIR_FAC.update_dir_fact", parameters) == 1;
         }
 
         public virtual List<ClientView> ViewClient(string companyId, string branchId, string codClient)
@@ -298,7 +298,7 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_company", companyId));
             parameters.Add(O7Parameter.Make("p_branch", branchId));
             parameters.Add(O7Parameter.Make("p_codcli", codClient));
-            return DataAccess.ExecuteFunction<AddressFact>("CRUD_DIR_FAC.view_dir_fac", parameters, AddressFactMapper.Class);
+            return DataAccess.ExecuteFunction<AddressFact>("CRUD_DIR_FAC.view_dirs_fac", parameters, AddressFactMapper.Class);
         }
         //Esto es para cuando vaya a editar necesito mostrar todas las direcciones anteriores de entrega
         public virtual List<AddressEnt> ViewAddressEntry(string companyId, string branchId, string codClient)
@@ -307,12 +307,12 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_company", companyId));
             parameters.Add(O7Parameter.Make("p_branch", branchId));
             parameters.Add(O7Parameter.Make("p_codcli", codClient));
-            return DataAccess.ExecuteFunction<AddressEnt>("CRUD_DIR_ENTREGA.view_dir_ent", parameters, AddressEntryMapper.Class);
+            return DataAccess.ExecuteFunction<AddressEnt>("CRUD_DIR_ENTREGA.view_dirs_ent", parameters, AddressEntryMapper.Class);
         }
         public virtual bool UpdateClient(string companyId, string branchId, string codClient, string typeClient, string businessName, string person,
                             string stateClient, string ruc, string dni, string country, string zone, string address, string codPost,
                             string city, string phone, string initialDate, string email, string ubigeoDep,
-                            string ubigeoProv, string ubigeoDist)
+                            string ubigeoProv, string ubigeoDist, string documentType)
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
@@ -323,7 +323,7 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_tip_per", person));
             parameters.Add(O7Parameter.Make("p_est_cli", stateClient));
             parameters.Add(O7Parameter.Make("p_ruc", ruc));
-            parameters.Add(O7Parameter.Make("p_nrodni", dni));
+            parameters.Add(O7Parameter.Make("p_dni", dni));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_zona", zone));
             parameters.Add(O7Parameter.Make("p_dir", address));
@@ -335,12 +335,12 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_ubidpt", ubigeoDep));
             parameters.Add(O7Parameter.Make("p_ubiprv", ubigeoProv));
             parameters.Add(O7Parameter.Make("p_ubidis", ubigeoDist));
-
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
             return DataAccess.ExecuteFunction<int>("o7express_package_cliente.update_client", parameters) == 1;
         }
         //Esto es para editar una fila de la tabla de direcciones de entrega 
         public virtual bool UpdateAddressFact(string companyId, string branchId, string codClient, string codDir, string route, string fax,
-                            string contacto,string country, string zone, string address, string codPost,string city, string phone, string ubigeoDep,
+                            string contacto, string country, string zone, string address, string codPost, string city, string phone, string ubigeoDep,
                             string ubigeoProv, string ubigeoDist)
         {
             var parameters = O7DbParameterCollection.Make;
@@ -349,19 +349,19 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_codcli", codClient));
             parameters.Add(O7Parameter.Make("p_coddir", codDir));
             parameters.Add(O7Parameter.Make("p_dir", address));
-            parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
+            //parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
             parameters.Add(O7Parameter.Make("p_ubi_1", ubigeoDep));
             parameters.Add(O7Parameter.Make("p_ubi_2", ubigeoProv));
             parameters.Add(O7Parameter.Make("p_ubi_3", ubigeoDist));
             parameters.Add(O7Parameter.Make("p_ciudad", city));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_zona", zone));
-            parameters.Add(O7Parameter.Make("p_ruta", route));
+            //parameters.Add(O7Parameter.Make("p_ruta", route));
             parameters.Add(O7Parameter.Make("p_nro_tlf", phone));
-            parameters.Add(O7Parameter.Make("p_nro_fax", fax));
+            //parameters.Add(O7Parameter.Make("p_nro_fax", fax));
             parameters.Add(O7Parameter.Make("p_contacto", contacto));
 
-            return DataAccess.ExecuteFunction<int>("O7EXPRESS_PACK.update_dir_fact", parameters) == 1;
+            return DataAccess.ExecuteFunction<int>("CRUD_DIR_FAC.update_dir_fact", parameters) == 1;
         }
 
         //Esto es para editar una fila de la tabla de direcciones de facturacion 
@@ -373,22 +373,22 @@ namespace Angkor.O7Web.Data.Finantial
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
             parameters.Add(O7Parameter.Make("p_branch", branchId));
-            parameters.Add(O7Parameter.Make("p_codcli", codClient));
+            parameters.Add(O7Parameter.Make("p_codclie", codClient));
             parameters.Add(O7Parameter.Make("p_coddir", codDir));
             parameters.Add(O7Parameter.Make("p_dir", address));
-            parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
+            //parameters.Add(O7Parameter.Make("p_cod_postal", codPost));
             parameters.Add(O7Parameter.Make("p_ubi_1", ubigeoDep));
             parameters.Add(O7Parameter.Make("p_ubi_2", ubigeoProv));
             parameters.Add(O7Parameter.Make("p_ubi_3", ubigeoDist));
             parameters.Add(O7Parameter.Make("p_ciudad", city));
             parameters.Add(O7Parameter.Make("p_pais", country));
             parameters.Add(O7Parameter.Make("p_zona", zone));
-            parameters.Add(O7Parameter.Make("p_ruta", route));
+            //parameters.Add(O7Parameter.Make("p_ruta", route));
             parameters.Add(O7Parameter.Make("p_nro_tlf", phone));
-            parameters.Add(O7Parameter.Make("p_nro_fax", fax));
+            //parameters.Add(O7Parameter.Make("p_nro_fax", fax));
             parameters.Add(O7Parameter.Make("p_contacto", contacto));
 
-            return DataAccess.ExecuteFunction<int>("CRUD_DIR_ENT.update_dir_ent", parameters) == 1;
+            return DataAccess.ExecuteFunction<int>("CRUD_DIR_ENTREGA.update_dir_ent", parameters) == 1;
         }
         public virtual List<InvoiceClient> AllClients(string companyId, string branchId, string word)
         {

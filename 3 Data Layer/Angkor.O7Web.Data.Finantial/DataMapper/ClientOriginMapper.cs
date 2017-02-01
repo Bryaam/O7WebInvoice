@@ -13,7 +13,7 @@ namespace Angkor.O7Web.Data.Finantial.DataMapper
             => new ClientOrigin
             {
                 Id = Source.GetValue<string>(0),
-                Description= Source.GetValue<string>(1)
+                Description = Source.GetValue<string>(1)
             };
     }
 }

@@ -36,17 +36,17 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        public JsonResult AllProvinces(string countryId,string departmentId)
+        public JsonResult AllProvinces(string countryId, string departmentId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.AllProvinces(countryId,departmentId);
+            var response = domain.AllProvinces(countryId, departmentId);
             return new O7JsonResult(response);
         }
 
-        public JsonResult AllDistricts(string countryId,string departmentId, string provinceId)
+        public JsonResult AllDistricts(string countryId, string departmentId, string provinceId)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.AllDistricts(countryId,departmentId, provinceId);
+            var response = domain.AllDistricts(countryId, departmentId, provinceId);
             return new O7JsonResult(response);
         }
 
@@ -82,6 +82,20 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.ClientType();
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult InvoicerAddressPopulate(string clientId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.ViewAddressFact(User.Company, User.Branch, clientId);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult EntryAddressPopulate(string clientId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.ViewAddressEntry(User.Company, User.Branch, clientId);
             return new O7JsonResult(response);
         }
 
