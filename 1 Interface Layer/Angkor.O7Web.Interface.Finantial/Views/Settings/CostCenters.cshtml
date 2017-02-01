@@ -1,0 +1,412 @@
+﻿
+@{
+    ViewBag.Title = "Centros de Costo";
+    ViewBag.Section = "Configuración";
+    Layout = "~/Views/_Layout.cshtml";
+}
+@section styles_link {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
+    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
+    @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")
+}
+
+@section scripts_link {
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+    
+    @Html.JavaScriptLink("js/plugins/datapicker/bootstrap-datepicker.js")
+    @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
+    <script>
+        function delete_action(id, start, end, current, type, digital) {
+            $("#txtModalTitle").text("Eliminar serie");
+            $("#btnConfirm").show();
+            $("#btnConfirm").attr("action", "3");
+            var txtSerie = $("#txtSerie");
+            var txtStart = $("#txtStart");
+            var txtFinal = $("#txtFinal");
+            var txtCurrent = $("#txtCurrent");
+            var slcDocumentType = $("#chkDocumentType");
+            var slcInvoiceType = $("#chkInvoiceType");
+            slcDocumentType.attr("disabled", true);
+            slcDocumentType.val(digital);
+            slcDocumentType.trigger("chosen:updated");
+            slcInvoiceType.attr("disabled", true);
+            slcInvoiceType.val(type);
+            slcInvoiceType.trigger("chosen:updated");
+            txtSerie.val(id);
+            txtSerie.attr('readonly', true);
+            txtStart.val(start);
+            txtStart.attr('readonly', true);
+            txtFinal.val(end);
+            txtFinal.attr('readonly', true);
+            txtCurrent.val(current);
+            txtCurrent.attr('readonly', true);
+        }
+
+        function detail(id, start, end, current, type, digital, prefix) {
+            $("#txtModalTitle").text("Detalle Centros de Costo");
+            $("#btnConfirm").hide();
+            $(".input-hidden").attr("disabled", true);
+            var txtSerie = $("#txtSerie");
+            var txtStart = $("#txtStart");
+            var txtFinal = $("#txtFinal");
+            var txtCurrent = $("#txtCurrent");
+            var slcDocumentType = $("#chkDocumentType");
+            var slcInvoiceType = $("#chkInvoiceType");
+            var txtPrefix = $("#txtPrefix");
+            slcDocumentType.attr("disabled", true);
+            slcDocumentType.val(digital);
+            slcDocumentType.trigger("chosen:updated");
+            slcInvoiceType.attr("disabled", true);
+            slcInvoiceType.val(type);
+            slcInvoiceType.trigger("chosen:updated");
+            txtSerie.val(id);
+            txtSerie.attr('readonly', true);
+            txtStart.val(start);
+            txtStart.attr('readonly', true);
+            txtFinal.val(end);
+            txtFinal.attr('readonly', true);
+            txtCurrent.val(current);
+            txtCurrent.attr('readonly', true);
+            txtPrefix.val(prefix);
+            txtPrefix.attr('readonly', true);
+        }
+
+        function update(id, start, end, current, type, digital, prefix) {
+            $("#txtModalTitle").text("Actualizar Centros de Costo");
+            $("#btnConfirm").show();
+            $("#btnConfirm").attr("action", "2");
+            $(".input-hidden").attr("disabled", false);
+            var txtSerie = $("#txtSerie");
+            var txtStart = $("#txtStart");
+            var txtFinal = $("#txtFinal");
+            var txtCurrent = $("#txtCurrent");
+            var slcDocumentType = $("#chkDocumentType");
+            var slcInvoiceType = $("#chkInvoiceType");
+            var txtPrefix = $("#txtPrefix");
+            slcDocumentType.attr("disabled", false);
+            slcDocumentType.val(digital);
+            slcDocumentType.trigger("chosen:updated");
+            slcInvoiceType.attr("disabled", false);
+            slcInvoiceType.val(type);
+            slcInvoiceType.trigger("chosen:updated");
+            $("#txtInvoiceTypeOld").val(slcInvoiceType.val());
+            txtSerie.val(id);
+            txtSerie.attr('readonly', false);
+            txtStart.val(start);
+            txtStart.attr('readonly', false);
+            txtFinal.val(end);
+            txtFinal.attr('readonly', false);
+            txtCurrent.val(current);
+            txtCurrent.attr('readonly', false);
+            txtPrefix.val(prefix);
+            if (digital == "true") {
+                var serieNum = txtSerie.val();
+                $("#txtSerieOld").val(serieNum.substring(1,4));
+            } else {
+                $("#txtSerieOld").val(txtSerie.val());
+            }
+
+            if(prefix == '--')
+                txtPrefix.attr('readonly', true);
+        }
+
+
+    </script>
+}
+
+@section section_script {
+
+    $('#data_1 .input-group.date').datepicker({
+        format: 'dd/mm/yyyy',
+        todayBtn: "linked",
+        keyboardNavigation: false,
+        forceParse: false,
+        calendarWeeks: true,
+        autoclose: true
+    });
+
+    var tblCenters = $("#tblCenters").DataTable({
+        //searching: false,
+        dom: 'Bfrtip',
+        buttons: [{
+            text: 'Agregar',
+            action: function(e, dt, node, config) {
+                $("#txtModalTitle").text("Insertar serie");
+                $("#btnConfirm").attr("action", "1");
+                $("#btnConfirm").show();
+                var txtSerie = $("#txtSerie");
+                var txtStart = $("#txtStart");
+                var txtFinal = $("#txtFinal");
+                var txtCurrent = $("#txtCurrent");
+                var slcDocumentType = $("#chkDocumentType");
+                var slcInvoiceType = $("#chkInvoiceType");
+                slcDocumentType.attr("disabled", false);
+                slcDocumentType.val("true");
+                slcDocumentType.trigger("chosen:updated");
+                slcInvoiceType.attr("disabled", false);
+                $("#chkInvoiceType option:first-child").attr("selected", "selected");
+                slcInvoiceType.trigger("chosen:updated");
+                txtSerie.val('');
+                txtSerie.attr('readonly', false);
+                txtStart.val('');
+                txtStart.attr('readonly', false);
+                txtFinal.val('');
+                txtFinal.attr('readonly', false);
+                txtCurrent.val('');
+                txtCurrent.attr('readonly', false);
+            }
+        }],
+        columns: [{
+                data: "Digital",
+                width: "15%"
+
+            },
+            {
+                data: "DocumentDescription",
+                width: "18%"
+            },
+            {
+                data: "Id",
+                width: "15%"
+            },
+            {
+                data: "Current",
+                width: "20%"
+            },
+            {
+                data: "Default",
+                className: "text-center",
+                width: "7%"
+            },
+            {
+                orderable: false,
+                className: "text-center",
+                render: function(data, type, full, meta) {
+                    var invoiceId = '"' + full.Id + '",' + '"' + full.Max + '",' + '"' + full.Min + '",' + '"' + full.Current + '",' + '"' + full.DocumentType + '",' + '"' + full.Digital + '",' + '"' + full.Prefix + '"';
+                    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
+                    var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
+                    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+                    return buttonSearch + buttonEdit + buttonDelete;
+                },
+                width: "15%"
+            }
+        ]
+    });
+
+    $("#chkInvoiceType").chosen({
+        width: "100%",
+        disable_search: true
+    });
+
+    $("#chkDocumentType").chosen({
+        width: "100%",
+        disable_search: true
+    });
+
+    $("#chkDocumentType").chosen().change(function() {
+        var value = $(this).val();
+        if (value == "false")
+            $('#txtPrefix').attr('readonly', true);
+        else
+            $('#txtPrefix').attr('readonly', false);
+    });
+
+    $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/InvoiceDocuments_Populate",
+            async: false
+        })
+        .done(function(result) {
+            var objResult = jQuery.parseJSON(result);
+            tblCenters.clear().rows.add(objResult).draw();
+        }).fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+
+    $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").attr("data-toggle", "modal").attr("data-target", "#mdlInsert");
+
+    $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/DocumentTypes"
+        })
+        .done(function(result) {
+            var objResult = jQuery.parseJSON(result);
+            var documentType = $("#chkInvoiceType");
+            $.each(objResult, function(index, value) {
+                documentType.append("<option value='" + value.Value + "'>" + value.Content + "</option>");
+            });
+            documentType.trigger("chosen:updated");
+        }).fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+
+    $("#btnConfirm").on("click", function() {
+        var value = $(this).attr("action");
+        if (value == "1") {
+            var prefixVal = $("#chkDocumentType").val();
+            var serie = $("#txtSerie").val();
+            var _prefix = "";
+            var _id = "";
+            if (prefixVal == "true") {
+                _prefix = serie.substring(0, 1);
+                _id = serie.substring(1, 4);
+            } else {
+                _id = serie.substring(0, 3);
+            }
+
+            var _max = $("#txtStart").val();
+
+            $.ajax({
+                    method: "POST",
+                    url: "/Finantial/Settings/AddSeries",
+                    data: {
+                        documentType: $("#chkInvoiceType").val(),
+                        id: _id,
+                        current: $("#txtCurrent").val(),
+                        max: $("#txtFinal").val(),
+                        min: _max,
+                        default: "true",
+                        prefix: _prefix
+                    }
+                })
+                .done(function(result) {
+                    console.log(result);
+                    toastr.success(result, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                }).fail(function(result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
+        } else {
+            if (value == "2") {
+                var prefixVal = $("#chkDocumentType").val();
+                var serie = $("#txtSerie").val();
+                var _prefix = "";
+                if (prefixVal == "true") {
+                    _prefix = serie.substring(0, 1);
+                }
+
+                var _id = serie.substring(1, 4);
+                var _max = $("#txtStart").val();
+
+                $.ajax({
+                        method: "POST",
+                        url: "/Finantial/Settings/UpdateSeries",
+                        data: {
+                            documentType: $("#txtInvoiceTypeOld").val(),
+                            id: $("#txtSerieOld").val(),
+                            current: $("#txtCurrent").val(),
+                            max: $("#txtFinal").val(),
+                            min: _max,
+                            default: $("#checkbox2").val(),
+                            prefix: _prefix,
+                            idUpdate: _id,
+                            documentTypeUpdate: $("#chkInvoiceType").val()
+                        }
+                    })
+                    .done(function(result) {
+                        console.log(result);
+                        toastr.success(result, "Mensaje", {
+                            positionClass: "toast-top-full-width"
+                        });
+                    }).fail(function(result) {
+                        toastr.error(result.statusText, "Mensaje", {
+                            positionClass: "toast-top-full-width"
+                        });
+                    });
+            } else
+            if (value == "3") alert("eliminar");
+        }
+    });
+}
+
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <div class="table-responsive">
+                    <table id="tblCenters" class="table table-striped table-bordered table-hover" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>Código</th>
+                                <th>Dimensión</th>
+                                <th>Descripción</th>
+                                <th>Fecha Inicial</th>
+                                <th>Fecha Final</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="mdlInsert" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="txtModalTitle" class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <label>Código</label>
+                            <div class="col-md-12">
+                                <input id="txtCode" type="text" class="form-control input-hidden" placeholder="Código" />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label>Dimensión</label>
+                            <div class="col-md-12">
+                                <input id="txtDimension" type="text" class="form-control input-hidden" placeholder="Dimensión" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-12">
+                            <label>Descripción</label>
+                            <div class="col-md-12">
+                                <input id="txtDescription" type="text" class="form-control input-hidden" placeholder="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-6">
+                            <div id="data_1" class="">
+                                <label class="pull-left form-separation"> Fecha Inicial </label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="txtStartDate" type="text" class="form-control currentDateDefault" name="documentDate" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div id="data_1" class="">
+                                <label class="pull-left form-separation"> Fecha Final </label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="txtEndDate" type="text" class="form-control currentDateDefault" name="documentDate" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnConfirm">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
