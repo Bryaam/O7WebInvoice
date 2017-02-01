@@ -83,6 +83,9 @@
             }
             var btnAddReciber = $("#tblReciber_wrapper .dt-button");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
+            if (action == '3'){
+                btnAddReciber.hide();
+            }
             btnAddReciber.on("click", function () {                                
                 var reciber_count = parseInt($("#hddCountReciber").val());
                 var row = {};
@@ -238,6 +241,9 @@
             }
             var btnAddReciber = $("#tblInvoicer_wrapper .dt-button");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
+            if (action == '3'){
+                btnAddReciber.hide();
+            }
             btnAddReciber.on("click", function () {
                 var reciber_count = parseInt($("#hddCountInvoicer").val());
                 var row = {};
@@ -458,18 +464,18 @@
         });
         console.log("estoy aqui");
         $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId:$("#chkCountry").val() } , async: false })
-        .done(function (result) {
-        var objResult = jQuery.parseJSON(result);
-        console.log(objResult);
-        var documentType = $("#chkDepartment");
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                console.log(objResult);
+                var documentType = $("#chkDepartment");
                 documentType.html("");
                 $.each(objResult, function (index, value) {
                     documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
                 });
                 documentType.trigger("chosen:updated");
             }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
+                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
     
         $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:$("#chkCountry").val(),departmentId:$("#chkDepartment").val(), provinceId:$(this).val() }, async: false })
             .done(function (result) {
@@ -599,68 +605,71 @@
     
     if(action == "2" || action == "3") {
         var clientId = $("#txtClientId").val();
-            $("#btnSubmit").text("Actualizar ");
-            $("#btnSubmit").append("<i class='fa fa-floppy-o' aria-hidden='true'></i>");
-            $.ajax({ method: "GET", url: "/Finantial/Client/OneClient_Populate", data: { codClient:clientId }, async: false })
-                .done(function (result) {
-                    console.log(result);
-                    var objResult = jQuery.parseJSON(result);
-                    var obj = objResult[0];
-                    console.log(obj);
-                    $("#chkClientState").val(obj.StateClient);
-                    $("#chkClientState").trigger("chosen:updated");
-                    $("#chkOriginClient").val(obj.TypeClient);
-                    $("#chkOriginClient").trigger("chosen:updated");
-                    $("#txtName").val(obj.BussinessName);
-                    console.log(obj.Person);
-                    $("#chkpersonType").val(obj.Person);
-                    $("#chkpersonType").trigger("chosen:updated");
-                    $("#chkpersonType").trigger("change");
-                    $("#txtAddress").val(obj.Address);
-                    $("#txtCity").val(obj.City);
-                    $("#chkCountry").val(obj.Country);
-                    $("#chkCountry").trigger("chosen:updated");
-                    $("#chkZone").val(obj.Zone);
-                    $("#chkZone").trigger("chosen:updated");
-                    $("#chkPostale").val(obj.CodPost);
-                    $("#chkPostale").trigger("chosen:updated");
-                    $("#chkDepartment").val(obj.UbigeoDep);
-                    $("#chkDepartment").trigger("chosen:updated");
-                    $("#chkDepartment").trigger("change");
-                    $("#chkProvince").val(obj.UbigeProv);
-                    $("#chkProvince").trigger("chosen:updated");
-                    $("#chkProvince").trigger("change");
-                    $("#chkDistrict").val(obj.UbigeoDistrict);
-                    $("#chkDistrict").trigger("chosen:updated");
-                    $("#chkDistrict").trigger("change");
-                    $("#txtPhone").val(obj.Phone);
-                    $("#txtEmail").val(obj.Email);
-                    $("#txtDocumentNumber").val(obj.Dni);
-                    $("#txtRucNumber").val(obj.Ruc);
-                    $("#chkDocumentType").val(obj.DocumentType);
-                    $("#chkDocumentType").trigger("chosen:updated");
-                    $("#dpckRegister").datepicker("update", new Date(obj.InitialDate));    
-            }).fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
-    
-            $.ajax({ method: "GET", url: "/Finantial/Client/InvoicerAddressPopulate", data: { clientId: clientId }, async: false })
-                .done(function (result) {
-                    var objResult = jQuery.parseJSON(result);
-                    console.log(objResult);
-                    tblInvoicer.clear().rows.add(objResult).draw();                    
-                }).fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                });
+        $("#btnSubmit").text("Actualizar ");        
+        $("#btnSubmit").append("<i class='fa fa-floppy-o' aria-hidden='true'></i>");
+        $.ajax({ method: "GET", url: "/Finantial/Client/OneClient_Populate", data: { codClient:clientId }, async: false })
+            .done(function (result) {
+                console.log(result);
+                var objResult = jQuery.parseJSON(result);
+                var obj = objResult[0];    
+                $("#routePath").append("<li class='active'><i>"+obj.BussinessName+" ("+clientId+")</i></li>")
+                console.log("datos del cliente");
+                console.log(obj);
 
-            $.ajax({ method: "GET", url: "/Finantial/Client/EntryAddressPopulate", data: { clientId: clientId }, async: false })
-                .done(function (result) {
-                    var objResult = jQuery.parseJSON(result);
-                    console.log(objResult);
-                    tblReciber.clear().rows.add(objResult).draw();
-                }).fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                });          
+                $("#chkClientState").val(obj.StateClient);
+                $("#chkClientState").trigger("chosen:updated");
+                $("#chkOriginClient").val(obj.TypeClient);
+                $("#chkOriginClient").trigger("chosen:updated");
+                $("#txtName").val(obj.BussinessName);
+                console.log(obj.Person);
+                $("#chkpersonType").val(obj.Person);
+                $("#chkpersonType").trigger("chosen:updated");
+                $("#chkpersonType").trigger("change");
+                $("#txtAddress").val(obj.Address);
+                $("#txtCity").val(obj.City);
+                $("#chkCountry").val(obj.Country);
+                $("#chkCountry").trigger("chosen:updated");
+                $("#chkZone").val(obj.Zone);
+                $("#chkZone").trigger("chosen:updated");
+                $("#chkPostale").val(obj.CodPost);
+                $("#chkPostale").trigger("chosen:updated");
+                $("#chkDepartment").val(obj.UbigeoDep);
+                $("#chkDepartment").trigger("chosen:updated");
+                $("#chkDepartment").trigger("change");
+                $("#chkProvince").val(obj.UbigeProv);
+                $("#chkProvince").trigger("chosen:updated");
+                $("#chkProvince").trigger("change");
+                $("#chkDistrict").val(obj.UbigeoDistrict);
+                $("#chkDistrict").trigger("chosen:updated");
+                $("#chkDistrict").trigger("change");
+                $("#txtPhone").val(obj.Phone);
+                $("#txtEmail").val(obj.Email);
+                $("#txtDocumentNumber").val(obj.Dni);
+                $("#txtRucNumber").val(obj.Ruc);
+                $("#chkDocumentType").val(obj.DocumentType);
+                $("#chkDocumentType").trigger("chosen:updated");
+                $("#dpckRegister").datepicker("update", new Date(obj.InitialDate));    
+        }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
+    
+        $.ajax({ method: "GET", url: "/Finantial/Client/InvoicerAddressPopulate", data: { clientId: clientId }, async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                console.log(objResult);
+                tblInvoicer.clear().rows.add(objResult).draw();                    
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
+
+        $.ajax({ method: "GET", url: "/Finantial/Client/EntryAddressPopulate", data: { clientId: clientId }, async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                console.log(objResult);
+                tblReciber.clear().rows.add(objResult).draw();
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });          
       
             var countReciber = 0;    
             $("#tblReciber > tbody > tr").each(function () {    
@@ -1060,32 +1069,33 @@
             });
             $("#hddCountInvoicer").val(countInvoicer);
     }
+    if(action == "1"){
+        $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:$("#chkCountry").val(), departmentId:$(this).val() }, async: false })
+                .done(function (result) {
+                    var objResult = jQuery.parseJSON(result);
+                    var documentType = $("#chkProvince");
+                    documentType.html("");
+                    $.each(objResult, function (index, value) {
+                        documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
+                    });
+                    documentType.trigger("chosen:updated");
+                }).fail(function (result) {
+                   toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
     
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:$("#chkCountry").val(), departmentId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkProvince");
-                documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
-            }).fail(function (result) {
-               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
-    
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:$("#chkCountry").val(),departmentId:$("#chkDepartment").val(), provinceId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDistrict");
-                documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
-            }).fail(function (result) {
-               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:$("#chkCountry").val(),departmentId:$("#chkDepartment").val(), provinceId:$(this).val() }, async: false })
+                .done(function (result) {
+                    var objResult = jQuery.parseJSON(result);
+                    var documentType = $("#chkDistrict");
+                    documentType.html("");
+                    $.each(objResult, function (index, value) {
+                        documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
+                    });
+                    documentType.trigger("chosen:updated");
+                }).fail(function (result) {
+                   toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });  
+    }
 }
 <div class="ibox float-e-margins">
     <form method="post" class="form-horizontal">
