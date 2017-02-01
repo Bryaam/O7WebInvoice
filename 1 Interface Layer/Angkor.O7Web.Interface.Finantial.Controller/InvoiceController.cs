@@ -367,7 +367,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var guiRem = Request.Form["guiRem"];
             var addressId = Request.Form["addressId"];
             var serieExtRef = Request.Form["serieExtRef"];
-            var nroExtRef = Request.Form["nroExtRef"];
+            var nroExtRef = Request.Form["nroDoceExt"];
             var jDetaill = InsertDetail();
 
            
@@ -438,7 +438,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var guiRem = Request.Form["guiRem"];
             var addressId = Request.Form["addressId"];
             var serieExtRef = Request.Form["serieExtRef"];
-            var nroExtRef = Request.Form["nroExtRef"];
+            var nroExtRef = Request.Form["nroDoceExt"];
             var jDetaill = InsertDetail();
 
             UpdateInvoiceHead(documentType, documentId,

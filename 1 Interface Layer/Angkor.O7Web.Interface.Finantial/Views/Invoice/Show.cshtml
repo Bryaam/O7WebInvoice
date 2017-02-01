@@ -196,11 +196,8 @@
     });
 
     $('#btnPDF').click(function () {
-    var url = "./GenerateReporte?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
-    window.location.href = url;
-
-    var url = "./Show?documentType=" + '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
-    window.location.href = url;
+        var url = "./GenerateReporte?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
+        window.location.href = url;
     });
 
     $('#btnEditar').click(function () {
