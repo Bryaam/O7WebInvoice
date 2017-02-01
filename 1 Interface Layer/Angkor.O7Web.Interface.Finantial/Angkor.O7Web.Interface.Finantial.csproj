@@ -124,11 +124,8 @@
     <Content Include="Views\Client\Managment.cshtml" />
     <Content Include="Views\Invoice\Management.cshtml" />
     <Content Include="Views\Invoice\Show.cshtml" />
-<<<<<<< HEAD
     <Content Include="Views\Settings\TableofTables.cshtml" />
-=======
     <Content Include="Views\Settings\CostCenters.cshtml" />
->>>>>>> e4364023db7d0fa48ccec8b3cfa89213aa3ccde8
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
