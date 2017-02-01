@@ -251,8 +251,7 @@ namespace Angkor.O7Web.Domain.Finantial
         }
 
         // Inicio de la parte InvoiceFlow de Gf
-        public override O7Response AllInvoices(string companyId, string branchId, string filter,string clientCode)
-
+        public override O7Response AllInvoices(string companyId, string branchId, string filter, string clientCode)
         {
             var invoices = FinantialDataService.AllInvoices(companyId, branchId, filter, clientCode);
             var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
