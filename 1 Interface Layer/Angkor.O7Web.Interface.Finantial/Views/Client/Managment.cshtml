@@ -819,7 +819,9 @@
                                 resultZone = resultZone.replace(/Description/g, 'name');
                                 resultZone = resultZone.replace(/Id/g, 'id');
                                 var objResultZone = jQuery.parseJSON(resultZone);
-
+                                $(zoneAutocomplete).typeahead({
+								    source: objResultZone,
+							    });
                                 $.each(objResultZone, function (index, value){
                                     if(value.id == zone) {
                                         $(zoneAutocomplete).val(value.name);
@@ -832,6 +834,9 @@
                                 result = result.replace(/Description/g, 'name');
                                 result = result.replace(/Id/g, 'id');
                                 var objResult = jQuery.parseJSON(result);
+    							$(departmentAutocomplete).typeahead({
+								    source: objResult,
+							    });
                                 $.each(objResult, function (index, value){
                                     if(value.id == department) {
                                         $(departmentAutocomplete).val(value.name);
@@ -845,6 +850,9 @@
                                 resultProv = resultProv.replace(/Id/g, 'id');
                                 console.log(resultProv);
                                 var objResultProv = jQuery.parseJSON(resultProv);
+    							$(provinceAutocomplete).typeahead({
+								    source: objResultProv,
+							    });
                                 $.each(objResultProv, function (index, value){
                                     if(value.id == province) {
                                         $(provinceAutocomplete).val(value.name);
@@ -858,16 +866,19 @@
                                 resultDistrict = resultDistrict.replace(/Id/g, 'id');
                                 console.log(resultDistrict);
                                 objResultDis = jQuery.parseJSON(resultDistrict); 
+    							$(districtAutocomplete).typeahead({
+								    source: objResultDis,
+							    });
                                 $.each(objResultDis, function (index, value){
-                                        if(value.id == district) {
-                                            $(districtAutocomplete).val(value.name);
-                                        }
-                                    });
-                                }).fail(function (result) {
-                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                                    if(value.id == district) {
+                                        $(districtAutocomplete).val(value.name);
+                                    }
                                 });
+                            }).fail(function (result) {
+                                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                             });
-                        countReciber = countReciber + 1;
+                    });
+                    countReciber = countReciber + 1;
                 });
             $("#hddCountReciber").val(countReciber);
         
@@ -1016,7 +1027,9 @@
                                 resultZone = resultZone.replace(/Description/g, 'name');
                                 resultZone = resultZone.replace(/Id/g, 'id');
                                 var objResultZone = jQuery.parseJSON(resultZone);
-
+    							$(zoneAutocomplete).typeahead({
+								    source: objResultZone,
+							    });
                                 $.each(objResultZone, function (index, value){
                                     if(value.id == zone) {
                                         $(zoneAutocomplete).val(value.name);
@@ -1029,6 +1042,9 @@
                                 result = result.replace(/Description/g, 'name');
                                 result = result.replace(/Id/g, 'id');
                                 var objResult = jQuery.parseJSON(result);
+							    $(departmentAutocomplete).typeahead({
+								    source: objResult,
+							    });
                                 $.each(objResult, function (index, value){
                                     if(value.id == department) {
                                         $(departmentAutocomplete).val(value.name);
@@ -1040,8 +1056,10 @@
                             .done(function (resultProv) {
                                 resultProv = resultProv.replace(/Description/g, 'name');
                                 resultProv = resultProv.replace(/Id/g, 'id');
-                                console.log(resultProv);
                                 var objResultProv = jQuery.parseJSON(resultProv);
+							    $(provinceAutocomplete).typeahead({
+								    source: objResultProv,
+							    });
                                 $.each(objResultProv, function (index, value){
                                     if(value.id == province) {
                                         $(provinceAutocomplete).val(value.name);
@@ -1053,8 +1071,10 @@
                             .done(function (resultDistrict) {
                                 resultDistrict = resultDistrict.replace(/Description/g, 'name');
                                 resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                console.log(resultDistrict);
                                 objResultDis = jQuery.parseJSON(resultDistrict);
+							    $(districtAutocomplete).typeahead({
+								    source: objResultDis,
+							    });
                                 $.each(objResultDis, function (index, value){
                                     if(value.id == district) {
                                         $(districtAutocomplete).val(value.name);
