@@ -43,5 +43,10 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         {
             return View();
         }
+
+        public ActionResult TableofTables()
+        {
+            return View();
+        }
     }
 }
