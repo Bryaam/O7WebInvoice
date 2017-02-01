@@ -612,10 +612,7 @@
                 console.log(result);
                 var objResult = jQuery.parseJSON(result);
                 var obj = objResult[0];    
-                $("#routePath").append("<li class='active'><i>"+obj.BussinessName+" ("+clientId+")</i></li>")
-                console.log("datos del cliente");
-                console.log(obj);
-
+                $("#header-detail").html(obj.BussinessName+" ("+clientId+")");
                 $("#chkClientState").val(obj.StateClient);
                 $("#chkClientState").trigger("chosen:updated");
                 $("#chkOriginClient").val(obj.TypeClient);
