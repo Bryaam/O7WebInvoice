@@ -84,27 +84,25 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
-        public override O7Response AddClient(string companyId, string branchId, string typeClient, string businessName, string person,
-                            string stateClient, string ruc, string dni, string country, string zone, string address, string codPost,
-                            string city, string phone, string initialDate, string email,string ubigeoDep,string ubigeoProv, string ubigeoDist,
-                            string documentType)
-        {           
-            var clientId = FinantialDataService.AddClient(companyId,  branchId,  typeClient,  businessName,  person, stateClient,  ruc, 
-                dni,  initialDate,  email,  country,  zone,  address,  codPost, city,  phone, ubigeoDep,  ubigeoProv,  ubigeoDist, documentType);
-                var seriesSerialized = "{" +clientId+"}";
-                return O7SuccessResponse.MakeResponse(seriesSerialized);
+        public override O7Response AddClient(string companyId, string branchId, string typeClient, string businessName, string person, string stateClient,
+            string ruc, string dni, string initialDate, string email, string country, string zone, string address, string codPost, string city, string phone,
+            string ubigeoDep, string ubigeoProv, string ubigeoDist, string documentType)
+        {
+            var clientId = FinantialDataService.AddClient(companyId, branchId, typeClient, businessName, person, stateClient, ruc,
+                dni, initialDate, email, country, zone, address, codPost, city, phone, ubigeoDep, ubigeoProv, ubigeoDist, documentType);
+            var seriesSerialized = "{" + clientId + "}";
+            return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
         public override O7Response UpdateClient(string companyId, string branchId, string codClient, string typeClient, string businessName, string person,
                             string stateClient, string ruc, string dni, string country, string zone, string address, string codPost,
-                            string city, string phone, string initialDate, string email,  string ubigeoDep,
-                            string ubigeoProv, string ubigeoDist)
+                            string city, string phone, string initialDate, string email, string ubigeoDep, string ubigeoProv, string ubigeoDist, string documentType)
         {
 
             var result = FinantialDataService.UpdateClient(companyId, branchId, codClient, typeClient, businessName, person, stateClient, ruc,
-                dni, country, zone, address, codPost, city, phone, initialDate, email,  ubigeoDep, ubigeoProv,ubigeoDist);
-                var seriesSerialized = O7JsonSerealizer.Serialize(result);
-                return O7SuccessResponse.MakeResponse(seriesSerialized);
+                dni, country, zone, address, codPost, city, phone, initialDate, email, ubigeoDep, ubigeoProv, ubigeoDist, documentType);
+            var seriesSerialized = O7JsonSerealizer.Serialize(result);
+            return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
         public override O7Response ClientOrigins()
@@ -135,16 +133,16 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
-        public override O7Response AllProvinces(string country,string departmentId)
+        public override O7Response AllProvinces(string country, string departmentId)
         {
-            var result = FinantialDataService.AllProvinces(country,departmentId);
+            var result = FinantialDataService.AllProvinces(country, departmentId);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
         public override O7Response AllDistricts(string country, string departmentId, string provinceId)
         {
-            var result = FinantialDataService.AllDistricts(country,departmentId, provinceId);
+            var result = FinantialDataService.AllDistricts(country, departmentId, provinceId);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
@@ -177,20 +175,19 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
-        public override O7Response UpdateAddressEntry(string companyId, string branchId, string codClient, string codDir,
-            string route, string fax, string contacto, string country, string zone, string address, string codPost,
-            string city, string phone,string ubigeoDep, string ubigeoProv, string ubigeoDist)
+        public override O7Response UpdateAddressEntry(string companyId, string branchId, string codClient, string codDir, string route, string fax,
+                            string contacto, string country, string zone, string address, string codPost, string city, string phone, string ubigeoDep,
+                            string ubigeoProv, string ubigeoDist)
         {
-            var result = FinantialDataService.UpdateAddressEntry(companyId,  branchId,  codClient,  codDir,
-             route,  fax,  contacto,  country,  zone,  address,  codPost,city,  phone,  ubigeoDep,  ubigeoProv,  ubigeoDist);
+            var result = FinantialDataService.UpdateAddressEntry(companyId, branchId, codClient, codDir,
+             route, fax, contacto, country, zone, address, codPost, city, phone, ubigeoDep, ubigeoProv, ubigeoDist);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
         public override O7Response UpdateAddressFact(string companyId, string branchId, string codClient, string codDir,
             string route, string fax, string contacto, string country, string zone, string address, string codPost,
-            string city, string phone,
-            string ubigeoDep, string ubigeoProv, string ubigeoDist)
+            string city, string phone, string ubigeoDep, string ubigeoProv, string ubigeoDist)
         {
             var result = FinantialDataService.UpdateAddressFact(companyId, branchId, codClient, codDir,
              route, fax, contacto, country, zone, address, codPost, city, phone, ubigeoDep, ubigeoProv, ubigeoDist);
@@ -200,10 +197,10 @@ namespace Angkor.O7Web.Domain.Finantial
 
         public override O7Response AddAddressFact(string companyId, string branchId, string codClient, string address,
             string codPostal, string ubi1, string ubi2, string ubi3, string country, string city, string zone,
-            string route, string phone,string fax, string contact)
+            string route, string phone, string fax, string contact)
         {
-            var result = FinantialDataService.AddAddressFact(companyId, branchId, codClient,   address, codPostal,  ubi1,  ubi2,  ubi3,  country,  city,  zone,
-             route,  phone,  fax,  contact);
+            var result = FinantialDataService.AddAddressFact(companyId, branchId, codClient, address, codPostal, ubi1, ubi2, ubi3, country, city, zone,
+             route, phone, fax, contact);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
@@ -218,14 +215,14 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
-        public override O7Response SavePrincipalAddressFact(string companyId, string branchId, string codClient,string dirFact)
+        public override O7Response SavePrincipalAddressFact(string companyId, string branchId, string codClient, string dirFact)
         {
-            var result = FinantialDataService.SavePrincipalAddressFact(companyId, branchId, codClient,dirFact);
+            var result = FinantialDataService.SavePrincipalAddressFact(companyId, branchId, codClient, dirFact);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
 
-        public override O7Response SavePrincipalAddressEnt(string companyId, string branchId, string codClient,string dirEnt)
+        public override O7Response SavePrincipalAddressEnt(string companyId, string branchId, string codClient, string dirEnt)
         {
             var result = FinantialDataService.SavePrincipalAddressEnt(companyId, branchId, codClient, dirEnt);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
@@ -234,10 +231,10 @@ namespace Angkor.O7Web.Domain.Finantial
 
         public override O7Response UpdatePrincipalAddressEnt(string companyId, string branchId, string codClient,
             string codDir, string route, string fax, string contacto, string country, string zone, string address,
-            string codPost, string city, string phone,string ubigeoDep, string ubigeoProv, string ubigeoDist)
+            string codPost, string city, string phone, string ubigeoDep, string ubigeoProv, string ubigeoDist)
         {
-            var result = FinantialDataService.UpdatePrincipalAddressEnt(companyId, branchId, codClient, codDir,  route,  fax,  contacto,  country,  zone,  address,
-             codPost,  city,  phone,  ubigeoDep,  ubigeoProv,  ubigeoDist);
+            var result = FinantialDataService.UpdatePrincipalAddressEnt(companyId, branchId, codClient, codDir, route, fax, contacto, country, zone, address,
+             codPost, city, phone, ubigeoDep, ubigeoProv, ubigeoDist);
             var seriesSerialized = O7JsonSerealizer.Serialize(result);
             return O7SuccessResponse.MakeResponse(seriesSerialized);
         }
@@ -254,10 +251,9 @@ namespace Angkor.O7Web.Domain.Finantial
         }
 
         // Inicio de la parte InvoiceFlow de Gf
-        public override O7Response AllInvoices(string companyId, string branchId, string filter)
-
+        public override O7Response AllInvoices(string companyId, string branchId, string filter, string clientCode)
         {
-            var invoices = FinantialDataService.AllInvoices(companyId, branchId, filter);
+            var invoices = FinantialDataService.AllInvoices(companyId, branchId, filter, clientCode);
             var invoicesSerialized = O7JsonSerealizer.Serialize(invoices);
             return O7SuccessResponse.MakeResponse(invoicesSerialized);
         }

@@ -5,7 +5,7 @@ using Angkor.O7Web.Common.Finantial.Entity;
 
 namespace Angkor.O7Web.Data.Finantial.DataMapper
 {
-    public class AddressFactMapper:O7DbMapper<AddressFact>
+    public class AddressFactMapper : O7DbMapper<AddressFact>
     {
         public static Type Class => typeof(AddressFactMapper);
 

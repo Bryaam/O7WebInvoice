@@ -23,9 +23,9 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response AllDepartments(string country);
 
-        public abstract O7Response AllProvinces(string country,string departmentId);
+        public abstract O7Response AllProvinces(string country, string departmentId);
 
-        public abstract O7Response AllDistricts(string country,string departmentId, string provinceId);
+        public abstract O7Response AllDistricts(string country, string departmentId, string provinceId);
 
         public abstract O7Response AllCountries(string companyId, string branchId);
 
@@ -46,17 +46,17 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response UpdateSeries(string companyId, string branchId, string documentType, string id,
             string current, string max, string min, string @default, string prefix, string idUpdate, string documentTypeUpdate);
-        
+
         public abstract O7Response AllClients(string companyId, string branchId, string filter);
 
-        public abstract O7Response AddClient(string companyId, string branchId, string typeClient, string businessName, string person,
-                            string stateClient, string ruc, string dni, string country, string zone, string address, string codPost,
-                            string city, string phone, string initialDate, string email,  string ubigeoDep,
-                            string ubigeoProv, string ubigeoDist, string documentType);
+        public abstract O7Response AddClient(string companyId, string branchId, string typeClient, string businessName, string person, string stateClient,
+            string ruc, string dni, string initialDate, string email, string country, string zone, string address, string codPost, string city, string phone,
+            string ubigeoDep, string ubigeoProv, string ubigeoDist, string documentType);
+
         public abstract O7Response UpdateClient(string companyId, string branchId, string codClient, string typeClient, string businessName, string person,
                             string stateClient, string ruc, string dni, string country, string zone, string address, string codPost,
-                            string city, string phone, string initialDate, string email,  string ubigeoDep,
-                            string ubigeoProv, string ubigeoDist);
+                            string city, string phone, string initialDate, string email, string ubigeoDep,
+                            string ubigeoProv, string ubigeoDist, string documentType);
 
         public abstract O7Response AllRoute(string companyId, string branchId);
 
@@ -66,34 +66,34 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response ViewAddressFact(string companyId, string branchId, string codClient);
 
-        public abstract O7Response UpdateAddressEntry(string companyId, string branchId, string codClient, string codDir,
-            string route, string fax,string contacto, string country, string zone, string address, string codPost, string city, string phone,
-            string ubigeoDep,string ubigeoProv, string ubigeoDist);
+        public abstract O7Response UpdateAddressEntry(string companyId, string branchId, string codClient, string codDir, string route, string fax,
+                            string contacto, string country, string zone, string address, string codPost, string city, string phone, string ubigeoDep,
+                            string ubigeoProv, string ubigeoDist);
         public abstract O7Response UpdateAddressFact(string companyId, string branchId, string codClient, string codDir,
             string route, string fax, string contacto, string country, string zone, string address, string codPost, string city, string phone,
             string ubigeoDep, string ubigeoProv, string ubigeoDist);
 
         public abstract O7Response AddAddressFact(string companyId, string branchId, string codClient, string address,
-            string codPostal,string ubi1, string ubi2, string ubi3, string country, string city, string zone, string route, string phone,
+            string codPostal, string ubi1, string ubi2, string ubi3, string country, string city, string zone, string route, string phone,
             string fax, string contact);
         public abstract O7Response AddAddressEnt(string companyId, string branchId, string codClient, string address,
             string codPostal, string ubi1, string ubi2, string ubi3, string country, string city, string zone, string route, string phone,
             string fax, string contact);
 
-        public abstract O7Response SavePrincipalAddressFact(string companyId, string branchId, string codClient,string dirFact);
+        public abstract O7Response SavePrincipalAddressFact(string companyId, string branchId, string codClient, string dirFact);
 
-        public abstract O7Response SavePrincipalAddressEnt(string companyId, string branchId, string codClient,string dirEnt);
+        public abstract O7Response SavePrincipalAddressEnt(string companyId, string branchId, string codClient, string dirEnt);
 
         public abstract O7Response UpdatePrincipalAddressEnt(string companyId, string branchId, string codClient,
-            string codDir, string route, string fax,string contacto, string country, string zone, string address, string codPost, string city, string phone,
-            string ubigeoDep,string ubigeoProv, string ubigeoDist);
+            string codDir, string route, string fax, string contacto, string country, string zone, string address, string codPost, string city, string phone,
+            string ubigeoDep, string ubigeoProv, string ubigeoDist);
 
         public abstract O7Response UpdatePrincipalAddressFact(string companyId, string branchId, string codClient,
-            string codDir, string route, string fax,string contacto, string country, string zone, string address, string codPost, string city, string phone,
-            string ubigeoDep,string ubigeoProv, string ubigeoDist);
+            string codDir, string route, string fax, string contacto, string country, string zone, string address, string codPost, string city, string phone,
+            string ubigeoDep, string ubigeoProv, string ubigeoDist);
 
         // Inicio modificacion Invoice Gf
-        public abstract O7Response AllInvoices(string companyId, string branchId, string filter);
+        public abstract O7Response AllInvoices(string companyId, string branchId, string filter,string clientCode);
         public abstract O7Response Concepts(string companyId, string branchId, string percepcionTasa);
         public abstract O7Response Series(string companyId, string branchId, string docType);
         public abstract O7Response Cco(string companyId, string branchId);
