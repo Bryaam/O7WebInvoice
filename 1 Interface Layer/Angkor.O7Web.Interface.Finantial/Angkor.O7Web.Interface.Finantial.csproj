@@ -119,7 +119,6 @@
       <DependentUpon>Web.config</DependentUpon>
     </Content>
     <Content Include="Views\Web.config" />
-    <Content Include="Views\Invoice\Index.cshtml" />
     <Content Include="Views\Client\Index.cshtml" />
     <Content Include="Views\Client\Managment.cshtml" />
     <Content Include="Views\Invoice\Management.cshtml" />
@@ -146,10 +145,11 @@
     <Content Include="Views\Settings\InvoiceDocuments.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Invoice\Insert.cshtml" />
+    <Content Include="Views\Invoice\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Invoice\Edit.cshtml" />
+    <Content Include="Views\Invoice\Index.cshtml" />
+    <Content Include="Views\Invoice\Insert.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
