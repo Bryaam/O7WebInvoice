@@ -138,6 +138,72 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceDocumentCount>("O7EXPRESS_PACKAGE_SERIESF.get_seriesF", parameters, InvoiceDocumentCountMapper.Class);
         }
 
+        public virtual bool UpdateSeries(string companyId, string branchId, string documentType, string id, string current,
+           string max, string min, string @default, string prefix, string idUpdate, string documentTypeUpdate)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_company", companyId));
+            parameters.Add(O7Parameter.Make("p_branch", branchId));
+            parameters.Add(O7Parameter.Make("p_document_type", documentType));
+            parameters.Add(O7Parameter.Make("p_id", id));
+            parameters.Add(O7Parameter.Make("p_min", min));
+            parameters.Add(O7Parameter.Make("p_max", max));
+            parameters.Add(O7Parameter.Make("p_current", current));
+            parameters.Add(O7Parameter.Make("p_default", @default));
+            parameters.Add(O7Parameter.Make("p_prefix", prefix));
+            parameters.Add(O7Parameter.Make("p_document_type_new", documentTypeUpdate));
+            parameters.Add(O7Parameter.Make("p_id_new", idUpdate));
+            return DataAccess.ExecuteFunction<int>("O7EXPRESS_PACKAGE_SERIESF.update_serieF", parameters) == 1;
+        }
+
+        public virtual int UpdateTTData(string codtabl,string keyold,string keynew,string datocur)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_codtabl", codtabl));
+            parameters.Add(O7Parameter.Make("p_keyocur", keyold));
+            parameters.Add(O7Parameter.Make("p_keyocurnew", keynew));
+            parameters.Add(O7Parameter.Make("p_datocur", datocur));
+            return DataAccess.ExecuteFunction<int>("table_tables.update_data", parameters) ;
+        }
+
+        public virtual int InsertTTData(string codtabl, string key, string datocur)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_codtabl", codtabl));
+            parameters.Add(O7Parameter.Make("p_keyocur", key));
+            parameters.Add(O7Parameter.Make("p_datocur", datocur));
+            return DataAccess.ExecuteFunction<int>("table_tables.insert_data", parameters) ;
+        }
+
+        public virtual int DeleteTTData(string codtabl, string key)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_codtabl", codtabl));
+            parameters.Add(O7Parameter.Make("p_keyocur", key));
+            return DataAccess.ExecuteFunction<int>("table_tables.delete_data", parameters);
+        }
+
+        public virtual List<TTHeads> GetTTHeads(string codtable)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_codtabl", codtable));
+            return DataAccess.ExecuteFunction<TTHeads>("table_tables.get_tablehead", parameters,TTHeadMapper.Class) ;
+        }
+
+        public virtual List<GenericListValue> GetTTNames()
+        {
+            var parameters = O7DbParameterCollection.Make;
+            return DataAccess.ExecuteFunction<GenericListValue>("table_tables.get_tablenames", parameters, InvoiceGenericListMapper.Class);
+        }
+
+        public virtual List<TTData> GetTTData(string primary, string secondary)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_primary", primary));
+            parameters.Add(O7Parameter.Make("p_secondary", secondary));
+            return DataAccess.ExecuteFunction<TTData>("table_tables.get_data", parameters, TTDataMapper.Class);
+        }
+
         public virtual bool ValidateCountryInvoicer(string countryId)
         {
             var parameters = O7DbParameterCollection.Make;

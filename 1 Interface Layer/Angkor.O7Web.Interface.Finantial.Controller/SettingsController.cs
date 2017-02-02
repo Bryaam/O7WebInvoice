@@ -1,8 +1,9 @@
 ﻿// O7ERP Web created by felix_dev
-using System.Web.Mvc;
+
 using Angkor.O7Framework.Web.Base;
 using Angkor.O7Framework.Web.WebResult;
 using Angkor.O7Web.Comunication;
+using System.Web.Mvc;
 
 namespace Angkor.O7Web.Interface.Finantial.Controller
 {
@@ -52,5 +53,8 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         {
             return View();
         }
+
+
+
     }
 }
