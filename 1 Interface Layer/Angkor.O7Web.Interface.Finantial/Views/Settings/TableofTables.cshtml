@@ -134,12 +134,12 @@
                     "bFilter": false,
                     "bInfo": false,
                     "bAutoWidth": false,
-                    "paging": true,
+                    "paging": false,
                     "columns": [
                         {
                             data : "key",
                             width: "1%",
-                            title: "<div style='White-space:pre; padding-left:1%;'>"+jsonResult[0].TK+"<br />"+jsonResult[0].CK+"</div>"
+                            title: "<div style='White-space:pre; padding-left:1%; font-family: monospace !important;'>"+jsonResult[0].TK+"<br />"+jsonResult[0].CK+"</div>"
                         },
                         {
                             data : "content",
@@ -218,7 +218,7 @@
     }
 
     load_table_names();
-    load_table(1,null);
+    load_table(2,null);
 
     $('#primary_table_id').change(function(){
         var primary_id = $(this).typeahead("getActive").Value;
@@ -242,7 +242,7 @@
                         <input id="primary_table_id" style="width:60%;"/>
                     </div>
                 </div>
-                <div style="width:100%; overflow-x:scroll;">
+                <div style="width:100%; height:500px; overflow:scroll;">
                     <table class="table table-striped table-bordered table-hover" id="tableOfTables" style="font-family: monospace !important;">
                         <thead></thead>
                         <tbody></tbody>
