@@ -1,5 +1,4 @@
 ﻿// O7ERP Web created by felix_dev
-
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -18,7 +17,7 @@ namespace Angkor.O7Web.Interface.AppStart.Filter
             var session = HttpContext.Current.Session[WebConstant.USER_COOKIE];
             if (session != null) return;
 
-            filterContext.Result = new RedirectResult("http://localhost:120/Security", true);
+            filterContext.Result = new RedirectResult("http://localhost:120/Security", false);
             filterContext.Result.ExecuteResult(filterContext.Controller.ControllerContext);
         }
     }
