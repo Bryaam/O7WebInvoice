@@ -37,6 +37,13 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(clientSerialized);
         }
 
+        public override O7Response GetCcos(string companyId,string branchId)
+        {
+            var ccos = FinantialDataService.GetCcos(companyId,branchId);
+            var ccosSerialized = O7JsonSerealizer.Serialize(ccos);
+            return O7SuccessResponse.MakeResponse(ccosSerialized);
+        }
+
         public override O7Response GetTTHeads(string codtabl)
         {
             var heads = FinantialDataService.GetTTHeads(codtabl);

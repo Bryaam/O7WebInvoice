@@ -9,6 +9,16 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 {
     public class SettingsController : O7Controller
     {
+
+        public JsonResult Ccos_Populate()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.AllSeries(User.Company, User.Branch);
+            return new O7JsonResult(response);
+        }
+
+        
+
         public JsonResult InvoiceDocuments_Populate()
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
@@ -95,6 +105,15 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var response = domain.DeleteTTData(codtabl, key);
             return new O7JsonResult(response);
         }
+
+        public JsonResult GetCcos()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetCcos(User.Company, User.Branch);
+            return new O7JsonResult(response);
+        }
+
+
 
 
 
