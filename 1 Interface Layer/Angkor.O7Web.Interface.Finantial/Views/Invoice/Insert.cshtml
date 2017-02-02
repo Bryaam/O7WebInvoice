@@ -606,7 +606,12 @@
     $('#dirInputSelect').addClass("hidden");
     $('#dirInputSelect').next().addClass("hidden");
 
+<<<<<<< HEAD
     $('#perception_chosen').hide();
+=======
+        $('#perceptionLabel').hide();
+        $('#perception_chosen').show();
+>>>>>>> f7253e1eed29865227d60a675b59e73bfc8f940a
     });
 
     $('#clienteOcasionalCB').on('ifUnchecked', function() {
@@ -630,7 +635,12 @@
     $('#dirInputSelect').removeClass("hidden");
     $('#dirInputSelect').next().removeClass("hidden");
 
+<<<<<<< HEAD
     $('#perception_chosen').hide();
+=======
+        $('#perceptionLabel').hide();
+        $('#perception_chosen').hide();
+>>>>>>> f7253e1eed29865227d60a675b59e73bfc8f940a
     });
 
     $('.i-checks').iCheck({
@@ -1009,7 +1019,58 @@
     $("#mailInput").val(parentRow.children('td').eq(4).text());
     tableClients.row('.selected').remove().draw(false);
 
+
     var clientCode = parentRow.children('td').eq(0).text();
+
+            $.ajax({
+                    method: "GET",
+                    url: "/Finantial/Invoice/ClientDefaultValues",
+                    data: {
+                        clientId: clientCode
+                    }
+                })
+                .done(function(result) {
+                    var jsonResult = jQuery.parseJSON(result);
+
+                    if (!jQuery.isEmptyObject(jsonResult)) {
+                        update_chosen_select("#taxe", jsonResult[0].TaxId);
+                        update_chosen_select("#currency", jsonResult[0].CurrencyId);
+                        update_chosen_select("#tipoVenta", jsonResult[0].TypeSell);
+                        update_chosen_select("#condVenta", jsonResult[0].CondSell);
+                        update_chosen_select("#formaPago", jsonResult[0].Payment);
+                        update_chosen_select("#vendedor", jsonResult[0].Seller);
+                        update_chosen_select("#codFinanciero", jsonResult[0].FinantialCode);
+                        update_chosen_select("#lineaNegocio", jsonResult[0].BussinessLine);
+                        update_chosen_select("#language", jsonResult[0].Language);
+                       
+                        if (jsonResult[0].FlgPer == "N") {
+                            $('#perception_chosen').hide();
+                            $('#perceptionLabel').hide();
+                            update_chosen_select("#perception", "");
+                        } else {
+                            $('#perception_chosen').show();
+                            $('#perceptionLabel').show();
+                        }
+
+                        var condition = $("#condVenta").val();
+                        $.ajax({
+                                method: "GET",
+                                url: "/Finantial/Invoice/GetPayments",
+                                data: {
+                                    cond_sell: condition
+                                }
+                            })
+                            .done(function(result) {
+                                var jsonResult = jQuery.parseJSON(result);
+                                if (!jQuery.isEmptyObject(jsonResult)) {
+                                    populate_combo_box("#formaPago", jsonResult);
+                                }
+                            })
+                            .fail(function(result) {
+                                toastr.error(result.statusText, "Mensaje", {
+                                    positionClass: "toast-top-full-width"
+                                });
+                            });
 
     $("#clientCode").val(clientCode);
 
