@@ -96,23 +96,7 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceDocumentType>("finantial_invoice.document_type", O7DbParameterCollection.Make, InvoiceDocumentTypeMapper.Class);
         }
 
-        public virtual bool UpdateSeries(string companyId, string branchId, string documentType, string id, string current,
-            string max, string min, string @default, string prefix, string idUpdate, string documentTypeUpdate)
-        {
-            var parameters = O7DbParameterCollection.Make;
-            parameters.Add(O7Parameter.Make("p_company", companyId));
-            parameters.Add(O7Parameter.Make("p_branch", branchId));
-            parameters.Add(O7Parameter.Make("p_document_type", documentType));
-            parameters.Add(O7Parameter.Make("p_id", id));
-            parameters.Add(O7Parameter.Make("p_min", min));
-            parameters.Add(O7Parameter.Make("p_max", max));
-            parameters.Add(O7Parameter.Make("p_current", current));
-            parameters.Add(O7Parameter.Make("p_default", @default));
-            parameters.Add(O7Parameter.Make("p_prefix", prefix));
-            parameters.Add(O7Parameter.Make("p_document_type_new", documentTypeUpdate));
-            parameters.Add(O7Parameter.Make("p_id_new", idUpdate));
-            return DataAccess.ExecuteFunction<int>("O7EXPRESS_PACKAGE_SERIESF.update_serieF", parameters) == 1;
-        }
+        
 
         public virtual bool AddSeries(string companyId, string branchId, string documentType, string id, string current,
             string max, string min, string @default, string prefix)
