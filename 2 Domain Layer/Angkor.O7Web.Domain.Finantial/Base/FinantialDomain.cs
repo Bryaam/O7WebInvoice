@@ -21,6 +21,17 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response ValidateCountryEntry(string countryId);
 
+        public abstract O7Response GetTTHeads(string codtabl);
+
+        public abstract O7Response GetTTData(string primary, string secondary);
+
+        public abstract O7Response GetTTNames();
+
+        public abstract O7Response GetCcos(string companyId, string branchId);
+        public abstract O7Response InsertTTData(string codtabl, string keyocur, string datocur);
+        public abstract O7Response UpdateTTData(string codtabl, string keyocur, string keyocurNew, string datocur);
+
+        public abstract O7Response DeleteTTData(string codtabl, string keyocur);
         public abstract O7Response AllPostales();
 
         public abstract O7Response AllClientZones(string countryId);
