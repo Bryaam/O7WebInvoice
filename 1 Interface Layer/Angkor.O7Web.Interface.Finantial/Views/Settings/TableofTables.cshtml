@@ -139,11 +139,11 @@
                         {
                             data : "key",
                             width: "1%",
-                            title: "<span style='White-space:pre;'>"+jsonResult[0].TK+"<br />"+jsonResult[0].CK+"</span>"
+                            title: "<div style='White-space:pre; padding-left:1%;'>"+jsonResult[0].TK+"<br />"+jsonResult[0].CK+"</div>"
                         },
                         {
                             data : "content",
-                            title: "<span style='White-space:pre'>"+jsonResult[0].TF+"<br />"+jsonResult[0].CF+"</span>"
+                            title: "<div style='White-space:pre; padding-left:1%;'>"+jsonResult[0].TF+"<br />"+jsonResult[0].CF+"</div>"
                         }
                     ]
                 });
@@ -158,35 +158,35 @@
     }
 
     function loadData(primaryCode, secondCode){
-    var data = {
-    primaryCode: primaryCode
-    }
+        var data = {
+            primaryCode: primaryCode
+        }
 
-    if (secondCode != null){
-    data.secondCode = secondCode;
-    }
-
+        if (secondCode != null){
+            data.secondCode = secondCode;
+        }
+        
         $.ajax({
             method: "GET",
             url: "/Finantial/Settings/GetData",
             data: data
-            })
-            .done(function(result) {
-                var jsonResult = jQuery.parseJSON(result);
-                if (!jQuery.isEmptyObject(jsonResult)) {
-                    $.each(jsonResult, function (index, value) {
-                        var dataUnit = {};
-                        dataUnit.key = "<input class='form-control' style='width:100%' value='"+value.key+"'>";
-                        dataUnit.content = "<input class='form-control' style='width:100%' value='"+value.content+"'>";
-                        var dataSet = [];
-                        dataSet.push(dataUnit);
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                $.each(jsonResult, function (index, value) {
+                    var dataUnit = {};
+                    dataUnit.key = "<input class='form-control' style='width:100%' value='"+value.key+"'>";
+                    dataUnit.content = "<input class='form-control' style='width:100%' value='"+value.content+"'>";
+                    var dataSet = [];
+                    dataSet.push(dataUnit);
 
-                        tableOfTables.rows.add(dataSet).draw();
-                    });
-                }
-            })
-            .fail(function(result) {
-                toastr.error(result.statusText, "Mensaje", {
+                    tableOfTables.rows.add(dataSet).draw();
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
                 positionClass: "toast-top-full-width"
             });
         });
@@ -203,10 +203,8 @@
             url: "/Finantial/Settings/GetTTNames"
         })
         .done(function(result) {
-            console.log(result);
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
-                //console.log(jsonResult);
                 $('#primary_table_id').typeahead({
                     source: jsonResult
                 });
@@ -221,6 +219,15 @@
 
     load_table_names();
     load_table(1,null);
+
+    $('#primary_table_id').change(function(){
+        var primary_id = $(this).typeahead("getActive").Value;
+        tableOfTables.clear().draw();
+        $('#tableOfTables').dataTable().fnDestroy();
+
+        load_table(primary_id,null);
+        
+    });
 }
 
 <div class="row">
@@ -236,7 +243,7 @@
                     </div>
                 </div>
                 <div style="width:100%; overflow-x:scroll;">
-                    <table class="table table-striped table-bordered table-hover" id="tableOfTables" style="font-family: monospace;">
+                    <table class="table table-striped table-bordered table-hover" id="tableOfTables" style="font-family: monospace !important;">
                         <thead></thead>
                         <tbody></tbody>
                     </table>
