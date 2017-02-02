@@ -639,6 +639,17 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceEdit>("finantial_invoice.search_fact", parameters, InvoiceMapper.Class);
         }
 
+
+        public virtual List<CcoView> GetCcos(string companyId, string branchId, string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipo_doc", documentType));
+            parameters.Add(O7Parameter.Make("p_nro_doc", documentId));
+            return DataAccess.ExecuteFunction<CcoView>("finantial_invoice.search_fact", parameters, CcoViewMapper.Class);
+        }
+
         public virtual List<InvoiceDetail> GetInvoiceDetail(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;
