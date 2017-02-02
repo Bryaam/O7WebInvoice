@@ -220,6 +220,7 @@
         $('#dirInputSelect').addClass("hidden");
         $('#dirInputSelect').next().addClass("hidden");
 
+        $('#perceptionLabel').hide();
         $('#perception_chosen').hide();
     });
 
@@ -244,6 +245,7 @@
         $('#dirInputSelect').removeClass("hidden");
         $('#dirInputSelect').next().removeClass("hidden");
 
+        $('#perceptionLabel').hide();
         $('#perception_chosen').hide();
     });
 
@@ -482,44 +484,6 @@
     });
 
     //Fin Tab 4
-
-    //Inicio de data dummy
-    var dataClient = {
-        "ClientCode": "666",
-        "ClientType": "Natural",
-        "DocumentNumber": "6688",
-        "ClientPhone": "442131231",
-        "ClientEmail": "a@caca.com"
-    };
-    var dataClient2 = {
-        "ClientCode": "6662",
-        "ClientType": "Natural2",
-        "DocumentNumber": "6688222",
-        "ClientPhone": "442131231",
-        "ClientEmail": "a@caca.com"
-    };
-
-    var dataSetClient = [];
-    dataSetClient.push(dataClient);
-    dataSetClient.push(dataClient2);
-
-    var dataUnit = {
-        "item": "1",
-        "concept": "observacion",
-        "desc": "descripcion",
-        "price": "8",
-        "tax": "18",
-        "porc": "5"
-    };
-    dataUnit.amount = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' value='' id='item_amount_" + 1 + "'>";
-    dataUnit.comment = "<input class='form-control' value='' id='item_comment_" + 1 + "'>";
-    dataUnit.price = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' id='item_price_" + 1 + "'>";
-
-    var dataSet = [];
-    dataSet.push(dataUnit);
-
-    //Fin de data dummy
-
 
     var tableClients = $('#seleccionarCliente').DataTable({
         "bPaginate": false,
@@ -1084,7 +1048,7 @@
     //create_dataset();
 
     $('#botonAgregarProducto').click(function() {
-        var rowsCount = $("#tableProducts tr").length;
+        var rowsCount = tableProduct.rows('.odd').count() + tableProduct.rows('.even').count();
         create_dataset(rowsCount);
     });
 
@@ -1118,10 +1082,9 @@
         });
         return name;
     }
-    var itemNum = 0;
 
       function create_dataset(rowsCount) {
-        var itemNum = rowsCount - 1;
+        var itemNum = rowsCount;
         var dataUnit = {
             "porc": "5"
         };
@@ -1198,7 +1161,12 @@
         initialize_combo_ajax("#item_tax_" + itemNum, "/Finantial/Invoice/GetTaxes", false);
         update_chosen_select("#item_tax_" + itemNum, $("#taxe").val());
 
-          itemNum++;
+        itemNum++;
+
+        //$('#botonAgregarProducto').prop("disabled", true);
+        //console.log("editando");
+        //console.log(itemNum-1);
+        //$('.input-add_product').bind('keyup', verify_complete(itemNum));
 
     }
 
@@ -1334,6 +1302,8 @@
         } else {
             $('#perception_chosen').show();
             $('#perceptionLabel').show();
+            console.log("muestra percep--------------------------------------");
+            console.log(invoice.perception);
             update_chosen_select("#perception", invoice.perception);
         }
         if (invoice.donate == "S")
@@ -1553,7 +1523,7 @@
     //----------------------------------------------------------------------------FIN EDIT
 
     // Verificar que todos los campos esten completos
-     function verify_complete() {
+     function verify_complete(itemNum) {
         var amount = $('#item_amount_' + (itemNum - 1)).val();
         var comment = $('#item_comment_' + (itemNum - 1)).val();
         var price = $('#item_price_' + (itemNum - 1)).val();

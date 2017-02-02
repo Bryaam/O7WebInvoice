@@ -536,7 +536,8 @@
         $('#dirInputSelect').addClass("hidden");
         $('#dirInputSelect').next().addClass("hidden");
 
-        $('#perception_chosen').hide();
+        $('#perceptionLabel').hide();
+        $('#perception_chosen').show();
     });
 
     $('#clienteOcasionalCB').on('ifUnchecked', function() {
@@ -560,6 +561,7 @@
         $('#dirInputSelect').removeClass("hidden");
         $('#dirInputSelect').next().removeClass("hidden");
 
+        $('#perceptionLabel').hide();
         $('#perception_chosen').hide();
     });
 
@@ -986,7 +988,7 @@
                         update_chosen_select("#codFinanciero", jsonResult[0].FinantialCode);
                         update_chosen_select("#lineaNegocio", jsonResult[0].BussinessLine);
                         update_chosen_select("#language", jsonResult[0].Language);
-
+                       
                         if (jsonResult[0].FlgPer == "N") {
                             $('#perception_chosen').hide();
                             $('#perceptionLabel').hide();
