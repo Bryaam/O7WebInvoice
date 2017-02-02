@@ -12,6 +12,20 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 {
     public partial class ClientController : O7Controller
     {
+        public JsonResult ValidateCountryInvoicer(string countryId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.ValidateCountryInvoicer(countryId);
+            return new O7JsonResult(response);            
+        }
+
+        public JsonResult ValidateCountryEntry(string countryId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.ValidateCountryEntry(countryId);
+            return new O7JsonResult(response);
+        }
+
         public ActionResult Index()
         {
             return View();

@@ -17,6 +17,10 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             FinantialDataService = O7DataInstanceMaker.MakeInstance<FinantialDataService>(new object[] { login, password });
         }
 
+        public abstract O7Response ValidateCountryInvoicer(string countryId);
+
+        public abstract O7Response ValidateCountryEntry(string countryId);
+
         public abstract O7Response AllPostales();
 
         public abstract O7Response AllClientZones(string countryId);
