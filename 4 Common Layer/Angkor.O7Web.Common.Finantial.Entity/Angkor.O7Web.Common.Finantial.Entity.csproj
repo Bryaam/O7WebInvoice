@@ -39,6 +39,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressEnt.cs" />
+    <Compile Include="TTData.cs" />
+    <Compile Include="TTHeads.cs" />
     <Compile Include="AddressFact.cs" />
     <Compile Include="ClientCountry.cs" />
     <Compile Include="ClientDefaultValues.cs" />

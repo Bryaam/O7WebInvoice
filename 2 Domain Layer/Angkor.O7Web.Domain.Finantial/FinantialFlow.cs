@@ -18,11 +18,63 @@ namespace Angkor.O7Web.Domain.Finantial
         {
         }
 
+        public override O7Response ValidateCountryInvoicer(string countryId)
+        {
+            var client = FinantialDataService.ValidateCountryInvoicer(countryId);
+            return O7SuccessResponse.MakeResponse($"{client}");
+        }
+
+        public override O7Response ValidateCountryEntry(string countryId)
+        {
+            var client = FinantialDataService.ValidateCountryEntry(countryId);
+            return O7SuccessResponse.MakeResponse($"{client}");
+        }
+
         public override O7Response AllPostales()
         {
             var client = FinantialDataService.AllPostales();
             var clientSerialized = O7JsonSerealizer.Serialize(client);
             return O7SuccessResponse.MakeResponse(clientSerialized);
+        }
+
+        public override O7Response GetTTHeads(string codtabl)
+        {
+            var heads = FinantialDataService.GetTTHeads(codtabl);
+            var headsSerialized = O7JsonSerealizer.Serialize(heads);
+            return O7SuccessResponse.MakeResponse(headsSerialized);
+        }
+
+        public override O7Response GetTTData(string primary,string secondary)
+        {
+            var data = FinantialDataService.GetTTData(primary,secondary);
+            var dataSerialized = O7JsonSerealizer.Serialize(data);
+            return O7SuccessResponse.MakeResponse(dataSerialized);
+        }
+
+        public override O7Response GetTTNames(string codtabl)
+        {
+            var ttnames = FinantialDataService.GetTTNames();
+            var ttnamesSerialized = O7JsonSerealizer.Serialize(ttnames);
+            return O7SuccessResponse.MakeResponse(ttnamesSerialized);
+        }
+        public override O7Response InsertTTData(string codtabl,string keyocur,string datocur)
+        {
+            var respuesta = FinantialDataService.InsertTTData(codtabl,keyocur,datocur);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
+        }
+        public override O7Response UpdateTTData(string codtabl, string keyocur,string keyocurNew, string datocur)
+        {
+            var respuesta = FinantialDataService.UpdateTTData(codtabl,keyocur,keyocurNew,datocur);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
+        }
+
+        public override O7Response DeleteTTData(string codtabl,string keyocur)
+        {
+            var respuesta = FinantialDataService.DeleteTTData(codtabl,keyocur);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
         }
 
         public override O7Response AllClientZones(string countryId)

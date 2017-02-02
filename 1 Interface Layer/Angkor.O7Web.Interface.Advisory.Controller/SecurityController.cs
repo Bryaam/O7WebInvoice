@@ -51,6 +51,7 @@ namespace Angkor.O7Web.Interface.Advisory.Controller
 
         public ActionResult Logout()
         {
+            _authentication = new O7Authentication(Session);
             _authentication.RemoveUser();
             _authentication.RemoveMenus();
             return Redirect(LinkHelper.SourceLink("Security", "Signout"));

@@ -9,13 +9,12 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
 
-    @Html.StyleLink("css/bootstrap.min.css");
-    @Html.StyleLink("font-awesome/css/font-awesome.css");
-    @Html.StyleLink("css/plugins/iCheck/custom.css");
-    @Html.StyleLink("css/plugins/steps/jquery.steps.css");
-    @Html.StyleLink("css/animate.css");
-    @Html.StyleLink("css/style.css");
-
+    @Html.StyleLink("css/bootstrap.min.css")
+    @Html.StyleLink("font-awesome/css/font-awesome.css")
+    @Html.StyleLink("css/plugins/iCheck/custom.css")
+    @Html.StyleLink("css/plugins/steps/jquery.steps.css")
+    @Html.StyleLink("css/animate.css")
+    @Html.StyleLink("css/style.css")
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
     @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")
 
@@ -78,6 +77,7 @@
             padding: 10px 20px !important;
         }
     </style>
+
 }
 @section scripts_link {
     <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
@@ -115,31 +115,75 @@
         var dateOutput = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + currentDate.getFullYear();
 
         $(".currentDateDefault").val(dateOutput);
+
+        $(document).ajaxStop(function () {
+            $("#spinner").hide();
+        });
+
+        $(document).ajaxSend(function () {
+            $("#spinner").show();
+        });
+
+        $(document).ajaxStart(function () {
+            $("#spinner").show();
+        });
+      
+        $("#spinner").bind("ajaxSend", function () {
+            $("#spinner").show();
+        }).bind("ajaxComplete", function () {
+            $("#spinner").hide();
+        }).bind("ajaxStop", function () {
+            $("#spinner").hide();
+        }).bind("ajaxError", function () {
+            $("#spinner").hide();
+        });
+
     </script>
 }
 
 @section section_script {
-
     $("#btnSubmit").click(function() {
-        swal({
-            title: "Confirmación",
-            text: "¿Actualizar documento?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Sí",
-            closeOnConfirm: false
-        }, function() {
-            swal({
-                title: "Actualizado",
-                text: "Documento actualizado exitosamente",
-                type: "success",
-                confirmButtonText: "Continuar"
-                }, function () {
-                    $("#formInvoice").submit();
-            });
-            
+        var inputNotFilledYet = false;
+        var selectNotFilledYet = false;
+        $('input[required]').each(function(){
+            if ($(this).val() == ""){
+                $(this).focus();
+                var curName = "#"+($(this)[0].id)+"Label";
+                toastr.error("Campo obligatorio", "Falta completar el campo "+$(curName)[0].textContent, {
+                    positionClass: "toast-top-right"
+                });
+                inputNotFilledYet = true;
+                return;
+            }
         });
+        $('select[required]').each(function(){
+            if ($(this)[0].selectedIndex == -1){
+                selectNotFilledYet = true;
+                return;
+            }
+        });
+        if (inputNotFilledYet || selectNotFilledYet){
+            return;
+        }else{
+            swal({
+                title: "Confirmación",
+                text: "¿Desea guardar los cambios?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                swal({
+                    title: "Guardado",
+                    text: "Documento grabado exitosamente",
+                    type: "success",
+                    confirmButtonText: "Continuar"
+                    }, function () {
+                         $("#formInvoice").submit();
+                });
+            });
+        }
     });
 
     $("#tableProducts").on('change', function() {
@@ -200,7 +244,7 @@
         $('#dirInputSelect').removeClass("hidden");
         $('#dirInputSelect').next().removeClass("hidden");
 
-        $('#perception_chosen').show();
+        $('#perception_chosen').hide();
     });
 
     $('.i-checks').iCheck({
@@ -709,9 +753,9 @@
             .done(function(result) {
                 //console.log(result);
                 var jsonResult = jQuery.parseJSON(result);
-                if (!jQuery.isEmptyObject(jsonResult)) {
-                    tableClients.clear().rows.add(jsonResult).draw();
-                }
+                //if (!jQuery.isEmptyObject(jsonResult)) {
+                tableClients.clear().rows.add(jsonResult).draw();
+                //}
             })
             .fail(function(result) {
                 toastr.error(result.statusText, "Mensaje", {
@@ -992,35 +1036,43 @@
         "paging": true,
         columns: [{
                 title: "Concepto",
-                data: "concept"
+                data: "concept",
+                width: "20%"
             },
             {
                 title: "Comentario",
-                data: "comment"
+                data: "comment",
+                width: "28%"
             },
             {
                 title: "Centro de costos",
-                data: "cost_center"
+                data: "cost_center",
+                width: "20%"
             },
             {
                 title: "Impuesto",
-                data: "tax"
+                data: "tax",
+                width: "5%"
             },
             {
                 title: "Valor Unitario",
-                data: "price"
+                data: "price",
+                width: "11%"
             },
             {
                 title: "Cantidad",
-                data: "amount"
+                data: "amount",
+                width: "7%"
             },
             {
                 title: "Subtotal",
-                data: "subtotal"
+                data: "subtotal",
+                width: "7%"
             },
             {
                 title: "",
-                data: "delete"
+                data: "delete",
+                width: "2%"
             }
         ]
     });
@@ -1068,7 +1120,7 @@
     }
     var itemNum = 0;
 
-    function create_dataset(rowsCount) {
+      function create_dataset(rowsCount) {
         var itemNum = rowsCount - 1;
         var dataUnit = {
             "porc": "5"
@@ -1146,7 +1198,7 @@
         initialize_combo_ajax("#item_tax_" + itemNum, "/Finantial/Invoice/GetTaxes", false);
         update_chosen_select("#item_tax_" + itemNum, $("#taxe").val());
 
-        itemNum++;
+          itemNum++;
 
     }
 
@@ -1357,7 +1409,7 @@
             });
     }
 
-    function edit_product_line(jsonResult, iDoc) {
+     function edit_product_line(jsonResult, iDoc) {
         //var itemNum = jsonResult.length;
         var itemNum = 0;
         $.each(jsonResult, function(index, value) {
@@ -1450,6 +1502,8 @@
         });
     }
 
+
+
     //--------------------------------------------------------------------------------EDIT
 
     $.ajax({
@@ -1499,7 +1553,7 @@
     //----------------------------------------------------------------------------FIN EDIT
 
     // Verificar que todos los campos esten completos
-    function verify_complete() {
+     function verify_complete() {
         var amount = $('#item_amount_' + (itemNum - 1)).val();
         var comment = $('#item_comment_' + (itemNum - 1)).val();
         var price = $('#item_price_' + (itemNum - 1)).val();
@@ -1507,12 +1561,18 @@
         var cost_center = $('#item_cost_center_' + (itemNum - 1)).val();
         var tax = $('#item_tax_' + (itemNum - 1)).val();
 
-        console.log(tax)
+        console.log(amount);
+    console.log(comment);
+    console.log(price);
+    console.log(concept);
+    console.log(cost_center);
+    console.log(tax);
 
         if (amount != "" && comment != "" && price != "" && concept != "" && cost_center != "" && tax != null) {
             $('#botonAgregarProducto').prop("disabled", false);
         }
     }
+
 
 }
 
@@ -1521,6 +1581,14 @@
         <div class="tab-content">
             <div id="tab-1" class="tab-pane active">
                 <div class="panel-body">
+                   
+                    <div id ="spinner" class="sk-spinner sk-spinner-wave" style="position: absolute; left: 50%; top: 50%; z-index:3;">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -1530,6 +1598,7 @@
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
+                                   
                                     <fieldset>
                                         <div class="row">
                                             <div class="col-sm-6">
@@ -1540,10 +1609,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7">
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <div class="row">
-                                                        <div class="col-sm-3">
+                                                        <div class="col-sm-4">
                                                             <input value ='@ViewBag.documentId' hidden name="documentId">
                                                             <input id="clientCode" class="hidden" name="clienteCode">
                                                             <input id="invoiceId" class="hidden">
@@ -1558,18 +1627,18 @@
                                                         </div>
                                                     </div>
                                                     <div class=row>
-                                                        <div class="col-sm-11">
+                                                        <div class="col-sm-12">
                                                             <label class="pull-left form-separation"> Dirección</label>
-                                                            <input id="dirInput" class="form-control hidden" type="text" name="addressId">
+                                                            <input id="dirInput" class="form-control hidden" type="text" name="addressId" required>
                                                             <input id="dirInputContent" class="form-control hidden" type="text" name="invoiceAddress" required>
-                                                            <select class="form-control" id="dirInputSelect"></select>
+                                                            <select class="form-control" id="dirInputSelect" required></select>
                                                             <label style="margin-top: 30px;margin-bottom: -30px;"> <input id="clienteOcasionalCB" type="checkbox" class="i-checks" name=""> Cliente ocasional </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-5">
-                                                <div class="col-sm-5">
+                                            <div class="col-lg-6">
+                                                <div class="col-sm-6">
                                                     <label style="left:inherit" class="form-label-separation">Condición de la venta</label>
                                                     <select id="condVenta" class="form-control" name="condSell" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Forma de pago</label>
@@ -1577,7 +1646,7 @@
                                                     <label style="left:inherit" class="form-label-separation">Vendedor</label>
                                                     <select id="vendedor" class="form-control" name="seller" required></select>
                                                 </div>
-                                                <div class="col-sm-5">
+                                                <div class="col-sm-6">
                                                     <label style="left:inherit" class="form-label-separation">Tipo de venta</label>
                                                     <select id="tipoVenta" class="form-control" name="sellType" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Código Financiero</label>
@@ -1650,7 +1719,7 @@
                                                             <input id="taxeNumber" type="hidden" />
                                                             <select id="taxe" class="form-control" name="codTax" required></select>
                                                         </div>
-                                                        <div class="col-sm-4">
+                                                        <div id="toHide" class="col-sm-4">
                                                             <label id="perceptionLabel" style="left:inherit" class="form-label-separation typeInput">Percepción</label>
                                                             <select id="perception" class="form-control" name="perception"></select>
                                                         </div>

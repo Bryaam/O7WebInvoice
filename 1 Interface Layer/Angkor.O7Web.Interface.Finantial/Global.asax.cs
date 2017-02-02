@@ -10,6 +10,7 @@ namespace Angkor.O7Web.Interface.Finantial
         {
             AreaRegistration.RegisterAllAreas();
             FinantialAppStart.BuildRouteConfig(RouteTable.Routes);
+            FinantialAppStart.RegisterGlobalFilters(GlobalFilters.Filters);
         }
     }
 }

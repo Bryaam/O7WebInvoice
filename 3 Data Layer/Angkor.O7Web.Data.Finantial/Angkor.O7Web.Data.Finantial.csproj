@@ -58,6 +58,8 @@
     <Compile Include="DataMapper\ClientDistrictMapper.cs" />
     <Compile Include="DataMapper\ClientOriginMapper.cs" />
     <Compile Include="DataMapper\ClientPostaleMapper.cs" />
+    <Compile Include="DataMapper\TTDataMapper.cs" />
+    <Compile Include="DataMapper\TTHeadMapper.cs" />
     <Compile Include="DataMapper\ClientProvinceMapper.cs" />
     <Compile Include="DataMapper\ClientRoutMapper.cs" />
     <Compile Include="DataMapper\ClientStateMapper.cs" />

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Web.Mvc;
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Utility;
+using Angkor.O7Framework.Web.Attributes;
 using Angkor.O7Framework.Web.Base;
 using Angkor.O7Framework.Web.HtmlHelper;
 using Angkor.O7Framework.Web.Model;
@@ -30,10 +31,10 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return Redirect(LinkHelper.SourceLink("Security", "Signout"));
         }
 
+        [ExcludeFilter]
         public ActionResult Access(string menuId, string credential)
         {
-            if (string.IsNullOrEmpty(credential)) return null;
-
+            if (string.IsNullOrEmpty(credential)) return null;            
             _authentication = new O7Authentication(Session);
             var credentialCookie = make_credential_cookie(credential);
             authenticate_user(credentialCookie);
