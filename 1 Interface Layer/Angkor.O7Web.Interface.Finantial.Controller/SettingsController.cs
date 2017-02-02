@@ -54,6 +54,48 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return View();
         }
 
+        public JsonResult GetTTHeads(string codTable)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetTTHeads(codTable);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult GetTTData(string primary,string secondary)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetTTData(primary,secondary);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult GetTTNames()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GetTTNames();
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult InsertTTData(string codtabl,string key,string dato)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.InsertTTData(codtabl,key,dato);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult UpdateTTData(string codtabl, string key, string keynew, string dato)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.UpdateTTData(codtabl,key,keynew,dato);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult DeleteTTData(string codtabl, string key)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.DeleteTTData(codtabl, key);
+            return new O7JsonResult(response);
+        }
+
 
 
     }

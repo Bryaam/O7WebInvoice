@@ -25,7 +25,7 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response GetTTData(string primary, string secondary);
 
-        public abstract O7Response GetTTNames(string codtabl);
+        public abstract O7Response GetTTNames();
         public abstract O7Response InsertTTData(string codtabl, string keyocur, string datocur);
         public abstract O7Response UpdateTTData(string codtabl, string keyocur, string keyocurNew, string datocur);
 

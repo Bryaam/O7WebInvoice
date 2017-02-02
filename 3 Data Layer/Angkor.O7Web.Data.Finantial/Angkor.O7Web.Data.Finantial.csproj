@@ -52,14 +52,13 @@
   <ItemGroup>
     <Compile Include="DataMapper\AddressEntryMapper.cs" />
     <Compile Include="DataMapper\AddressFactMapper.cs" />
+    <Compile Include="DataMapper\CcoViewMapper.cs" />
     <Compile Include="DataMapper\ClientCountryMapper.cs" />
     <Compile Include="DataMapper\ClientDefaultValueMapper.cs" />
     <Compile Include="DataMapper\ClientDepartmentMapper.cs" />
     <Compile Include="DataMapper\ClientDistrictMapper.cs" />
     <Compile Include="DataMapper\ClientOriginMapper.cs" />
     <Compile Include="DataMapper\ClientPostaleMapper.cs" />
-    <Compile Include="DataMapper\TTDataMapper.cs" />
-    <Compile Include="DataMapper\TTHeadMapper.cs" />
     <Compile Include="DataMapper\ClientProvinceMapper.cs" />
     <Compile Include="DataMapper\ClientRoutMapper.cs" />
     <Compile Include="DataMapper\ClientStateMapper.cs" />

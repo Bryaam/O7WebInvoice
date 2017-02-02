@@ -51,7 +51,7 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(dataSerialized);
         }
 
-        public override O7Response GetTTNames(string codtabl)
+        public override O7Response GetTTNames()
         {
             var ttnames = FinantialDataService.GetTTNames();
             var ttnamesSerialized = O7JsonSerealizer.Serialize(ttnames);

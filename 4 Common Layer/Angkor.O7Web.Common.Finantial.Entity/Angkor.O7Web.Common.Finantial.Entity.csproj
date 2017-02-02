@@ -39,8 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddressEnt.cs" />
-    <Compile Include="TTData.cs" />
-    <Compile Include="TTHeads.cs" />
     <Compile Include="AddressFact.cs" />
     <Compile Include="ClientCountry.cs" />
     <Compile Include="ClientDefaultValues.cs" />
@@ -54,6 +52,7 @@
     <Compile Include="ClientType.cs" />
     <Compile Include="ClientView.cs" />
     <Compile Include="ClientZone.cs" />
+    <Compile Include="CcoView.cs" />
     <Compile Include="LogFE.cs" />
     <Compile Include="DetailInvoicePDF.cs" />
     <Compile Include="GenericListValue.cs" />
