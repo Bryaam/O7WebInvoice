@@ -1,6 +1,6 @@
 ﻿@{
-    ViewBag.Title = "Index";
-    ViewBag.Section = "Facturación";
+    ViewBag.Title = "Gestión";
+    ViewBag.Section = "Cliente";
     Layout = "~/Views/_Layout.cshtml";
 }
 @section styles_link {
@@ -8,18 +8,62 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
     @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")
+    @Html.StyleLink("css/plugins/jquery-confirm-master/jquery-confirm.css")
+    <style>
+        .btn-confirm-normal{
+            font-weight: normal !important; 
+            text-transform: none !important;
+        }
+    </style>
 }
 @section scripts_link {
     <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
+    @Html.JavaScriptLink("js/plugins/jquery-confirm-master/jquery-confirm.js")
     <script>
         function editClient(clientId) {
             window.location.href = 'http://localhost:120/Finantial/Client/Edit?idClient='+clientId;
         }
         function detail(clientId) {
             window.location.href = 'http://localhost:120/Finantial/Client/ViewDetail?idClient=' + clientId;
+        }
+        function changeStateClient(clientId) {
+            $.alert({
+                title: 'Advertencia',
+                content: '<p>Deseas cambiar el estado del cliente ' + clientId + '</p>',
+                animation: 'zoom',
+                closeAnimation: 'zoom',
+                type: 'success',
+                buttons: {
+                    confirm: {
+                        text: 'Aceptar',
+                        btnClass: 'btn-primary btn-confirm-normal btn-confirm',
+                        action: function () {
+                            var span = this.$content.find('p');
+                            $.ajax({method: "POST", url: "/Finantial/Client/ClientChangeState", data: {clientId: clientId}, async: false})
+                                 .done(function (result) {
+                                     if (result == "True") {
+                                         span.html('Se actualizo correctamente el estado.');
+                                         $('.btn-confirm').hide();
+                                     }
+                                 })
+                                .fail(function (result) {
+                                    toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width"});
+                                });
+                            return false;
+                        }
+                    },
+                    cancel: {
+                        text: 'Cancelar',
+                        btnClass: 'btn-danger btn-confirm-normal',
+                        action: function () {
+                            $("#btnSearchClient").click();
+                        }
+                    },
+                }
+            });
         }
     </script>
 
@@ -43,10 +87,6 @@
              width: "9%"
          },
          {
-             data: "ClientOrigin",
-             width: "9%"
-         },
-         {
              data: "DocumentNumber",
              width: "11%"
          },
@@ -56,19 +96,34 @@
          },
          {
              data: "ClientPhone",
-             width: "11%"
+             width: "8%"
          },
          {
              data: "ClientEmail",
              width: "11%"
          },
          {
+             data: "ClientState",
+             width: "3%",
+             render: function(data, type, full, meta) {
+                 var invoiceId = '"' + full.ClientCode + '"';
+                 if(data=="Activo") return "<span class='label label-info' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+                 return "<span class='label label-warning' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+             }
+         },
+         {
              orderable: false,
              className: "text-center",
              render: function(data, type, full, meta) {
                  var invoiceId = '"' + full.ClientCode + '"';
-                 var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
-                 var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='editClient(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
+                 var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + invoiceId + ");'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
+                 var buttonEdit = "";
+                 if(full.ClientState == "Activo") {
+                     buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='editClient(" + invoiceId + ");'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;"
+                 }
+                 else {
+                     buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='editClient(" + invoiceId + ");' disabled='disabled'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;"
+                 }                     
                  return buttonSearch + buttonEdit;
              },
              width: "15%"
@@ -128,11 +183,11 @@
                             <tr>
                                 <th>Codigo</th>
                                 <th>Tipo</th>
-                                <th>Origen</th>
                                 <th>DNI / RUC</th>
                                 <th>Razón Social</th>
                                 <th>Telefono</th>
                                 <th>Correo</th>
+                                <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>

@@ -1,14 +1,7 @@
 ﻿// O7ERP Web created by felix_dev
-
-using System.CodeDom;
-using System.Collections.Generic;
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Utility;
-using Angkor.O7Web.Common.Finantial.Entity;
 using Angkor.O7Web.Domain.Finantial.Base;
-
-using Angkor.O7Web.Data.Finantial;
-
 
 namespace Angkor.O7Web.Domain.Finantial
 {
@@ -96,6 +89,12 @@ namespace Angkor.O7Web.Domain.Finantial
             var client = FinantialDataService.AllCountries(companyId, branchId);
             var clientSerialized = O7JsonSerealizer.Serialize(client);
             return O7SuccessResponse.MakeResponse(clientSerialized);
+        }
+
+        public override O7Response ClientChangeState(string companyId, string branchId, string clientId)
+        {
+            var client = FinantialDataService.ClientChangeState(companyId, branchId, clientId);
+            return O7SuccessResponse.MakeResponse($"{client}");
         }
 
         public override O7Response DocumentType(string clientType)
