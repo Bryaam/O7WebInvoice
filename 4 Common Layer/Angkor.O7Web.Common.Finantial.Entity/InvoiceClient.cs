@@ -9,5 +9,6 @@
         public string ClientName { get; set; }
         public string ClientPhone { get; set; }
         public string ClientEmail{ get; set; }
+        public string ClientState { get; set; }
     }
 }
