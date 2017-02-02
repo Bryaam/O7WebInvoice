@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "Insertar";
     ViewBag.Section = "Facturación";
     Layout = "~/Views/_Layout.cshtml";
@@ -85,6 +84,13 @@
         <div class="tab-content">
             <div id="tab-1" class="tab-pane active">
                 <div class="panel-body">
+                    <div id="spinner" class="sk-spinner sk-spinner-wave" style="position: absolute; left: 50%; top: 50%; z-index:3;">
+                        <div class="sk-rect1"></div>
+                        <div class="sk-rect2"></div>
+                        <div class="sk-rect3"></div>
+                        <div class="sk-rect4"></div>
+                        <div class="sk-rect5"></div>
+                    </div>
                     <div class="panel-group" id="accordion">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -104,49 +110,49 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7">
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <div class="row">
-                                                        <div class="col-sm-3">
+                                                        <div class="col-sm-4">
                                                             <input id="clientCode" class="hidden" name="clienteCode">
                                                             <input id="invoiceId" class="hidden">
-                                                            <label id="docLabel" class="pull-left form-separation"> DNI/RUC </label>
-                                                            <input readonly type="text" class="form-control emulate-label" id="docInput" name="ClientId" required>
-                                                            <label class="pull-left form-separation"> Teléfono </label>
-                                                            <input type="text" class="form-control" id="phoneInput" name="telephone" required>
+                                                            <label id="docInputLabel" class="pull-left form-separation"> DNI/RUC </label>
+                                                            <input readonly type="text" class="form-control emulate-label myReq" id="docInput" name="ClientId" required>
+                                                            <label class="pull-left form-separation"> Teléfono<small style="opacity:0.5;"> (opcional)</small> </label>
+                                                            <input type="text" class="form-control" id="phoneInput" name="telephone">
                                                         </div>
                                                         <div class="col-sm-8">
-                                                            <label class="pull-left form-separation"> Nombre </label>
-                                                            <input type="text" class="form-control" id="nameInput" name="clientName" required>
+                                                            <label id="nameInputLabel" class="pull-left form-separation"> Nombre </label>
+                                                            <input type="text" class="form-control myReq" id="nameInput" name="clientName" required>
                                                         </div>
                                                     </div>
                                                     <div class=row>
-                                                        <div class="col-sm-11">
-                                                            <label class="pull-left form-separation"> Dirección</label>
+                                                        <div class="col-sm-12">
+                                                            <label id="dirInputSelectLabel" class="pull-left form-separation"> Dirección</label>
                                                             <input id="dirInput" class="form-control hidden" type="text" name="addressId">
-                                                            <input id="dirInputContent" class="form-control hidden" type="text" name="invoiceAddress" required>
-                                                            <select class="form-control" id="dirInputSelect"></select>
+                                                            <input id="dirInputContent" class="form-control hidden myReq" type="text" name="invoiceAddress">
+                                                            <select required class="form-control myReq" id="dirInputSelect"></select>
                                                             <label style="margin-top: 30px;margin-bottom: -30px;"> <input id="clienteOcasionalCB" type="checkbox" class="i-checks" name=""> Cliente ocasional </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-5">
-                                                <div class="col-sm-5">
-                                                    <label style="left:inherit" class="form-label-separation">Condición de la venta</label>
-                                                    <select id="condVenta" class="form-control" name="condSell" required></select>
-                                                    <label style="left:inherit" class="form-label-separation">Forma de pago</label>
-                                                    <select id="formaPago" class="form-control" name="payment" required></select>
-                                                    <label style="left:inherit" class="form-label-separation">Vendedor</label>
-                                                    <select id="vendedor" class="form-control" name="seller" required></select>
+                                            <div class="col-lg-6">
+                                                <div class="col-sm-6">
+                                                    <label id="condVentaLabel" style="left:inherit" class="form-label-separation">Condición de la venta</label>
+                                                    <select id="condVenta" class="form-control myReq" name="condSell" required></select>
+                                                    <label id="formaPagoLabel" style="left:inherit" class="form-label-separation">Forma de pago</label>
+                                                    <select id="formaPago" class="form-control myReq" name="payment" required></select>
+                                                    <label id="vendedorLabel" style="left:inherit" class="form-label-separation">Vendedor</label>
+                                                    <select id="vendedor" class="form-control myReq" name="seller" required></select>
                                                 </div>
-                                                <div class="col-sm-5">
-                                                    <label style="left:inherit" class="form-label-separation">Tipo de venta</label>
-                                                    <select id="tipoVenta" class="form-control" name="sellType" required></select>
-                                                    <label style="left:inherit" class="form-label-separation">Código Financiero</label>
-                                                    <select id="codFinanciero" class="form-control" name="finantialcod" required></select>
-                                                    <label style="left:inherit" class="form-label-separation">Línea de negocio</label>
-                                                    <select id="lineaNegocio" class="form-control" name="bussinessline" required></select>
+                                                <div class="col-sm-6">
+                                                    <label id="tipoVentaLabel" style="left:inherit" class="form-label-separation">Tipo de venta</label>
+                                                    <select id="tipoVenta" class="form-control myReq" name="sellType" required></select>
+                                                    <label id="codFinancieroLabel" style="left:inherit" class="form-label-separation">Código Financiero</label>
+                                                    <select id="codFinanciero" class="form-control myReq" name="finantialcod" required></select>
+                                                    <label id="lineaNegocioLabel" style="left:inherit" class="form-label-separation">Línea de negocio</label>
+                                                    <select id="lineaNegocio" class="form-control myReq" name="bussinessline" required></select>
                                                 </div>
                                             </div>
                                         </div>
@@ -169,23 +175,23 @@
                                                 <div class="form-group">
                                                     <div class="row">
                                                         <div class="col-sm-4">
-                                                            <label style="left:inherit" class="form-label-separation">Tipo de Doc.</label>
+                                                            <label id="invoiceTypeLabel" style="left:inherit" class="form-label-separation">Tipo de Doc.</label>
                                                             <select id="invoiceType" class="form-control" name="documentType" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
-                                                            <label style="left:inherit" class="form-label-separation">Serie Externo</label>
+                                                            <label id="idSerieExternoLabel" style="left:inherit" class="form-label-separation">Serie Externo</label>
                                                             <select id="idSerieExterno" class="form-control" name="serie" required></select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div id="data_1" class="col-sm-4">
-                                                            <label class="pull-left form-separation"> Fecha de Documento </label>
+                                                            <label id="fechaDocLabel" class="pull-left form-separation"> Fecha de Documento </label>
                                                             <div class="input-group date">
                                                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="fechaDoc" type="text" class="form-control currentDateDefault" name="documentDate" required>
                                                             </div>
                                                         </div>
                                                         <div id="data_1" class="col-sm-4">
-                                                            <label class="pull-left form-separation"> Fecha de vencimiento </label>
+                                                            <label id="fechaVencLabel" class="pull-left form-separation"> Fecha vencimiento </label>
                                                             <div class="input-group date">
                                                                 <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="fechaVenc" type="text" class="form-control currentDateDefault" name="documentExpiration" required>
                                                             </div>
@@ -194,19 +200,19 @@
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-4">
-                                                            <label style="left:inherit" class="form-label-separation">Moneda</label>
-                                                            <select id="currency" class="form-control" name="currency" required></select>
+                                                            <label id="currencyLabel" style="left:inherit" class="form-label-separation">Moneda</label>
+                                                            <select id="currency" class="form-control myReq" name="currency" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
-                                                            <label style="left:inherit" class="form-label-separation">Idioma</label>
-                                                            <select id="language" class="form-control" name="language" required></select>
+                                                            <label id="languageLabel" style="left:inherit" class="form-label-separation">Idioma</label>
+                                                            <select id="language" class="form-control myReq" name="language" required></select>
                                                         </div>
                                                     </div>
                                                     <div class="row">
                                                         <div class="col-sm-4">
-                                                            <label style="left:inherit" class="form-label-separation">Impuesto</label>
+                                                            <label id="taxeLabel" style="left:inherit" class="form-label-separation">Impuesto</label>
                                                             <input id="taxeNumber" type="hidden" />
-                                                            <select id="taxe" class="form-control" name="codTax" required></select>
+                                                            <select id="taxe" class="form-control myReq" name="codTax" required></select>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <label id="perceptionLabel" style="left:inherit" class="form-label-separation typeInput">Percepción</label>
@@ -214,12 +220,12 @@
                                                         </div>
                                                     </div>
                                                     <div class="row">
-                                                        <div class="col-sm-4">
-                                                            <label class="pull-left form-separation"> Número O/C </label>
+                                                        <div class="col-sm-6">
+                                                            <label class="pull-left form-separation"> Número O/C<small style="opacity:0.5;"> (opcional)</small> </label>
                                                             <input id="nroOC" type="text" class="form-control" name="documentOc">
                                                         </div>
-                                                        <div class="col-sm-4">
-                                                            <label class="pull-left form-separation"> Nro guía remisión </label>
+                                                        <div class="col-sm-6">
+                                                            <label class="pull-left form-separation"> Nro guía remisión<small style="opacity:0.5;"> (opcional)</small> </label>
                                                             <input id="nroGuiaRem" type="text" class="form-control" name="guiRem">
                                                         </div>
                                                     </div>
@@ -423,32 +429,76 @@
         var dateOutput = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + currentDate.getFullYear();
 
         $(".currentDateDefault").val(dateOutput);
+
+        $(document).ajaxStop(function () {
+            $("#spinner").hide();
+        });
+
+        $(document).ajaxSend(function () {
+            $("#spinner").show();
+        });
+
+        $(document).ajaxStart(function () {
+            $("#spinner").show();
+        });
+
+        $("#spinner").bind("ajaxSend", function () {
+            $("#spinner").show();
+        }).bind("ajaxComplete", function () {
+            $("#spinner").hide();
+        }).bind("ajaxStop", function () {
+            $("#spinner").hide();
+        }).bind("ajaxError", function () {
+            $("#spinner").hide();
+        });
+
     </script>
 }
 
 
 @section section_script {
-
     $("#btnSubmit").click(function() {
-        swal({
-            title: "Confirmación",
-            text: "¿Crear documento?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Sí",
-            closeOnConfirm: false
-        }, function() {
-            swal({
-                title: "Generado",
-                text: "Documento creado exitosamente",
-                type: "success",
-                confirmButtonText: "Continuar"
-                }, function () {
-                    $("#formInvoice").submit();
-            });
-
+        var inputNotFilledYet = false;
+        var selectNotFilledYet = false;
+        $('input[required]').each(function(){
+            if ($(this).val() == ""){
+                $(this).focus();
+                var curName = "#"+($(this)[0].id)+"Label";
+                toastr.error("Campo obligatorio", "Falta completar el campo "+$(curName)[0].textContent, {
+                    positionClass: "toast-top-right"
+                });
+                inputNotFilledYet = true;
+                return;
+            }
         });
+        $('select[required]').each(function(){
+            if ($(this)[0].selectedIndex == -1){
+                selectNotFilledYet = true;
+                return;
+            }
+        });
+        if (inputNotFilledYet || selectNotFilledYet){
+            return;
+        }else{
+            swal({
+                title: "Confirmación",
+                text: "¿Crear documento?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                swal({
+                    title: "Generado",
+                    text: "Documento creado exitosamente",
+                    type: "success",
+                    confirmButtonText: "Continuar"
+                    }, function () {
+                         $("#formInvoice").submit();
+                });
+            });
+        }
     });
 
 
@@ -510,7 +560,7 @@
         $('#dirInputSelect').removeClass("hidden");
         $('#dirInputSelect').next().removeClass("hidden");
 
-        $('#perception_chosen').show();
+        $('#perception_chosen').hide();
     });
 
     $('.i-checks').iCheck({
@@ -1011,9 +1061,9 @@
             .done(function(result) {
                 //console.log(result);
                 var jsonResult = jQuery.parseJSON(result);
-                if (!jQuery.isEmptyObject(jsonResult)) {
-                    tableClients.clear().rows.add(jsonResult).draw();
-                }
+                //if (!jQuery.isEmptyObject(jsonResult)) {
+                tableClients.clear().rows.add(jsonResult).draw();
+                //}
             })
             .fail(function(result) {
                 toastr.error(result.statusText, "Mensaje", {
@@ -1260,35 +1310,43 @@
         "paging": true,
         columns: [{
                 title: "Concepto",
-                data: "concept"
+                data: "concept",
+                width: "20%"
             },
             {
                 title: "Comentario",
-                data: "comment"
+                data: "comment",
+                width: "28%"
             },
             {
                 title: "Centro de costos",
-                data: "cost_center"
+                data: "cost_center",
+                width: "20%"
             },
             {
                 title: "Impuesto",
-                data: "tax"
+                data: "tax",
+                width: "5%"
             },
             {
                 title: "Valor Unitario",
-                data: "price"
+                data: "price",
+                width: "11%"
             },
             {
                 title: "Cantidad",
-                data: "amount"
+                data: "amount",
+                width: "7%"
             },
             {
                 title: "Subtotal",
-                data: "subtotal"
+                data: "subtotal",
+                width: "7%"
             },
             {
                 title: "",
-                data: "delete"
+                data: "delete",
+                width: "2%"
             }
         ]
     });
@@ -1341,9 +1399,7 @@
 
     // Crear dataset
     function create_dataset() {
-        var dataUnit = {
-            "porc": "5"
-        };
+        var dataUnit = {};
         dataUnit.item = itemNum;
         dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
         dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
@@ -1454,5 +1510,7 @@
         $('#percepcionImport').text(totalPorc);
         $('#totalACobrar').text(sellValue + totalTax + totalPorc);
     }
+
+     
 
 }

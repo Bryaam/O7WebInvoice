@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DataMapper\AddressEntryMapper.cs" />
     <Compile Include="DataMapper\AddressFactMapper.cs" />
+    <Compile Include="DataMapper\CcoViewMapper.cs" />
     <Compile Include="DataMapper\ClientCountryMapper.cs" />
     <Compile Include="DataMapper\ClientDefaultValueMapper.cs" />
     <Compile Include="DataMapper\ClientDepartmentMapper.cs" />
@@ -81,6 +82,8 @@
     <Compile Include="DataMapper\InvoiceTaxMapper.cs" />
     <Compile Include="DataMapper\ProductDetailsMapper.cs" />
     <Compile Include="DataMapper\SingleValueMapper.cs" />
+    <Compile Include="DataMapper\TTDataMapper.cs" />
+    <Compile Include="DataMapper\TTHeadMapper.cs" />
     <Compile Include="DataMapper\TypeAheadMapper.cs" />
     <Compile Include="FinantialDataService.cs" />
     <Compile Include="PdfGenerator.cs" />
