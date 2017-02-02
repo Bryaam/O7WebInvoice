@@ -119,27 +119,49 @@
 }
 
 @section section_script {
-
+    $("#toHide").hide();
     $("#btnSubmit").click(function() {
-        swal({
-            title: "Confirmación",
-            text: "¿Actualizar documento?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Sí",
-            closeOnConfirm: false
-        }, function() {
-            swal({
-                title: "Actualizado",
-                text: "Documento actualizado exitosamente",
-                type: "success",
-                confirmButtonText: "Continuar"
-                }, function () {
-                    $("#formInvoice").submit();
-            });
-            
+        var inputNotFilledYet = false;
+        var selectNotFilledYet = false;
+        $('input[required]').each(function(){
+            if ($(this).val() == ""){
+                $(this).focus();
+                var curName = "#"+($(this)[0].id)+"Label";
+                toastr.error("Campo obligatorio", "Falta completar el campo "+$(curName)[0].textContent, {
+                    positionClass: "toast-top-right"
+                });
+                inputNotFilledYet = true;
+                return;
+            }
         });
+        $('select[required]').each(function(){
+            if ($(this)[0].selectedIndex == -1){
+                selectNotFilledYet = true;
+                return;
+            }
+        });
+        if (inputNotFilledYet || selectNotFilledYet){
+            return;
+        }else{
+            swal({
+                title: "Confirmación",
+                text: "¿Crear documento?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                swal({
+                    title: "Generado",
+                    text: "Documento creado exitosamente",
+                    type: "success",
+                    confirmButtonText: "Continuar"
+                    }, function () {
+                         $("#formInvoice").submit();
+                });
+            });
+        }
     });
 
     $("#tableProducts").on('change', function() {
@@ -709,9 +731,9 @@
             .done(function(result) {
                 //console.log(result);
                 var jsonResult = jQuery.parseJSON(result);
-                if (!jQuery.isEmptyObject(jsonResult)) {
-                    tableClients.clear().rows.add(jsonResult).draw();
-                }
+                //if (!jQuery.isEmptyObject(jsonResult)) {
+                tableClients.clear().rows.add(jsonResult).draw();
+                //}
             })
             .fail(function(result) {
                 toastr.error(result.statusText, "Mensaje", {
@@ -1540,10 +1562,10 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col-lg-7">
+                                            <div class="col-lg-6">
                                                 <div class="form-group">
                                                     <div class="row">
-                                                        <div class="col-sm-3">
+                                                        <div class="col-sm-4">
                                                             <input value ='@ViewBag.documentId' hidden name="documentId">
                                                             <input id="clientCode" class="hidden" name="clienteCode">
                                                             <input id="invoiceId" class="hidden">
@@ -1558,18 +1580,18 @@
                                                         </div>
                                                     </div>
                                                     <div class=row>
-                                                        <div class="col-sm-11">
+                                                        <div class="col-sm-12">
                                                             <label class="pull-left form-separation"> Dirección</label>
-                                                            <input id="dirInput" class="form-control hidden" type="text" name="addressId">
+                                                            <input id="dirInput" class="form-control hidden" type="text" name="addressId" required>
                                                             <input id="dirInputContent" class="form-control hidden" type="text" name="invoiceAddress" required>
-                                                            <select class="form-control" id="dirInputSelect"></select>
+                                                            <select class="form-control" id="dirInputSelect" required></select>
                                                             <label style="margin-top: 30px;margin-bottom: -30px;"> <input id="clienteOcasionalCB" type="checkbox" class="i-checks" name=""> Cliente ocasional </label>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-5">
-                                                <div class="col-sm-5">
+                                            <div class="col-lg-6">
+                                                <div class="col-sm-6">
                                                     <label style="left:inherit" class="form-label-separation">Condición de la venta</label>
                                                     <select id="condVenta" class="form-control" name="condSell" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Forma de pago</label>
@@ -1577,7 +1599,7 @@
                                                     <label style="left:inherit" class="form-label-separation">Vendedor</label>
                                                     <select id="vendedor" class="form-control" name="seller" required></select>
                                                 </div>
-                                                <div class="col-sm-5">
+                                                <div class="col-sm-6">
                                                     <label style="left:inherit" class="form-label-separation">Tipo de venta</label>
                                                     <select id="tipoVenta" class="form-control" name="sellType" required></select>
                                                     <label style="left:inherit" class="form-label-separation">Código Financiero</label>
@@ -1650,7 +1672,7 @@
                                                             <input id="taxeNumber" type="hidden" />
                                                             <select id="taxe" class="form-control" name="codTax" required></select>
                                                         </div>
-                                                        <div class="col-sm-4">
+                                                        <div id="toHide" class="col-sm-4">
                                                             <label id="perceptionLabel" style="left:inherit" class="form-label-separation typeInput">Percepción</label>
                                                             <select id="perception" class="form-control" name="perception"></select>
                                                         </div>
