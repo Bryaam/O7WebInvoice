@@ -217,16 +217,55 @@
         });
     }
 
+    function load_table_names_second(){
+        $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/GetTTNames"
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                $('#second_table_id').typeahead({
+                    source: jsonResult
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+    }
+
     load_table_names();
-    load_table(2,null);
+    load_table_names_second();
+    load_table(1,null);
 
     $('#primary_table_id').change(function(){
         var primary_id = $(this).typeahead("getActive").Value;
+        if (primary_id =="999"){
+            $("#secondgroup").removeClass("hidden");
+            return;
+        }else{
+             $("#secondgroup").addClass("hidden");
+        }
+
         tableOfTables.clear().draw();
         $('#tableOfTables').dataTable().fnDestroy();
 
         load_table(primary_id,null);
         
+    });
+
+     $('#second_table_id').change(function(){
+        var primary_id = $('#primary_table_id').typeahead("getActive").Value;
+        var second_id = $(this).typeahead("getActive").Value;
+
+        tableOfTables.clear().draw();
+        $('#tableOfTables').dataTable().fnDestroy();
+
+        load_table(primary_id,second_id);
+
     });
 }
 
@@ -234,12 +273,16 @@
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
-                <div class="row">
-                    <div class="col-lg-1">
-                        <p>Tabla: </p>
-                    </div>
-                    <div class="col-lg-11">
-                        <input id="primary_table_id" style="width:60%;"/>
+                <div id="primarygroup" class="row">
+                    <div class="form-group" style="padding-bottom: 50px; padding-top: 20px;">
+                        <label class="col-sm-2 control-label">Ingrese Una Tabla</label>
+                        <div class="col-sm-10"><input id="primary_table_id" style="width:60%;" type="text" class="form-control"></div>
+                    </div>                   
+                </div>
+                <div id="secondgroup" class="row hidden" style="padding-bottom: 20px;">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Ingrese La tabla que desea editar</label>
+                        <div class="col-sm-10"><input id="second_table_id" style="width:60%;" type="text" class="form-control"></div>
                     </div>
                 </div>
                 <div style="width:100%; height:500px; overflow:scroll;">
