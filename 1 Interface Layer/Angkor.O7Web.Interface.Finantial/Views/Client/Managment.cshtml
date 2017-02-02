@@ -19,6 +19,11 @@
     @Html.StyleLink("css/plugins/iCheck/custom.css")
     @Html.StyleLink("css/plugins/steps/jquery.steps.css")
     @Html.StyleLink("css/plugins/datapicker/datepicker3.css")
+    <style>
+        .btn-remove-invoicer {
+            margin-left: 15px;
+        }
+    </style>
 }
 
 @section scripts_link {
@@ -225,14 +230,31 @@
         
                 reciber_count = reciber_count + 1;
                 $("#hddCountReciber").val(reciber_count);
-            });
+                $("#tblReciber tbody").on( "click", "tr", function () {
+                    if ( $(this).hasClass("selected") ) {
+                        $(this).removeClass("selected");
+                    }
+                    else {
+                        tblReciber.$("tr.selected").removeClass("selected");
+                        $(this).addClass("selected");
+                   }
+                });
+                $("#btnDeleteReciber").click( function () {
+                    table.row(".selected").remove().draw( false );
+                } );
+
+
+                });
         }            
     });   
 
     var tblInvoicer = $("#tblInvoicer").DataTable({
         searching: false,
         dom: 'Bfrtip',
-        buttons: [{ text: 'Agregar'}],
+    buttons: [{ text: 'Agregar',
+    className: 'btn-add-invoicer'},
+    { text: 'Eliminar',
+    className: 'btn-remove-invoicer'}],
         columns:[{ data: "CodDir" },
                  { data: "Country" },
                  { data: "Department" },
@@ -257,8 +279,13 @@
         initComplete: function( settings, json ) {
             if (action == '1') {
                 tblInvoicer.column(0).visible(false);
-            }
-            var btnAddReciber = $("#tblInvoicer_wrapper .dt-button");
+    }
+
+    var btnRemoveReciber = $(".btn-remove-invoicer");
+    btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
+
+
+    var btnAddReciber = $(".btn-add-invoicer");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
             if (action == '3'){
                 btnAddReciber.hide();
@@ -405,7 +432,20 @@
         
                 reciber_count = reciber_count + 1;
                 $("#hddCountInvoicer").val(reciber_count);
-            });
+                $("#tblnvoicer tbody").on( "click", "tr", function () {
+                    if ( $(this).hasClass("selected") ) {
+                        $(this).removeClass("selected");
+                    }
+                    else {
+                        tblInvoicer.$("tr.selected").removeClass("selected");
+                        $(this).addClass("selected");
+                   }
+                });
+                $("#btnDeleteInvoicer").click( function () {
+                    table.row(".selected").remove().draw( false );
+                } );
+
+                });
         }
     });
 
