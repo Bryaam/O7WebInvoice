@@ -190,10 +190,10 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<TTHeads>("table_tables.get_tablehead", parameters,TTHeadMapper.Class) ;
         }
 
-        public virtual List<GenericListValue> GetTTNames()
+        public virtual List<InvoiceTypeAhead> GetTTNames()
         {
             var parameters = O7DbParameterCollection.Make;
-            return DataAccess.ExecuteFunction<GenericListValue>("table_tables.get_tablenames", parameters, InvoiceGenericListMapper.Class);
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("table_tables.get_tablenames", parameters, TypeAheadMapper.Class);
         }
 
         public virtual List<TTData> GetTTData(string primary, string secondary)

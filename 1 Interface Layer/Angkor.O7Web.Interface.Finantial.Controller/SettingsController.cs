@@ -64,17 +64,17 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return View();
         }
 
-        public JsonResult GetTTHeads(string codTable)
+        public JsonResult GetHeads(string codTable)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.GetTTHeads(codTable);
             return new O7JsonResult(response);
         }
 
-        public JsonResult GetTTData(string primary,string secondary)
+        public JsonResult GetData(string primaryCode,string secondCode)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.GetTTData(primary,secondary);
+            var response = domain.GetTTData(primaryCode, secondCode);
             return new O7JsonResult(response);
         }
 
