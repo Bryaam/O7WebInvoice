@@ -64,8 +64,8 @@
     var invoiceId = '"'+invoiceSerie+'",'+'"'+invoiceNumber+'"';
     var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail("+invoiceId+");'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
     var buttonEdit = full.State == "1" ? "<button type='button' class='btn btn-outline btn-success' onclick='update("+invoiceId+");'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;" : "<button type='button' class='btn btn-outline btn-success' disabled onclick='update("+invoiceId+");'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
-    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete ("+invoiceId+");'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-    return buttonSearch + buttonEdit + buttonDelete;
+   // var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete ("+invoiceId+");'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+    return buttonSearch + buttonEdit;// + buttonDelete;
     },
     width: "15%"
     }]
