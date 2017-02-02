@@ -23,6 +23,10 @@
         .btn-remove-invoicer {
             margin-left: 15px;
         }
+        .selected{
+            background-color: #c5c9cc !important;
+        }
+        
     </style>
 }
 
@@ -60,7 +64,10 @@
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
         dom: 'Bfrtip',
-        buttons:[{ text: 'Agregar'}],
+        buttons:[{ text: 'Agregar',
+                className: 'btn-add-reciber'},
+                { text: 'Eliminar',
+                className: 'btn-remove-reciber'}],
         columns:[{ data: "CodDir" },
                  { data: "Country" },
                  { data: "Department" },
@@ -86,7 +93,10 @@
             if (action == '1') {
                 tblReciber.column(0).visible(false);
             }
-            var btnAddReciber = $("#tblReciber_wrapper .dt-button");
+            var btnRemoveReciber = $(".btn-remove-reciber");
+            btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
+            
+            var btnAddReciber = $(".btn-add-reciber");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
             if (action == '3'){
                 btnAddReciber.hide();
@@ -230,21 +240,7 @@
         
                 reciber_count = reciber_count + 1;
                 $("#hddCountReciber").val(reciber_count);
-                $("#tblReciber tbody").on( "click", "tr", function () {
-                    if ( $(this).hasClass("selected") ) {
-                        $(this).removeClass("selected");
-                    }
-                    else {
-                        tblReciber.$("tr.selected").removeClass("selected");
-                        $(this).addClass("selected");
-                   }
-                });
-                $("#btnDeleteReciber").click( function () {
-                    table.row(".selected").remove().draw( false );
-                } );
-
-
-                });
+            });
         }            
     });   
 
@@ -1192,6 +1188,20 @@
                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });  
     }
+    
+    $("#tblReciber tbody").on("click", "tr", function () {
+        if ( $(this).hasClass("selected") ) {
+            $(this).removeClass("selected");
+        }
+        else {
+            tblReciber.$("tr.selected").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+
+    $(".btn-remove-reciber").onclick( function () {
+        tblReciber.row(".selected").remove().draw( false );
+    });
 }
 <div class="ibox float-e-margins">
     <form method="post" class="form-horizontal">
