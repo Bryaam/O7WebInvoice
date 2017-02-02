@@ -206,14 +206,14 @@
             cancelButtonText: "Cancelar",
             closeOnConfirm: false
             }, function () {
-                var url = "./GenerateReporte?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
-                window.location.href = url;
                 swal({
                     title: "Enviado",
                     text: "Tu factura se envió a Sunat correctamente",
                     type: "success",
                     confirmButtonText: "Continuar"
                     }, function () {
+                        var url = "./GenerateReporte?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
+                        window.location.href = url;
                         location.reload();
                     });
             });

@@ -142,7 +142,6 @@
 }
 
 @section section_script {
-    $("#toHide").hide();
     $("#btnSubmit").click(function() {
         var inputNotFilledYet = false;
         var selectNotFilledYet = false;
@@ -168,7 +167,7 @@
         }else{
             swal({
                 title: "Confirmación",
-                text: "¿Crear documento?",
+                text: "¿Desea guardar los cambios?",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -176,8 +175,8 @@
                 closeOnConfirm: false
             }, function() {
                 swal({
-                    title: "Generado",
-                    text: "Documento creado exitosamente",
+                    title: "Guardado",
+                    text: "Documento grabado exitosamente",
                     type: "success",
                     confirmButtonText: "Continuar"
                     }, function () {
@@ -245,7 +244,7 @@
         $('#dirInputSelect').removeClass("hidden");
         $('#dirInputSelect').next().removeClass("hidden");
 
-        $('#perception_chosen').show();
+        $('#perception_chosen').hide();
     });
 
     $('.i-checks').iCheck({
@@ -1037,35 +1036,43 @@
         "paging": true,
         columns: [{
                 title: "Concepto",
-                data: "concept"
+                data: "concept",
+                width: "20%"
             },
             {
                 title: "Comentario",
-                data: "comment"
+                data: "comment",
+                width: "28%"
             },
             {
                 title: "Centro de costos",
-                data: "cost_center"
+                data: "cost_center",
+                width: "20%"
             },
             {
                 title: "Impuesto",
-                data: "tax"
+                data: "tax",
+                width: "5%"
             },
             {
                 title: "Valor Unitario",
-                data: "price"
+                data: "price",
+                width: "11%"
             },
             {
                 title: "Cantidad",
-                data: "amount"
+                data: "amount",
+                width: "7%"
             },
             {
                 title: "Subtotal",
-                data: "subtotal"
+                data: "subtotal",
+                width: "7%"
             },
             {
                 title: "",
-                data: "delete"
+                data: "delete",
+                width: "2%"
             }
         ]
     });
@@ -1113,11 +1120,8 @@
     }
     var itemNum = 0;
 
-    function create_dataset(rowsCount) {
-        var itemNum = rowsCount - 1;
-        var dataUnit = {
-            "porc": "5"
-        };
+    function create_dataset() {
+        var dataUnit = {};
         dataUnit.item = itemNum;
         dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
         dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
@@ -1126,7 +1130,7 @@
         dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_" + itemNum + "' name='ccoId_" + itemNum + "'>";
         dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
         dataUnit.subtotal = "<p id='item_subtotal_" + itemNum + "'>0</p>";
-        dataUnit.tax = "<select class='form-control' id='item_tax_" + itemNum + "' name='taxId_" + itemNum + "'></select>"
+        dataUnit.tax = "<select class='form-control'  style='width: 100%;' id='item_tax_" + itemNum + "' name='taxId_" + itemNum + "'></select>"
 
         var dataSet = [];
         dataSet.push(dataUnit);
@@ -1149,7 +1153,6 @@
                     $('#item_concept_' + itemNum).typeahead({
                         source: jsonResult
                     });
-
                 }
             })
             .fail(function(result) {
@@ -1157,7 +1160,10 @@
                     positionClass: "toast-top-full-width"
                 });
             });
-
+        $(".autocomplete-reference").change(function() {
+            var type_value = $(this).typeahead("getActive");
+            $(this).parent().find(".autocomplete-reference-value").val(type_value.Value);
+        });
 
         $.ajax({
                 method: "GET",
@@ -1178,11 +1184,6 @@
                 });
             });
 
-        $(".autocomplete-reference").change(function() {
-            var type_value = $(this).typeahead("getActive");
-            $(this).parent().find(".autocomplete-reference-value").val(type_value.Value);
-        });
-
         $("#item_tax_" + itemNum).chosen({
             width: "100%",
             disable_search: true
@@ -1192,6 +1193,9 @@
         update_chosen_select("#item_tax_" + itemNum, $("#taxe").val());
 
         itemNum++;
+
+        $('#botonAgregarProducto').prop("disabled", true);
+        $('.input-add_product').bind('keyup', verify_complete);
 
     }
 
@@ -1544,7 +1548,7 @@
     //----------------------------------------------------------------------------FIN EDIT
 
     // Verificar que todos los campos esten completos
-    function verify_complete() {
+     function verify_complete() {
         var amount = $('#item_amount_' + (itemNum - 1)).val();
         var comment = $('#item_comment_' + (itemNum - 1)).val();
         var price = $('#item_price_' + (itemNum - 1)).val();
@@ -1558,6 +1562,7 @@
             $('#botonAgregarProducto').prop("disabled", false);
         }
     }
+
 
 }
 

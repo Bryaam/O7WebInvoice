@@ -429,6 +429,29 @@
         var dateOutput = (day < 10 ? '0' : '') + day + '/' + (month < 10 ? '0' : '') + month + '/' + currentDate.getFullYear();
 
         $(".currentDateDefault").val(dateOutput);
+
+        $(document).ajaxStop(function () {
+            $("#spinner").hide();
+        });
+
+        $(document).ajaxSend(function () {
+            $("#spinner").show();
+        });
+
+        $(document).ajaxStart(function () {
+            $("#spinner").show();
+        });
+
+        $("#spinner").bind("ajaxSend", function () {
+            $("#spinner").show();
+        }).bind("ajaxComplete", function () {
+            $("#spinner").hide();
+        }).bind("ajaxStop", function () {
+            $("#spinner").hide();
+        }).bind("ajaxError", function () {
+            $("#spinner").hide();
+        });
+
     </script>
 }
 
@@ -537,7 +560,7 @@
         $('#dirInputSelect').removeClass("hidden");
         $('#dirInputSelect').next().removeClass("hidden");
 
-        $('#perception_chosen').show();
+        $('#perception_chosen').hide();
     });
 
     $('.i-checks').iCheck({
@@ -1287,35 +1310,43 @@
         "paging": true,
         columns: [{
                 title: "Concepto",
-                data: "concept"
+                data: "concept",
+                width: "20%"
             },
             {
                 title: "Comentario",
-                data: "comment"
+                data: "comment",
+                width: "28%"
             },
             {
                 title: "Centro de costos",
-                data: "cost_center"
+                data: "cost_center",
+                width: "20%"
             },
             {
                 title: "Impuesto",
-                data: "tax"
+                data: "tax",
+                width: "5%"
             },
             {
                 title: "Valor Unitario",
-                data: "price"
+                data: "price",
+                width: "11%"
             },
             {
                 title: "Cantidad",
-                data: "amount"
+                data: "amount",
+                width: "7%"
             },
             {
                 title: "Subtotal",
-                data: "subtotal"
+                data: "subtotal",
+                width: "7%"
             },
             {
                 title: "",
-                data: "delete"
+                data: "delete",
+                width: "2%"
             }
         ]
     });
@@ -1368,9 +1399,7 @@
 
     // Crear dataset
     function create_dataset() {
-        var dataUnit = {
-            "porc": "5"
-        };
+        var dataUnit = {};
         dataUnit.item = itemNum;
         dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
         dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
@@ -1482,26 +1511,6 @@
         $('#totalACobrar').text(sellValue + totalTax + totalPorc);
     }
 
-     $(document).ajaxStop(function () {
-            $("#spinner").hide();
-        });
-
-        $(document).ajaxSend(function () {
-            $("#spinner").show();
-        });
-
-        $(document).ajaxStart(function () {
-            $("#spinner").show();
-        });
-
-        $("#spinner").bind("ajaxSend", function () {
-            $("#spinner").show();
-        }).bind("ajaxComplete", function () {
-            $("#spinner").hide();
-        }).bind("ajaxStop", function () {
-            $("#spinner").hide();
-        }).bind("ajaxError", function () {
-            $("#spinner").hide();
-        });
+     
 
 }
