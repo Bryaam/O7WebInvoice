@@ -11,6 +11,7 @@ namespace Angkor.O7Web.Interface.AppStart.AppStart
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new PrivilegeAccessFilter());
+            filters.Add(new EndSessionFilter());
         }
     }
 }
