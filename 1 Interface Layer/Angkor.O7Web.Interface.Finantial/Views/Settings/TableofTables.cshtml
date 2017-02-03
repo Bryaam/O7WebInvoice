@@ -384,3 +384,25 @@
         </div>
     </div>
 </div>
+
+
+	function getIndexes(cad){
+        var l= cad.length;
+        var cAnt=' ';
+        var ini=0;
+        var listIndex=[];
+        var tupla=[];
+        for (var i=0;i<l;i++){
+            if (cAnt= =' ' && cad.substr(i, 1)!=' ')
+                ini=i;
+            if (cAnt!=' ' && cad.substr(i, 1)= =' '){
+                tupla=[ini,i-1];
+                listIndex.push(tupla);
+            }
+            cAnt=cad.substr(i, 1);
+        }
+        if (cAnt!=' '){
+            tupla=[ini,l-1];
+            listIndex.push(tupla);
+        }
+    }
