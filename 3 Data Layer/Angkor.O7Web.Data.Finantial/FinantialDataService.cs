@@ -6,6 +6,7 @@ using Angkor.O7Framework.Infrastructure.Data;
 using Angkor.O7Web.Common.Finantial.Entity;
 using Angkor.O7Web.Data.Finantial.DataMapper;
 using System.IO;
+using System.Reflection.Emit;
 
 namespace Angkor.O7Web.Data.Finantial
 {
@@ -756,17 +757,34 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
             parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
 
-            HeadInvoicePDF head =
-              DataAccess.ExecuteFunction<HeadInvoicePDF>("finantial_invoice.head_pdf", parameters,
-                  HeadInvoicePDFMapper.Class)[0];
-
-            List<DetailInvoicePDF> details = DataAccess.ExecuteFunction<DetailInvoicePDF>("finantial_invoice.detail_pdf", parameters, DetailInvoicePDFMapper.Class);
-
-
+            
             int result = DataAccess.ExecuteFunction<int>("finantial_invoice.facturar_electronica", parameters);
+            string url= DataAccess.ExecuteFunction<string>("finantial_invoice.generarpdf", parameters);
+
+            byte[] PDF = null;
+
+            using (var wc = new System.Net.WebClient())
+                PDF = wc.DownloadData(url);
+
+            return new MemoryStream(PDF);
+        }
+
+        public virtual Stream GeneratePDF(string companyId, string branchId, string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
+            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
 
 
-            return PdfGenerator.generar(head, details, "tura.pdf");
+           string url = DataAccess.ExecuteFunction<string>("finantial_invoice.generarpdf", parameters);
+           byte[] PDF = null;
+
+            using (var wc = new System.Net.WebClient())
+                PDF = wc.DownloadData(url);
+
+            return new MemoryStream(PDF);
         }
 
         public virtual List<SingleValue> GetFecVto(string companyId, string branchId, string payment, string documentDate)
