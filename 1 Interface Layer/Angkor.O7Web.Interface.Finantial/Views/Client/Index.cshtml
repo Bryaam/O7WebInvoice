@@ -23,7 +23,7 @@
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
     @Html.JavaScriptLink("js/plugins/jquery-confirm-master/jquery-confirm.js")
     <script>
-        function editClient(clientId) {s
+        function editClient(clientId) {
             window.location.href = 'http://localhost:120/Finantial/Client/Edit?idClient='+clientId;
         }
         function detail(clientId) {
@@ -31,11 +31,11 @@
         }
         function changeStateClient(clientId) {
             $.alert({
-                title: 'Advertencia',
+                title: 'Confirmación',
                 content: '<p>Deseas cambiar el estado del cliente ' + clientId + '</p>',
                 animation: 'zoom',
                 closeAnimation: 'zoom',
-                type: 'success',
+                type: 'green',
                 buttons: {
                     confirm: {
                         text: 'Aceptar',
@@ -137,7 +137,7 @@
 
          $(".dt-buttons").addClass("col-md-12").attr("style", "padding-left: 0px; padding-right: 0px;");
 
-         $("#tblInvoices_wrapper .dt-buttons").append('<div class="col-md-6 pull-right"><div class="row"><div class="col-md-2"></div><div class="input-group col-md-10"><input class="form-control" type="text"><span class="input-group-btn" style="width:1%!important;"><a id="btnSearchClient" href="#" class="btn btn-primary" disabled="true">Buscar&nbsp;<i class="fa fa-search"></i></a></span></div></div></div>');
+         $("#tblInvoices_wrapper .dt-buttons").append('<div class="col-md-6 pull-right"><div class="row"><div class="col-md-2"></div><div class="input-group col-md-10"><input id="txtFilterClient" class="form-control" type="text"><span class="input-group-btn" style="width:1%!important;"><a id="btnSearchClient" href="#" class="btn btn-primary" disabled="true">Buscar&nbsp;<i class="fa fa-search"></i></a></span></div></div></div>');
 
          $("#txtFilterClient").keyup(function(event) {
              var value = $("#txtFilterClient").val();
