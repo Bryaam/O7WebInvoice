@@ -138,6 +138,11 @@
             $("#spinner").hide();
         });
 
+        $("#backBtn").click(function () {
+            parent.history.back();
+            return false;
+        });
+
     </script>
 }
 
@@ -407,9 +412,6 @@
             })
             .done(function(result) {
                 var jsonResult = jQuery.parseJSON(result);
-                //console.log(result);
-                //console.log(jsonResult);
-                console.log("Actualiza");
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     populate_combo_box("#formaPago", jsonResult);
                 }
@@ -1322,6 +1324,8 @@
         update_chosen_select("#language", invoice.language);
         update_chosen_select("#condVenta", invoice.condSell);
         var condition = invoice.condSell;
+        if(invoice.clientCode == "99999999")
+            $('#clienteOcasionalCB').prop('checked', true);
         $.ajax({
                 method: "GET",
                 url: "/Finantial/Invoice/GetPayments",
@@ -1365,15 +1369,13 @@
         update_chosen_select("#codFinanciero", invoice.finantialCode);
         $("#phoneInput").val(invoice.clientPhone);
         update_chosen_select("#vendedor", invoice.Seller);
-        if (invoice.perception == "") {
+        if (invoice.perception == "" || invoice.perception == ".00") {
             $('#perception_chosen').hide();
             $('#perceptionLabel').hide();
             update_chosen_select("#perception", "");
         } else {
             $('#perception_chosen').show();
             $('#perceptionLabel').show();
-            console.log("muestra percep--------------------------------------");
-            console.log(invoice.perception);
             update_chosen_select("#perception", invoice.perception);
         }
         if (invoice.donate == "S")
@@ -1433,9 +1435,6 @@
             })
             .done(function(result) {
                 var jsonResult = jQuery.parseJSON(result);
-                console.log("----------------------Lineas");
-                console.log(result);
-                console.log(jsonResult);
                 if (!jQuery.isEmptyObject(jsonResult)) {
                     edit_product_line(jsonResult, idDoc);
                     calculate_total();
@@ -1477,13 +1476,7 @@
                 var type_value = $(this).typeahead("getActive");
                 $(this).parent().find(".autocomplete-reference-value").val(type_value.Value);
             });
-            /*CORREGIR
-                        var type_value_concept = $('#item_concept_' + itemNum).typeahead("getActive");
-                        var type_value_cost_center = $('#item_cost_center_' + itemNum).typeahead("getActive");
 
-                        $('#item_concept_val_' + itemNum).val(type_value_concept.Value);
-                        $('#item_cost_center_val_' + itemNum).val(type_value_cost_center.Value);
-                */
             var currentPerception = $("#perception").val();
 
             $.ajax({
@@ -1559,7 +1552,6 @@
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
                 edit_invoice(jsonResult[0]);
-                console.log("edit !!!!!!!!!!");
                 edit_products_detail('@ViewBag.documentType', '@ViewBag.documentId');
             }
         })
@@ -1599,7 +1591,6 @@
         var cost_center = $('#item_cost_center_' + (index - 1)).val();
         var tax = $('#item_tax_' + (index - 1)).val();
 
-        console.log(tax)
 
         if (amount == "")
             return "Cantidad";
@@ -1623,13 +1614,6 @@
         var concept = $('#item_concept_' + (itemNum - 1)).val();
         var cost_center = $('#item_cost_center_' + (itemNum - 1)).val();
         var tax = $('#item_tax_' + (itemNum - 1)).val();
-
-        console.log(amount);
-    console.log(comment);
-    console.log(price);
-    console.log(concept);
-    console.log(cost_center);
-    console.log(tax);
 
         if (amount != "" && comment != "" && price != "" && concept != "" && cost_center != "" && tax != null) {
             $('#botonAgregarProducto').prop("disabled", false);
@@ -1894,7 +1878,7 @@
                         </div>
                         <div class="row text-center" style="margin-top: 50px;">
                             <div class="ibox-footer text-right">
-                                <button class="btn btn-white"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
+                                <button id="backBtn" class="btn btn-white" type="button"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
                                 <button id="btnSubmit" class="btn btn-primary" type="button">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                             </div>
                         </div>

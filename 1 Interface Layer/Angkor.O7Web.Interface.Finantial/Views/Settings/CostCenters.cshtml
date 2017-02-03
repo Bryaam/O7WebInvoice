@@ -45,10 +45,14 @@
             txtCurrent.attr('readonly', true);
         }
 
-        function detail(id, start, end, current, type, digital, prefix) {
+        function detail(codigo, fecini) {
             $("#txtModalTitle").text("Detalle Centros de Costo");
             $("#btnConfirm").hide();
             $(".input-hidden").attr("disabled", true);
+
+
+
+
             var txtSerie = $("#txtSerie");
             var txtStart = $("#txtStart");
             var txtFinal = $("#txtFinal");
@@ -137,6 +141,7 @@
                 $("#txtModalTitle").text("Insertar Centro de Costo");
                 $("#btnConfirm").attr("action", "1");
                 $("#btnConfirm").show();
+                $(".input-hidden").attr("disabled", false);
                 var txtSerie = $("#txtSerie");
                 var txtStart = $("#txtStart");
                 var txtFinal = $("#txtFinal");
@@ -160,35 +165,34 @@
             }
         }],
         columns: [{
-                data: "Digital",
-                width: "15%"
+                data: "codigo",
+                width: "5%"
 
             },
             {
-                data: "DocumentDescription",
+                data: "dimension",
                 width: "18%"
             },
             {
-                data: "Id",
+                data: "descripcion",
                 width: "15%"
             },
             {
-                data: "Current",
-                width: "20%"
+                data: "fecini",
+                width: "15%"
             },
             {
-                data: "Default",
-                className: "text-center",
-                width: "7%"
+                data: "fecfin",
+                width: "15%"
             },
             {
                 orderable: false,
                 className: "text-center",
                 render: function(data, type, full, meta) {
-                    var invoiceId = '"' + full.Id + '",' + '"' + full.Max + '",' + '"' + full.Min + '",' + '"' + full.Current + '",' + '"' + full.DocumentType + '",' + '"' + full.Digital + '",' + '"' + full.Prefix + '"';
-                    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
-                    var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
-                    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+                    var costCenterId = '"' + full.codigo + '",' +  '"' + full.fecini + '"';
+                    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + costCenterId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
+                    var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update(" + costCenterId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
+                    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action(" + costCenterId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
                     return buttonSearch + buttonEdit + buttonDelete;
                 },
                 width: "15%"
@@ -196,27 +200,9 @@
         ]
     });
 
-    $("#chkInvoiceType").chosen({
-        width: "100%",
-        disable_search: true
-    });
-
-    $("#chkDocumentType").chosen({
-        width: "100%",
-        disable_search: true
-    });
-
-    $("#chkDocumentType").chosen().change(function() {
-        var value = $(this).val();
-        if (value == "false")
-            $('#txtPrefix').attr('readonly', true);
-        else
-            $('#txtPrefix').attr('readonly', false);
-    });
-
     $.ajax({
             method: "GET",
-            url: "/Finantial/Settings/InvoiceDocuments_Populate",
+            url: "/Finantial/Settings/GetCcos",
             async: false
         })
         .done(function(result) {
@@ -229,6 +215,71 @@
         });
 
     $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").attr("data-toggle", "modal").attr("data-target", "#mdlInsert");
+            
+    //MODAL
+
+    $("#txtDimension").chosen({
+        width: "100%",
+        disable_search: true
+    });
+
+    initialize_combo_ajax("#txtDimension", "/Finantial/Settings/getDimensions");
+
+    $.ajax({
+        method: "GET",
+        url: "/Finantial/Settings/getAccountsC"
+      })
+      .done(function(result) {
+        var jsonResult = jQuery.parseJSON(result);
+        if (!jQuery.isEmptyObject(jsonResult)) {
+          $('txtCtaContable').typeahead({
+            source: jsonResult
+          });
+        }
+      })
+      .fail(function(result) {
+        toastr.error(result.statusText, "Mensaje", {
+          positionClass: "toast-top-full-width"
+        });
+      });
+
+    $.ajax({
+        method: "GET",
+        url: "/Finantial/Settings/getAccountsT"
+      })
+      .done(function(result) {
+        var jsonResult = jQuery.parseJSON(result);
+        if (!jQuery.isEmptyObject(jsonResult)) {
+          $('txtCtaContableTransf').typeahead({
+            source: jsonResult
+          });
+        }
+      })
+      .fail(function(result) {
+        toastr.error(result.statusText, "Mensaje", {
+          positionClass: "toast-top-full-width"
+        });
+      });
+
+    $.ajax({
+        method: "GET",
+        url: "/Finantial/Settings/getCategories"
+      })
+      .done(function(result) {
+        var jsonResult = jQuery.parseJSON(result);
+        if (!jQuery.isEmptyObject(jsonResult)) {
+          $('txtCategoria').typeahead({
+            source: jsonResult
+          });
+        }
+      })
+      .fail(function(result) {
+        toastr.error(result.statusText, "Mensaje", {
+          positionClass: "toast-top-full-width"
+        });
+      });
+
+    //FIN MODAL
 
     $.ajax({
             method: "GET",
@@ -250,30 +301,21 @@
     $("#btnConfirm").on("click", function() {
         var value = $(this).attr("action");
         if (value == "1") {
-            var prefixVal = $("#chkDocumentType").val();
-            var serie = $("#txtSerie").val();
-            var _prefix = "";
-            var _id = "";
-            if (prefixVal == "true") {
-                _prefix = serie.substring(0, 1);
-                _id = serie.substring(1, 4);
-            } else {
-                _id = serie.substring(0, 3);
-            }
-
-            var _max = $("#txtStart").val();
-
             $.ajax({
                     method: "POST",
-                    url: "/Finantial/Settings/AddSeries",
+                    url: "/Finantial/Settings/AddInvoice",
                     data: {
-                        documentType: $("#chkInvoiceType").val(),
-                        id: _id,
-                        current: $("#txtCurrent").val(),
-                        max: $("#txtFinal").val(),
-                        min: _max,
-                        default: "true",
-                        prefix: _prefix
+                        code: $("#txtCode").val(),
+                        codeDim: $("#txtDimension").val(),
+                        description: $("#txtDescription").val(),
+                        dateB: $("#txtStartDate").val(),
+                        dateE: $("#txtEndDate").val(),
+                        accountC: $("#txtCtaContable").val(),
+                        accountT: $("#txtCtaContableTransf").val(),
+                        codeCat: $("#txtCategoria").val(),
+                        flgDet: $('#checkboxDet').is(":checked"),
+                        flgPresup: $('#checkboxPresup').is(":checked"),
+                        flgIng: $('#checkboxCenIng').is(":checked")
                     }
                 })
                 .done(function(result) {
@@ -288,29 +330,22 @@
                 });
         } else {
             if (value == "2") {
-                var prefixVal = $("#chkDocumentType").val();
-                var serie = $("#txtSerie").val();
-                var _prefix = "";
-                if (prefixVal == "true") {
-                    _prefix = serie.substring(0, 1);
-                }
-
-                var _id = serie.substring(1, 4);
-                var _max = $("#txtStart").val();
 
                 $.ajax({
                         method: "POST",
-                        url: "/Finantial/Settings/UpdateSeries",
+                        url: "/Finantial/Settings/UpdateInvoice",
                         data: {
-                            documentType: $("#txtInvoiceTypeOld").val(),
-                            id: $("#txtSerieOld").val(),
-                            current: $("#txtCurrent").val(),
-                            max: $("#txtFinal").val(),
-                            min: _max,
-                            default: $("#checkbox2").val(),
-                            prefix: _prefix,
-                            idUpdate: _id,
-                            documentTypeUpdate: $("#chkInvoiceType").val()
+                          code: $("#txtCode").val(),
+                          codeDim: $("#txtDimension").val(),
+                          description: $("#txtDescription").val(),
+                          dateB: $("#txtStartDate").val(),
+                          dateE: $("#txtEndDate").val(),
+                          accountC: $("#txtCtaContable").val(),
+                          accountT: $("#txtCtaContableTransf").val(),
+                          codeCat: $("#txtCategoria").val(),
+                          flgDet: $('#checkboxDet').is(":checked"),
+                          flgPresup: $('#checkboxPresup').is(":checked"),
+                          flgIng: $('#checkboxCenIng').is(":checked")
                         }
                     })
                     .done(function(result) {
@@ -327,6 +362,45 @@
             if (value == "3") alert("eliminar");
         }
     });
+
+    //Function que por request AJAX llena un comboBox
+    function initialize_combo_ajax(idSelect, url, async = true) {
+    $.ajax({
+    method: "GET",
+    url: url,
+    async: async
+    })
+    .done(function(result) {
+    var jsonResult = jQuery.parseJSON(result);
+    if (!jQuery.isEmptyObject(jsonResult)) {
+    populate_combo_box(idSelect, jsonResult);
+    }
+    })
+    .fail(function(result) {
+    toastr.error(result.statusText, "Mensaje", {
+    positionClass: "toast-top-full-width"
+    });
+    });
+    }
+
+    //Function que llena un comboBox
+    function populate_combo_box(idCombo, data) {
+    combo_box = $(idCombo);
+    combo_box.empty();
+    combo_box.trigger("chosen:updated");
+    $.each(data, function(index, value) {
+    combo_box.append("<option value='" + value.Value + "'>" + value.name + "</option>");
+    });
+    combo_box.trigger("chosen:updated");
+    }
+
+    //Function que hace update a un chosen select
+    function update_chosen_select(chosenId, value) {
+    var chosenElement = $(chosenId);
+    //chosenElement.attr("disabled", true);
+    chosenElement.val(value);
+    chosenElement.trigger("chosen:updated");
+    }
 }
 
 
@@ -386,18 +460,68 @@
                     <div class="form-group">
                         <div class="col-md-6">
                             <div id="data_1" class="">
-                                <label class="pull-left form-separation"> Fecha Inicial </label>
-                                <div class="input-group date">
+                                <div class="col-md-12" style="padding-left:0px;">
+                                    <label class="pull-left form-separation"> Fecha Inicial </label>
+                                </div>
+                                <div class="input-group date" style="padding-left: 15px;">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="txtStartDate" type="text" class="form-control currentDateDefault" name="documentDate" required>
                                 </div>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div id="data_1" class="">
-                                <label class="pull-left form-separation"> Fecha Final </label>
-                                <div class="input-group date">
+                                <div class="col-md-12" style="padding-left:0px;">
+                                    <label class="pull-left form-separation"> Fecha Final </label>
+                                </div>
+                                <div class="input-group date" style="padding-left: 15px;">
                                     <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input id="txtEndDate" type="text" class="form-control currentDateDefault" name="documentDate" required>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-4">
+                            <label>Cta. Contable</label>
+                            <div class="col-md-12">
+                                <input id="txtCtaContable" type="text" class="form-control input-hidden" placeholder="" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Cta. Contable Transf.</label>
+                            <div class="col-md-12">
+                                <input id="txtCtaContableTransf" type="text" class="form-control input-hidden" placeholder="" />
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label>Categoría</label>
+                            <div class="col-md-12">
+                                <input id="txtCategoria" type="text" class="form-control input-hidden" placeholder="" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkboxDet" type="checkbox" checked="">
+                                <label for="checkboxDet">
+                                    Det?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkboxPresup" type="checkbox" checked="">
+                                <label for="checkboxPresup">
+                                    Inc Presup?
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="checkbox checkbox-primary">
+                                <input id="checkboxCenIng" type="checkbox" checked="">
+                                <label for="checkboxCenIng">
+                                    Cen Ing?
+                                </label>
                             </div>
                         </div>
                     </div>
