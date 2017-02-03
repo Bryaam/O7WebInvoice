@@ -53,6 +53,7 @@
     <Compile Include="ClientView.cs" />
     <Compile Include="ClientZone.cs" />
     <Compile Include="CcoView.cs" />
+    <Compile Include="Exchange.cs" />
     <Compile Include="LogFE.cs" />
     <Compile Include="DetailInvoicePDF.cs" />
     <Compile Include="GenericListValue.cs" />

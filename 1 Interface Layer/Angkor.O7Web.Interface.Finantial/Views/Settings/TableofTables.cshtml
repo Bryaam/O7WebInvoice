@@ -108,6 +108,7 @@
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
 
     @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
+    @Html.JavaScriptLink("js/plugins/jquery-maskedinput/jquery.maskedinput.js")
     
     <script>
         function enable_input(btnId) {
@@ -117,190 +118,244 @@
             //btn.closest(".key-input").prop("disabled", false);
             //btn.closest(".content-input").prop("disabled", false);
         }
+
+        function getIndexes(cad) {
+            var l = cad.length;
+            var cAnt = ' ';
+            var ini = 0;
+            var listIndex = [];
+            var tupla = [];
+
+            for (i = 0; i < l; i++) {
+                if (cAnt == ' ' && cad.substr(i, 1) != ' ') {
+                    ini = i;
+                }
+
+                if (cAnt != ' ' && cad.substr(i, 1) == ' ') {
+                    tupla = [ini, i - 1];
+                    listIndex.push(tupla);
+                }
+                cAnt = cad.substr(i, 1);
+            }
+            if (cAnt != ' ') {
+                tupla = [ini, l - 1];
+                listIndex.push(tupla);
+            }
+            return listIndex;
+        }
     </script>
 }
 
 @section section_script {
 
     var tableOfTables;
+    var table_contents = [];
+    var format_tuples;
+    $.mask.definitions['a'] = "[A-Za-z0-9 ]";
 
-    $(".editTableBtn").click(function(){
-        console.log("--------------");
-        $(this).closest(".key-input").prop("disabled",false);
-        $(this).closest(".content-input").prop("disabled",false);
-    });
-
-    $("#btnCaca").click(function(){
-        console.log("caca");
-    });
-
-    function loadHeaders(codTable){
+    function loadHeaders(codTable) {
 
         $.ajax({
-            method: "GET",
-            url: "/Finantial/Settings/GetHeads",
-            data: {
-                codTable: codTable
-            },
-            async: false
-        })
-        .done(function(result) {
-            var jsonResult = jQuery.parseJSON(result);
-            if (!jQuery.isEmptyObject(jsonResult)) {
-                tableOfTables = $('#tableOfTables').DataTable({
-                    "bPaginate": false,
-                    "bLengthChange": false,
-                    "bFilter": false,
-                    "bInfo": false,
-                    "bAutoWidth": false,
-                    "paging": false,
-                    "columns": [
-                         {
-                            data : "edit",
-                            width: "20%",
-                            title: ""
-                        },
-                         {
-                            data : "delete",
-                            width: "20%",
-                            title: ""
-                        },
-                        {
-                            data : "key",
-                            width: "10%",
-                            title: "<div style='White-space:pre; padding-left:1%; font-family: monospace !important;'>"+jsonResult[0].TK+"<br />"+jsonResult[0].CK+"</div>"
-                        },
-                        {
-                            data : "content",
-                            width: "70%",
-                            title: "<div style='White-space:pre; padding-left:1%; font-size:14px;'>"+jsonResult[0].TF+"<br />"+jsonResult[0].CF+"</div>"
+                method: "GET",
+                url: "/Finantial/Settings/GetHeads",
+                data: {
+                    codTable: codTable
+                },
+                async: false
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    tableOfTables = $(' #tableOfTables').DataTable({
+                        "bPaginate": false,
+                        "bLengthChange": false,
+                        "bFilter": false,
+                        "bInfo": false,
+                        "bAutoWidth": false,
+                        "paging": false,
+                        "columns": [{
+                                data: "edit",
+                                width: "1%",
+                                title: ""
+                            },
+                            {
+                                data: "delete",
+                                width: "1%",
+                                title: ""
+                            },
+                            {
+                                data: "key",
+                                width: "1%",
+                                title: "<div>" + jsonResult[0].TK + "<br />" + jsonResult[0].CK + "</div>"
+                            },
+                            {
+                                data: "content",
+                                title: "<div style='White-space:pre;'>" + jsonResult[0].TF + "<br />" + jsonResult[0].CF + "</div>"
+                            }
+                        ]
+                    });
+
+                    var content_headers = jsonResult[0].TF.split(/\s+/);
+                    var content_format = jsonResult[0].CF.split(/\s+/);
+                    format_tuples = getIndexes(jsonResult[0].CF);
+
+                    $.each(content_headers, function(index, value) {
+                        var element = "<div class='form-group'><label class='control-label' for='" + value + "'>" + value + ":</label><input class='form-control' id='edit_input_" + index + "'></div>"
+
+                        if (index % 2 == 0) {
+                            $("#edit-line-1").append(element);
+                        } else {
+                            $("#edit-line-2").append(element);
                         }
-                    ]
+
+                        var reg = content_format[index].replace(/([a-zA-Z0-9])/g, "a");
+                        $('#edit_input_' + index).mask(reg);
+                    });
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
                 });
-            }
-        })
-        .fail(function(result) {
-            toastr.error(result.statusText, "Mensaje", {
-            positionClass: "toast-top-full-width"
-        });
-        });
+            });
 
     }
 
-    function loadData(primaryCode, secondCode){
+    function btn_edit_click() {
+        var btn_id = $(this).attr('id');
+        var btn_id_split = btn_id.split('_');
+        var id = btn_id_split[1];
+
+        var selected_content = table_contents[id].content;
+
+        $.each(format_tuples, function(index, value) {
+            var input_value = selected_content.substring(value[0], value[1] + 1);
+            $('#edit_input_' + index).val(input_value);
+        });
+
+        $('#editLineModal').modal('show');
+    }
+
+    function loadData(primaryCode, secondCode) {
         var data = {
             primaryCode: primaryCode
         }
 
-        if (secondCode != null){
+        if (secondCode != null) {
             data.secondCode = secondCode;
         }
-        
-        $.ajax({
-            method: "GET",
-            url: "/Finantial/Settings/GetData",
-            data: data,
-            async: false
-        })
-        .done(function(result) {
-            var jsonResult = jQuery.parseJSON(result);
-            if (!jQuery.isEmptyObject(jsonResult)) {                
-                $.each(jsonResult, function (index, value) {
-                    var dataUnit = {};
-                    var nameDelete='btnedit_' + index;
-                    dataUnit.edit="<button type='button' id='"+nameDelete+"'  onclick='enable_input("+nameDelete+")' class='btn btn-outline btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
-                    dataUnit.delete="<button type='button' id='btnedit_" + index + "' class='btn btn-outline btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>&nbsp;";
-                    dataUnit.key = "<input class='form-control key-input' disabled style='width:100%' value='"+value.key+"'>";
-                    dataUnit.content = "<input class='form-control content-input' disabled style='width:100%' value='"+value.content+"'>";
-                    var dataSet = [];
-                    dataSet.push(dataUnit);
 
-                    tableOfTables.rows.add(dataSet).draw();
+        $.ajax({
+                method: "GET",
+                url: "/Finantial/Settings/GetData",
+                data: data
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    table_contents = jsonResult;
+                    $.each(jsonResult, function(index, value) {
+                        var dataUnit = {};
+                        var nameDelete = 'btndelete_' + index;
+                        var nameEdit = 'btnedit_' + index;
+                        dataUnit.edit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
+                        dataUnit.delete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+                        dataUnit.key = "<div>" + value.key + "</div>";
+                        dataUnit.content = "<div style='White-space:pre;'>" + value.content + "</div>";
+                        var dataSet = [];
+                        dataSet.push(dataUnit);
+
+                        tableOfTables.rows.add(dataSet).draw();
+                        $('#btnedit_' + index).bind('click', btn_edit_click);
+                    });
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
                 });
-            }
-        })
-        .fail(function(result) {
-            toastr.error(result.statusText, "Mensaje", {
-                positionClass: "toast-top-full-width"
             });
-        });
     }
 
 
-    function load_table(primaryCode, secondCode){
+    function load_table(primaryCode, secondCode) {
         loadHeaders(primaryCode);
         loadData(primaryCode, secondCode);
     }
 
-    function load_table_names(){
+    function load_table_names() {
         $.ajax({
-            method: "GET",
-            url: "/Finantial/Settings/GetTTNames"
-        })
-        .done(function(result) {
-            var jsonResult = jQuery.parseJSON(result);
-            if (!jQuery.isEmptyObject(jsonResult)) {
-                $('#primary_table_id').typeahead({
-                    source: jsonResult
+                method: "GET",
+                url: "/Finantial/Settings/GetTTNames"
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    $('#primary_table_id').typeahead({
+                        source: jsonResult
+                    });
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
                 });
-            }
-        })
-        .fail(function(result) {
-            toastr.error(result.statusText, "Mensaje", {
-                positionClass: "toast-top-full-width"
             });
-        });
     }
 
-    function load_table_names_second(){
+    function load_table_names_second() {
         $.ajax({
-            method: "GET",
-            url: "/Finantial/Settings/GetTTNames"
-        })
-        .done(function(result) {
-            var jsonResult = jQuery.parseJSON(result);
-            if (!jQuery.isEmptyObject(jsonResult)) {
-                $('#second_table_id').typeahead({
-                    source: jsonResult
+                method: "GET",
+                url: "/Finantial/Settings/GetTTNames"
+            })
+            .done(function(result) {
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    $('#second_table_id').typeahead({
+                        source: jsonResult
+                    });
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
                 });
-            }
-        })
-        .fail(function(result) {
-            toastr.error(result.statusText, "Mensaje", {
-                positionClass: "toast-top-full-width"
             });
-        });
     }
 
     load_table_names();
     load_table_names_second();
-    load_table(1,null);
+    load_table(1, null);
 
-    $('#primary_table_id').change(function(){
+    $('#primary_table_id').change(function() {
         var primary_id = $(this).typeahead("getActive").Value;
-        if (primary_id =="999"){
+        if (primary_id == "999") {
             $("#secondgroup").removeClass("hidden");
             return;
-        }else{
-             $("#secondgroup").addClass("hidden");
+        } else {
+            $("#secondgroup").addClass("hidden");
         }
 
         tableOfTables.clear().draw();
         $('#tableOfTables').dataTable().fnDestroy();
 
-        load_table(primary_id,null);
-        
+        load_table(primary_id, null);
+
     });
 
-     $('#second_table_id').change(function(){
+    $('#second_table_id').change(function() {
         var primary_id = $('#primary_table_id').typeahead("getActive").Value;
         var second_id = $(this).typeahead("getActive").Value;
 
         tableOfTables.clear().draw();
         $('#tableOfTables').dataTable().fnDestroy();
 
-        load_table(primary_id,second_id);
+        load_table(primary_id, second_id);
 
+    });
+
+    $('#btnSaveEdit').click(function(){
+        
     });
 }
 
@@ -312,11 +367,11 @@
                     <div class="form-group" style="padding-bottom: 50px; padding-top: 20px;">
                         <label class="col-sm-2 control-label">Ingrese Una Tabla</label>
                         <div class="col-sm-10"><input id="primary_table_id" style="width:60%;" type="text" class="form-control"></div>
-                    </div>                   
+                    </div>
                 </div>
                 <div id="secondgroup" class="row hidden" style="padding-bottom: 20px;">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Ingrese La tabla que desea editar</label>
+                        <label class="col-sm-2 control-label">Ingrese la tabla que desea editar</label>
                         <div class="col-sm-10"><input id="second_table_id" style="width:60%;" type="text" class="form-control"></div>
                     </div>
                 </div>
@@ -326,6 +381,31 @@
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editLineModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Editar</h4>
+            </div>
+            <div style="height:500px; overflow-y:scroll; overflow-x:hidden;">
+                <div class="modal-body">
+                    <form id="edit_form">
+                        <div class="row">
+                            <div class="col-lg-6" id="edit-line-1"></div>
+                            <div class="col-lg-6" id="edit-line-2"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-default" id="btnSaveEdit">Guardar</button>
             </div>
         </div>
     </div>
