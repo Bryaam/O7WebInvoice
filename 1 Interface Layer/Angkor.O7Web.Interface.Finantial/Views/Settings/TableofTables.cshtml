@@ -148,7 +148,8 @@
 
 @section section_script {
 
-    var tableOfTables;
+        var tableOfTables;
+    var spaces_to_insert;
     var table_contents = [];
     var format_tuples;
     $.mask.definitions['a'] = "[A-Za-z0-9 ]";
@@ -194,13 +195,32 @@
                             }
                         ]
                     });
+                    
+                    spaces_to_insert = jsonResult[0].TK.length-jsonResult[0].CK.length+1;
 
-                    var content_headers = jsonResult[0].TF.split(/\s+/);
-                    var content_format = jsonResult[0].CF.split(/\s+/);
-                    format_tuples = getIndexes(jsonResult[0].CF);
+                    var all_headers = jsonResult[0].TK+" "+jsonResult[0].TF;
+                    var all_format = jsonResult[0].CK+" ".repeat(spaces_to_insert)+jsonResult[0].CF;
+                    var all_format_array = all_format.split(/\s+/);
+                    format_tuples = getIndexes(all_format);
 
-                    $.each(content_headers, function(index, value) {
-                        var element = "<div class='form-group'><label class='control-label' for='" + value + "'>" + value + ":</label><input class='form-control' id='edit_input_" + index + "'></div>"
+                    console.log(all_format);
+
+                    $("#edit-line-1").empty();
+                    $("#edit-line-2").empty();
+
+                    var cant_tuples = format_tuples.length;
+                    var next_header_position;
+
+                    $.each(format_tuples, function(index, value) {
+
+                        if (index == cant_tuples-1){
+                            next_header_position = all_headers.length;
+                        } else {
+                            next_header_position = format_tuples[index+1][0]-1;
+                        }
+
+                        var header = all_headers.substring(value[0],next_header_position);
+                        var element = "<div class='form-group'><label class='control-label' for='" + header + "'>" + header + ":</label><input class='form-control' id='edit_input_" + index + "'></div>"
 
                         if (index % 2 == 0) {
                             $("#edit-line-1").append(element);
@@ -208,7 +228,7 @@
                             $("#edit-line-2").append(element);
                         }
 
-                        var reg = content_format[index].replace(/([a-zA-Z0-9])/g, "a");
+                        var reg = all_format_array[index].replace(/([a-zA-Z0-9])/g, "a");
                         $('#edit_input_' + index).mask(reg);
                     });
                 }
@@ -226,7 +246,9 @@
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
 
-        var selected_content = table_contents[id].content;
+        var selected_content = table_contents[id].key.trim()+" ".repeat(spaces_to_insert)+table_contents[id].content;
+        
+        console.log(selected_content);
 
         $.each(format_tuples, function(index, value) {
             var input_value = selected_content.substring(value[0], value[1] + 1);
@@ -355,8 +377,9 @@
     });
 
     $('#btnSaveEdit').click(function(){
-        
+
     });
+
 }
 
 <div class="row">
