@@ -14,6 +14,9 @@
             font-weight: normal !important; 
             text-transform: none !important;
         }
+        body {
+            overflow-y:hidden;
+        }
     </style>
 }
 @section scripts_link {
@@ -108,7 +111,8 @@
              render: function(data, type, full, meta) {
                  var invoiceId = '"' + full.ClientCode + '"';
                  if(data=="Activo") return "<span class='label label-info' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
-                 return "<span class='label label-warning' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+                 if(data=="Inactivo") return "<span class='label label-warning' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+                 return "<span class='label label-success'>"+data+"</span>";    
              }
          },
          {
@@ -129,6 +133,8 @@
              width: "15%"
          }
      ],
+     scrollY: "270px",
+     scrollCollapse: true,
      language: {
          url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")"
      },
