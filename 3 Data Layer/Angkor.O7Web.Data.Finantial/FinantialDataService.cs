@@ -122,6 +122,14 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceDocumentCount>("O7EXPRESS_PACKAGE_SERIESF.get_seriesF", parameters, InvoiceDocumentCountMapper.Class);
         }
 
+        public virtual List<InvoiceDocumentCount> AllExchanges(string companyId, string branchId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("", companyId));
+            parameters.Add(O7Parameter.Make("p_branch", branchId));
+            return DataAccess.ExecuteFunction<InvoiceDocumentCount>("O7EXPRESS_PACKAGE_SERIESF.get_seriesF", parameters, InvoiceDocumentCountMapper.Class);
+        }
+
         public virtual bool UpdateSeries(string companyId, string branchId, string documentType, string id, string current,
            string max, string min, string @default, string prefix, string idUpdate, string documentTypeUpdate)
         {

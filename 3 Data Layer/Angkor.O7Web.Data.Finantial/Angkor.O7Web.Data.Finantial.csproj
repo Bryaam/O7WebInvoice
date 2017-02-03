@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="DataMapper\AddressEntryMapper.cs" />
     <Compile Include="DataMapper\AddressFactMapper.cs" />
+    <Compile Include="DataMapper\ExchangeMapper.cs" />
     <Compile Include="DataMapper\CcoViewMapper.cs" />
     <Compile Include="DataMapper\ClientCountryMapper.cs" />
     <Compile Include="DataMapper\ClientDefaultValueMapper.cs" />
