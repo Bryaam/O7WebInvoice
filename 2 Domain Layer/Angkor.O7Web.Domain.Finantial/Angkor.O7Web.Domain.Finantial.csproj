@@ -48,11 +48,17 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Base\ClientDomain.cs" />
     <Compile Include="Base\FinantialDomain.cs" />
+    <Compile Include="ClientBasicFlow.cs" />
     <Compile Include="FinantialFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\3 Data Layer\Angkor.O7Web.Data.Finantial.Entity\Angkor.O7Web.Data.Finantial.Entity.csproj">
+      <Project>{2EBDA1D1-572A-402C-9A6C-65104F453893}</Project>
+      <Name>Angkor.O7Web.Data.Finantial.Entity</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\3 Data Layer\Angkor.O7Web.Data.Finantial\Angkor.O7Web.Data.Finantial.csproj">
       <Project>{8059BAA3-67B3-4A58-93BE-5E9EE64BFE68}</Project>
       <Name>Angkor.O7Web.Data.Finantial</Name>

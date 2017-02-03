@@ -573,7 +573,7 @@
 
 
     $("#tableProducts").on('change', function() {
-    calculate_total();
+        calculate_total();
     });
 
     $('#data_1 .input-group.date').datepicker({
@@ -586,53 +586,59 @@
     });
 
     $('#clienteOcasionalCB').on('ifChecked', function() {
-    $('#botonBuscarCliente').hide();
-    $('#codInput').hide();
-    $('#docInput').prop('readonly', false);
-    $('#docInput').removeClass('emulate-label');
-    $('#codLabel').hide();
-    $('.typeInput').hide();
-    $('#typeLabel').hide();
+        $('#dirInputContent').prop('required',true);
+        $('#dirInputSelect').prop('required',false);
+        $('#dirInputSelectLabel').attr('id','dirInputContentLabel');
+        $('#botonBuscarCliente').hide();
+        $('#codInput').hide();
+        $('#docInput').prop('readonly', false);
+        $('#docInput').removeClass('emulate-label');
+        $('#codLabel').hide();
+        $('.typeInput').hide();
+        $('#typeLabel').hide();
 
-    $('#docInput').val('');
-    $('#nameInput').val('');
-    $('#phoneInput').val('');
-    $('#mailInput').val('');
-    $('#clientCode').val('99999999');
-    $('#dirInput').val("");
-    $('#dirInputContent').val("");
+        $('#docInput').val('');
+        $('#nameInput').val('');
+        $('#phoneInput').val('');
+        $('#mailInput').val('');
+        $('#clientCode').val('99999999');
+        $('#dirInput').val("");
+        $('#dirInputContent').val("");
 
-    $('#dirInputContent').removeClass("hidden");
-    $('#dirInputSelect').addClass("hidden");
-    $('#dirInputSelect').next().addClass("hidden");
+        $('#dirInputContent').removeClass("hidden");
+        $('#dirInputSelect').addClass("hidden");
+        $('#dirInputSelect').next().addClass("hidden");
 
-    $('#perceptionLabel').hide();
-    $('#perception_chosen').hide();
+        $('#perceptionLabel').hide();
+        $('#perception_chosen').hide();
     });
 
     $('#clienteOcasionalCB').on('ifUnchecked', function() {
-    $('#botonBuscarCliente').show();
-    $('#codInput').show();
-    $('#docInput').prop('readonly', true);
-    $('#docInput').addClass('emulate-label');
-    $('#codLabel').show();
-    $('.typeInput').show();
-    $('#typeLabel').show();
+        $('#dirInputContent').prop('required',false);
+        $('#dirInputSelect').prop('required',true);
+        $('#dirInputContentLabel').attr('id','dirInputSelectLabel');
+        $('#botonBuscarCliente').show();
+        $('#codInput').show();
+        $('#docInput').prop('readonly', true);
+        $('#docInput').addClass('emulate-label');
+        $('#codLabel').show();
+        $('.typeInput').show();
+        $('#typeLabel').show();
 
-    $('#docInput').val('');
-    $('#nameInput').val('');
-    $('#phoneInput').val('');
-    $('#mailInput').val('');
-    $('#clientCode').val('');
-    $('#dirInput').val("");
-    $('#dirInputContent').val("");
+        $('#docInput').val('');
+        $('#nameInput').val('');
+        $('#phoneInput').val('');
+        $('#mailInput').val('');
+        $('#clientCode').val('');
+        $('#dirInput').val("");
+        $('#dirInputContent').val("");
 
-    $('#dirInputContent').addClass("hidden");
-    $('#dirInputSelect').removeClass("hidden");
-    $('#dirInputSelect').next().removeClass("hidden");
+        $('#dirInputContent').addClass("hidden");
+        $('#dirInputSelect').removeClass("hidden");
+        $('#dirInputSelect').next().removeClass("hidden");
 
-    $('#perceptionLabel').hide();
-    $('#perception_chosen').hide();
+        $('#perceptionLabel').hide();
+        $('#perception_chosen').hide();
     });
 
     $('.i-checks').iCheck({

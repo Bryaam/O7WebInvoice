@@ -14,16 +14,20 @@
             font-weight: normal !important; 
             text-transform: none !important;
         }
+        body {
+            overflow-y:hidden;
+        }
     </style>
 }
 @section scripts_link {
     <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+    @Html.JavaScriptLink("js/plugins/slimscroll/jquery.slimscroll.min.js")
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
     @Html.JavaScriptLink("js/plugins/jquery-confirm-master/jquery-confirm.js")
     <script>
-        function editClient(clientId) {s
+        function editClient(clientId) {
             window.location.href = 'http://localhost:120/Finantial/Client/Edit?idClient='+clientId;
         }
         function detail(clientId) {
@@ -31,11 +35,11 @@
         }
         function changeStateClient(clientId) {
             $.alert({
-                title: 'Advertencia',
+                title: 'Confirmación',
                 content: '<p>Deseas cambiar el estado del cliente ' + clientId + '</p>',
                 animation: 'zoom',
                 closeAnimation: 'zoom',
-                type: 'success',
+                type: 'green',
                 buttons: {
                     confirm: {
                         text: 'Aceptar',
@@ -79,36 +83,37 @@
          }
      }],
      columns: [{
-             data: "ClientCode",
+             data: "Id",
              width: "9%"
          },
          {
-             data: "ClientType",
+             data: "Type",
              width: "9%"
          },
          {
-             data: "DocumentNumber",
+             data: "DocumentCode",
              width: "11%"
          },
          {
-             data: "ClientName",
+             data: "Name",
              width: "25%"
          },
          {
-             data: "ClientPhone",
+             data: "Phone",
              width: "8%"
          },
          {
-             data: "ClientEmail",
+             data: "Email",
              width: "11%"
          },
          {
-             data: "ClientState",
+             data: "State",
              width: "3%",
              render: function(data, type, full, meta) {
                  var invoiceId = '"' + full.ClientCode + '"';
-                 if(data=="Activo") return "<span class='label label-info' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
-                 return "<span class='label label-warning' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+                 if(data=="Activo") return "<span class='label label-success' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+                 if(data=="Inactivo") return "<span class='label label-warning' style='cursor: pointer;' onclick='changeStateClient(" + invoiceId + ");'>"+data+" <i class='fa fa-refresh' aria-hidden='true'></i></span>";    
+                 return "<span class='label label-primary'>"+data+"</span>";    
              }
          },
          {
@@ -129,15 +134,21 @@
              width: "15%"
          }
      ],
+     scrollY : '42hv',
+     "scrollCollapse" : true,
      language: {
          url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")"
      },
      initComplete: function(settings, json) {
+         $('.dataTables_scrollBody').slimscroll({
+              height: '42vh',
+              disableFadeOut : false
+         });
          $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").wrap("<div class='col-md-6' style='padding-left: 0px;'></div>");
 
          $(".dt-buttons").addClass("col-md-12").attr("style", "padding-left: 0px; padding-right: 0px;");
 
-         $("#tblInvoices_wrapper .dt-buttons").append('<div class="col-md-6 pull-right"><div class="row"><div class="col-md-2"></div><div class="input-group col-md-10"><input class="form-control" type="text"><span class="input-group-btn" style="width:1%!important;"><a id="btnSearchClient" href="#" class="btn btn-primary" disabled="true">Buscar&nbsp;<i class="fa fa-search"></i></a></span></div></div></div>');
+         $("#tblInvoices_wrapper .dt-buttons").append('<div class="col-md-6 pull-right"><div class="row"><div class="col-md-2"></div><div class="input-group col-md-10"><input id="txtFilterClient" class="form-control" type="text"><span class="input-group-btn" style="width:1%!important;"><a id="btnSearchClient" href="#" class="btn btn-primary" disabled="true">Buscar&nbsp;<i class="fa fa-search"></i></a></span></div></div></div>');
 
          $("#txtFilterClient").keyup(function(event) {
              var value = $("#txtFilterClient").val();
@@ -149,22 +160,14 @@
              }
          });
 
-         $("#btnSearchClient").on("click", function() {
-             $.ajax({
-                     method: "GET",
-                     url: "/Finantial/Client/Client_Populate",
-                     data: {
-                         filter: $("#txtFilterClient").val()
-                     },
-                     timeout: 70000
-                 })
+        $("#btnSearchClient").on("click", function() {
+            var clientFilter =  $("#txtFilterClient").val();
+             $.ajax({method: "GET", url: "/Finantial/Client/Index_PopulateClient", data: {filter: clientFilter}, timeout: 70000})
                  .done(function(result) {
-                     console.log(result);
                      var objResult = jQuery.parseJSON(result);
                      tblInvoices.clear().rows.add(objResult).draw();
                  })
                 .fail(function(result) {
-                    console.log(result);
                      toastr.error(result.statusText, "Mensaje", {
                          positionClass: "toast-top-full-width"
                      });
@@ -178,7 +181,7 @@
         <div class="ibox float-e-margins">
             <div class="ibox-content">
                 <div class="table-responsive">
-                    <table id="tblInvoices" class="table table-striped table-bordered table-hover" style="width:100%;">
+                    <table id="tblInvoices" class="table table-striped table-bordered table-hover scroll" style="width:100%;">
                         <thead>
                             <tr>
                                 <th>Codigo</th>
