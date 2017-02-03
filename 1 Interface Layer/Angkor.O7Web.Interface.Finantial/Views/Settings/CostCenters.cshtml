@@ -50,6 +50,49 @@
             $("#btnConfirm").hide();
             $(".input-hidden").attr("disabled", true);
 
+            $.ajax({
+                method: "GET",
+                url: "/Finantial/Settings/viewCco",
+                data: {
+                    code: codigo,
+                    date: fecini
+                }
+            })
+                .done(function (result) {
+                    console.log(result);
+                    var jsonResult = jQuery.parseJSON(result);
+                    $("#txtCode").val(jsonResult[0].code);
+                    $("#txtCode").val(jsonResult[0].codeDim);
+                    $("#txtCode").val(jsonResult[0].description);
+                    $("#txtCode").val(jsonResult[0].dateB);
+                    $("#txtCode").val(jsonResult[0].dateE);
+                    $("#txtCode").val(jsonResult[0].accountC);
+                    $("#txtCode").val(jsonResult[0].accountT);
+                    $("#txtCode").val(jsonResult[0].codeCat);
+
+                    if (jsonResult[0].flgDet == "true")
+                        $("#checkboxDet").prop("checked", true);
+                    else
+                        $("#checkboxDet").prop("checked", false);
+
+                    if (jsonResult[0].flgPresup == "true")
+                        $("#checkboxPresup").prop("checked", true);
+                    else
+                        $("#checkboxPresup").prop("checked", false);
+
+                    if (jsonResult[0].flgIng == "true")
+                        $("#checkboxCenIng").prop("checked", true);
+                    else
+                        $("#checkboxCenIng").prop("checked", false);
+
+                    toastr.success(result, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                }).fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
 
 
 
