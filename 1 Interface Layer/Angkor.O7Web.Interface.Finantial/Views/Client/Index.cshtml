@@ -23,7 +23,7 @@
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
     @Html.JavaScriptLink("js/plugins/jquery-confirm-master/jquery-confirm.js")
     <script>
-        function editClient(clientId) {s
+        function editClient(clientId) {
             window.location.href = 'http://localhost:120/Finantial/Client/Edit?idClient='+clientId;
         }
         function detail(clientId) {
@@ -31,11 +31,11 @@
         }
         function changeStateClient(clientId) {
             $.alert({
-                title: 'Advertencia',
+                title: 'Confirmación',
                 content: '<p>Deseas cambiar el estado del cliente ' + clientId + '</p>',
                 animation: 'zoom',
                 closeAnimation: 'zoom',
-                type: 'success',
+                type: 'green',
                 buttons: {
                     confirm: {
                         text: 'Aceptar',
