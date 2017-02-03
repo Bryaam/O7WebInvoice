@@ -50,6 +50,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClientDataService.cs" />
     <Compile Include="DataMapper\AddressEntryMapper.cs" />
     <Compile Include="DataMapper\AddressFactMapper.cs" />
     <Compile Include="DataMapper\ExchangeMapper.cs" />
@@ -94,6 +95,10 @@
     <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Common.Finantial.Entity\Angkor.O7Web.Common.Finantial.Entity.csproj">
       <Project>{1FE6DFCB-60C1-45F3-93D2-A36609B97CED}</Project>
       <Name>Angkor.O7Web.Common.Finantial.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Angkor.O7Web.Data.Finantial.Entity\Angkor.O7Web.Data.Finantial.Entity.csproj">
+      <Project>{2EBDA1D1-572A-402C-9A6C-65104F453893}</Project>
+      <Name>Angkor.O7Web.Data.Finantial.Entity</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

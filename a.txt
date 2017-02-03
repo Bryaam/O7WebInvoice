@@ -1,0 +1,18 @@
+./1 Interface Layer/Angkor.O7Web.Interface.Advisory/bin/Angkor.O7Web.Interface.Advisory.dll.config:  <O7Connection provider="Oracle.ManagedDataAccess" server="192.168.1.35:1521/UDEP2015" />
+./1 Interface Layer/Angkor.O7Web.Interface.Advisory/bin/Angkor.O7Web.Interface.Advisory.dll.config:  <O7WebSource address="192.168.1.186" port="120" source="SharedSource" />
+./1 Interface Layer/Angkor.O7Web.Interface.Advisory/Properties/PublishProfiles/FBueno.pubxml:    <publishUrl>ftp://192.168.1.190</publishUrl>
+./1 Interface Layer/Angkor.O7Web.Interface.Advisory/Web.config:  <O7Connection provider="Oracle.ManagedDataAccess" server="192.168.1.35:1521/UDEP2015" />
+./1 Interface Layer/Angkor.O7Web.Interface.Advisory/Web.config:  <O7WebSource address="192.168.1.186" port="120" source="SharedSource" />
+./1 Interface Layer/Angkor.O7Web.Interface.Finantial/bin/Angkor.O7Web.Interface.Finantial.dll.config:  <O7DbConnection provider="Oracle.ManagedDataAccess" server="192.168.1.190:1521/O7DEV" />
+./1 Interface Layer/Angkor.O7Web.Interface.Finantial/bin/Angkor.O7Web.Interface.Finantial.dll.config:  <O7WebSource address="192.168.1.186" port="120" source="SharedSource" />
+./1 Interface Layer/Angkor.O7Web.Interface.Finantial/Web.config:  <O7DbConnection provider="Oracle.ManagedDataAccess" server="192.168.1.190:1521/O7DEV" />
+./1 Interface Layer/Angkor.O7Web.Interface.Finantial/Web.config:  <O7WebSource address="192.168.1.179" port="120" source="Shared" />
+./1 Interface Layer/Angkor.O7Web.Interface.Security/bin/Angkor.O7Web.Interface.Security.dll.config:  <O7DbConnection provider="Oracle.ManagedDataAccess" server="192.168.1.190:1521/O7DEV" />
+./1 Interface Layer/Angkor.O7Web.Interface.Security/bin/Angkor.O7Web.Interface.Security.dll.config:  <O7WebSource address="192.168.1.186" port="120" source="SharedSource" />
+./1 Interface Layer/Angkor.O7Web.Interface.Security/Properties/PublishProfiles/FBueno.pubxml:    <publishUrl>ftp://192.168.1.190/</publishUrl>
+./1 Interface Layer/Angkor.O7Web.Interface.Security/Web.config:  <O7DbConnection provider="Oracle.ManagedDataAccess" server="192.168.1.190:1521/O7DEV" />
+./1 Interface Layer/Angkor.O7Web.Interface.Security/Web.config:  <O7WebSource address="192.168.1.186" port="120" source="SharedSource" />
+./1 Interface Layer/Angkor.O7Web.Interface.SharedSource/bin/Angkor.O7Web.Interface.SharedSource.dll.config:  <O7Connection provider="Oracle.ManagedDataAccess" server="192.168.1.35:1521/UDEP2015" />
+./1 Interface Layer/Angkor.O7Web.Interface.SharedSource/js/plugins/codemirror/mode/toml/index.html:server = "192.168.1.1"
+./1 Interface Layer/Angkor.O7Web.Interface.SharedSource/Properties/PublishProfiles/FBueno.pubxml:    <publishUrl>ftp://192.168.1.190/</publishUrl>
+./1 Interface Layer/Angkor.O7Web.Interface.SharedSource/Web.config:  <O7Connection provider="Oracle.ManagedDataAccess" server="192.168.1.35:1521/UDEP2015" />

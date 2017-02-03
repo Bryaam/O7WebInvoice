@@ -96,7 +96,14 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<InvoiceDocumentType>("finantial_invoice.document_type", O7DbParameterCollection.Make, InvoiceDocumentTypeMapper.Class);
         }
 
-        
+        public virtual bool ClientChangeState(string companyId, string branchId, string clientId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_company", companyId));
+            parameters.Add(O7Parameter.Make("p_branch", branchId));
+            parameters.Add(O7Parameter.Make("p_codcli", clientId));
+            return DataAccess.ExecuteFunction<int>("O7EXPRESS_PACKAGE_CLIENTE.change_est_cli", parameters) == 1;
+        }
 
         public virtual bool AddSeries(string companyId, string branchId, string documentType, string id, string current,
             string max, string min, string @default, string prefix)

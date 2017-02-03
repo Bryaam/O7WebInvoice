@@ -19,6 +19,17 @@
     @Html.StyleLink("css/plugins/iCheck/custom.css")
     @Html.StyleLink("css/plugins/steps/jquery.steps.css")
     @Html.StyleLink("css/plugins/datapicker/datepicker3.css")
+    <style>
+        .btn-remove-invoicer {
+            margin-left: 15px;
+        }
+        .selected{
+            background-color: #c5c9cc !important;
+        }
+        .dataTables_wrapper {
+            padding-bottom: 1px !important;
+        }
+    </style>
 }
 
 @section scripts_link {
@@ -55,7 +66,8 @@
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
         dom: 'Bfrtip',
-        buttons:[{ text: 'Agregar'}],
+        buttons:[{ text: 'Agregar',
+                className: 'btn-add-reciber'}],
         columns:[{ data: "CodDir" },
                  { data: "Country" },
                  { data: "Department" },
@@ -76,16 +88,22 @@
                  { targets: 7, width: "9%" },
                  { targets: 8, width: "9%" },
                  { targets: 9, width: "10%" }],
+        scrollY : '30hv',
+        "scrollCollapse" : true,
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
         initComplete: function( settings, json ) {
             if (action == '1') {
                 tblReciber.column(0).visible(false);
             }
-            var btnAddReciber = $("#tblReciber_wrapper .dt-button");
+            var btnRemoveReciber = $(".btn-remove-reciber");
+            btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
+            
+            var btnAddReciber = $(".btn-add-reciber");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
             if (action == '3'){
                 btnAddReciber.hide();
             }
+
             btnAddReciber.on("click", function () {                                
                 var reciber_count = parseInt($("#hddCountReciber").val());
                 var row = {};
@@ -225,6 +243,11 @@
         
                 reciber_count = reciber_count + 1;
                 $("#hddCountReciber").val(reciber_count);
+                    
+                 $('.dataTables_scrollBody').slimscroll({
+                      height: '30vh',
+                      disableFadeOut : false
+                 });
             });
         }            
     });   
@@ -232,7 +255,8 @@
     var tblInvoicer = $("#tblInvoicer").DataTable({
         searching: false,
         dom: 'Bfrtip',
-        buttons: [{ text: 'Agregar'}],
+    buttons: [{ text: 'Agregar',
+    className: 'btn-add-invoicer'}],
         columns:[{ data: "CodDir" },
                  { data: "Country" },
                  { data: "Department" },
@@ -257,8 +281,13 @@
         initComplete: function( settings, json ) {
             if (action == '1') {
                 tblInvoicer.column(0).visible(false);
-            }
-            var btnAddReciber = $("#tblInvoicer_wrapper .dt-button");
+    }
+
+    var btnRemoveReciber = $(".btn-remove-invoicer");
+    btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
+
+
+    var btnAddReciber = $(".btn-add-invoicer");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
             if (action == '3'){
                 btnAddReciber.hide();
@@ -405,7 +434,20 @@
         
                 reciber_count = reciber_count + 1;
                 $("#hddCountInvoicer").val(reciber_count);
-            });
+                $("#tblnvoicer tbody").on( "click", "tr", function () {
+                    if ( $(this).hasClass("selected") ) {
+                        $(this).removeClass("selected");
+                    }
+                    else {
+                        tblInvoicer.$("tr.selected").removeClass("selected");
+                        $(this).addClass("selected");
+                   }
+                });
+                $("#btnDeleteInvoicer").click( function () {
+                    table.row(".selected").remove().draw( false );
+                } );
+
+                });
         }
     });
 
@@ -1152,6 +1194,20 @@
                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });  
     }
+    
+    $("#tblReciber tbody").on("click", "tr", function () {
+        if ( $(this).hasClass("selected") ) {
+            $(this).removeClass("selected");
+        }
+        else {
+            tblReciber.$("tr.selected").removeClass("selected");
+            $(this).addClass("selected");
+        }
+    });
+
+    $(".btn-remove-reciber").onclick( function () {
+        tblReciber.row(".selected").remove().draw( false );
+    });
 }
 <div class="ibox float-e-margins">
     <form method="post" class="form-horizontal">
@@ -1310,7 +1366,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-12">
+                            <div id="dirSection" class="col-md-12">
                                 <div class="form-group">
                                     <div class="p-xxs border-bottom col-md-12">
                                         <strong>Direcciones</strong>
@@ -1354,26 +1410,30 @@
             <div class="modal-dialog modal-lg" style="width: 1280px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Direccion de entrega</h4>
+                        <h4 class="modal-title">Dirección de entrega</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table id="tblReciber" class="table table-striped table-bordered table-hover" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>País</th>
-                                        <th>Depa.</th>
-                                        <th>Prov.</th>
-                                        <th>Dist.</th>
-                                        <th>Dirección</th>
-                                        <th>Ciudad</th>
-                                        <th>Zona</th>
-                                        <th>Telef.</th>
-                                        <th>Conta.</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    <div class="modal-body" style="padding-bottom: 5px; padding-top:10px;">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content" style="padding-bottom: 0px !important;">
+                                <div class="table-responsive">
+                                    <table id="tblReciber" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Codigo</th>
+                                                <th>País</th>
+                                                <th>Depa.</th>
+                                                <th>Prov.</th>
+                                                <th>Dist.</th>
+                                                <th>Dirección</th>
+                                                <th>Ciudad</th>
+                                                <th>Zona</th>
+                                                <th>Telef.</th>
+                                                <th>Conta.</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

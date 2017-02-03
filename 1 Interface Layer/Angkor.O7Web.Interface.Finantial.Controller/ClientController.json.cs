@@ -1,5 +1,4 @@
 ﻿// O7ERP Web created by felix_dev
-
 using System.Web.Mvc;
 using Angkor.O7Framework.Web.WebResult;
 using Angkor.O7Web.Comunication;
@@ -8,9 +7,16 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 {
     public partial class ClientController
     {
+        public JsonResult Index_PopulateClient(string filter)
+        {
+            var domain = ProxyDomain.Instance.ClientDomain(User.Identity.Name, User.Password);
+            var response = domain.Clients(User.Company, User.Branch, filter);
+            return new O7JsonResult(response);
+        }
+
         public JsonResult AllRoute()
         {
-            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);            
             var response = domain.AllRoute(User.Company, User.Branch);
             return new O7JsonResult(response);
         }
@@ -75,6 +81,14 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.DocumentType(clientType);
+            return new O7JsonResult(response);
+        }
+
+        [HttpPost]
+        public JsonResult ClientChangeState(string clientId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.ClientChangeState(User.Company, User.Branch, clientId);
             return new O7JsonResult(response);
         }
 

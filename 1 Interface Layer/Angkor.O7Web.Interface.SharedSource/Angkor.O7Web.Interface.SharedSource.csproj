@@ -200,6 +200,7 @@
     <Content Include="css\plugins\ionRangeSlider\ion.rangeSlider.skinSimple.css" />
     <Content Include="css\plugins\jasny\jasny-bootstrap.min.css" />
     <Content Include="css\plugins\jqGrid\ui.jqgrid.css" />
+    <Content Include="css\plugins\jquery-confirm-master\jquery-confirm.css" />
     <Content Include="css\plugins\jQueryUI\images\animated-overlay.gif" />
     <Content Include="css\plugins\jQueryUI\images\ui-bg_flat_0_aaaaaa_40x100.png" />
     <Content Include="css\plugins\jQueryUI\images\ui-bg_flat_75_ffffff_40x100.png" />
@@ -492,6 +493,8 @@
     <Content Include="js\plugins\fullcalendar\fullcalendar-es.js" />
     <Content Include="js\plugins\fullcalendar\fullcalendar.min.js" />
     <Content Include="js\plugins\fullcalendar\locale-all.js" />
+    <Content Include="js\plugins\jquery-confirm-master\jquery-confirm.js" />
+    <Content Include="js\plugins\jquery-maskedinput\jquery.maskedinput.js" />
     <Content Include="js\plugins\moment\moment.min.js" />
     <Content Include="js\plugins\gritter\images\gritter-light.png" />
     <Content Include="js\plugins\gritter\images\gritter-long.png" />
@@ -876,6 +879,7 @@
     <Content Include="Views\Security\Signout.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="css\plugins\jquery-confirm-master\jquery-confirm.less" />
     <None Include="Properties\PublishProfiles\FBueno.pubxml" />
   </ItemGroup>
   <PropertyGroup>
