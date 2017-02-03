@@ -125,10 +125,7 @@
 
     var tableOfTables;
     var table_contents = [];
-
-    jQuery(function($){
-       $.mask.definitions['X']="[A-Za-z0-9]";
-    });
+    var format_tuples;
 
     function loadHeaders(codTable){
 
@@ -175,18 +172,19 @@
 
                 var content_headers = jsonResult[0].TF.split(/\s+/);
                 var content_format = jsonResult[0].CF.split(/\s+/);
+                format_tuples = get_indexes(jsonResult[0].CF);
                 
                 $.each(content_headers, function (index, value) {
                     var element = "<div class='form-group'><label class='control-label' for='"+value+"'>"+value+":</label><input class='form-control' id='edit_input_"+index+"'></div>"
-                    var reg = content_format[index].replace(/([a-zA-Z0-9])/g, "*");
-
-                    $('edit_input_'+index).mask(reg);
                     
                     if (index % 2 == 0){
                         $("#edit-line-1").append(element);
                     } else {
                         $("#edit-line-2").append(element);
-                    }      
+                    }
+    
+                    var reg = content_format[index].replace(/([a-zA-Z0-9])/g, "*");
+                    $('#edit_input_'+index).mask(reg);  
                 });
             }
         })
@@ -203,12 +201,13 @@
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
 
-        var selected_content = table_contents[id];     
-        var content_array = selected_content.content.split(/\s+/)
+        var selected_content = table_contents[id].content;
         
         console.log(content_array);
+        console.log(format_tuples);
 
-        $.each(content_array, function (index, value) {
+        $.each(format_tuples, function (index, value) {
+            var input_value = selected_content.substring(value[0], value[1]);
             $('#edit_input_'+index).val(value);
         });
         
