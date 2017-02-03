@@ -82,31 +82,31 @@
          }
      }],
      columns: [{
-             data: "ClientCode",
+             data: "Id",
              width: "9%"
          },
          {
-             data: "ClientType",
+             data: "Type",
              width: "9%"
          },
          {
-             data: "DocumentNumber",
+             data: "DocumentCode",
              width: "11%"
          },
          {
-             data: "ClientName",
+             data: "Name",
              width: "25%"
          },
          {
-             data: "ClientPhone",
+             data: "Phone",
              width: "8%"
          },
          {
-             data: "ClientEmail",
+             data: "Email",
              width: "11%"
          },
          {
-             data: "ClientState",
+             data: "State",
              width: "3%",
              render: function(data, type, full, meta) {
                  var invoiceId = '"' + full.ClientCode + '"';
@@ -155,15 +155,9 @@
              }
          });
 
-         $("#btnSearchClient").on("click", function() {
-             $.ajax({
-                     method: "GET",
-                     url: "/Finantial/Client/Client_Populate",
-                     data: {
-                         filter: $("#txtFilterClient").val()
-                     },
-                     timeout: 70000
-                 })
+        $("#btnSearchClient").on("click", function() {
+            var clientFilter =  $("#txtFilterClient").val();
+             $.ajax({method: "GET", url: "/Finantial/Client/Index_PopulateClient", data: {filter: clientFilter}, timeout: 70000})
                  .done(function(result) {
                      console.log(result);
                      var objResult = jQuery.parseJSON(result);
