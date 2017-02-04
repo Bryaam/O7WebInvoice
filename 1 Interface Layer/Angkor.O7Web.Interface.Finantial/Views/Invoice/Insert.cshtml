@@ -130,8 +130,8 @@
                                                         <div class="col-sm-12">
                                                             <label id="dirInputSelectLabel" class="pull-left form-separation"> Dirección</label>
                                                             <input id="dirInput" class="form-control hidden" type="text" name="addressId">
-                                                            <input id="dirInputContent" class="form-control hidden myReq" type="text" name="invoiceAddress">
-                                                            <select required class="form-control myReq" id="dirInputSelect"></select>
+                                                            <input required id="dirInputContent" class="form-control hidden myReq" type="text" name="invoiceAddress">
+                                                            <select class="form-control myReq" id="dirInputSelect"></select>
                                                             <label style="margin-top: 30px;margin-bottom: -30px;"> <input id="clienteOcasionalCB" type="checkbox" class="i-checks" name=""> Cliente ocasional </label>
                                                         </div>
                                                     </div>
@@ -326,7 +326,7 @@
                         </div>
                         <div class="row text-center" style="margin-top: 50px;">
                             <div class="ibox-footer text-right">
-                                <button class="btn btn-white"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
+                                <button id="backBtn" class="btn btn-white" type="button"><i class="fa fa-reply" aria-hidden="true"></i> Atras</button>
                                 <button id="btnSubmit" class="btn btn-primary" type="button">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
                             </div>
                         </div>
@@ -450,6 +450,11 @@
             $("#spinner").hide();
         }).bind("ajaxError", function () {
             $("#spinner").hide();
+        });
+
+        $("#backBtn").click(function () {
+            parent.history.back();
+            return false;
         });
 
     </script>
