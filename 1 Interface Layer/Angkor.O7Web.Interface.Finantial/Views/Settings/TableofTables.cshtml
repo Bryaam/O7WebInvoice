@@ -152,6 +152,7 @@
     var spaces_to_insert;
     var table_contents = [];
     var format_tuples;
+    var tkLen;
     $.mask.definitions['a'] = "[A-Za-z0-9 ]";
 
     function loadHeaders(codTable) {
@@ -197,13 +198,14 @@
                     });
                     
                     spaces_to_insert = jsonResult[0].TK.length-jsonResult[0].CK.length+1;
-
+                    tkLen=jsonResult[0].TK.length;
                     var all_headers = jsonResult[0].TK+" "+jsonResult[0].TF;
+              
                     var all_format = jsonResult[0].CK+" ".repeat(spaces_to_insert)+jsonResult[0].CF;
+        
                     var all_format_array = all_format.split(/\s+/);
                     format_tuples = getIndexes(all_format);
 
-                    console.log(all_format);
 
                     $("#edit-line-1").empty();
                     $("#edit-line-2").empty();
@@ -218,17 +220,18 @@
                         } else {
                             next_header_position = format_tuples[index+1][0]-1;
                         }
-
+                        //MIRAR LA TT867
                         var header = all_headers.substring(value[0],next_header_position);
-                        var element = "<div class='form-group'><label class='control-label' for='" + header + "'>" + header + ":</label><input class='form-control' id='edit_input_" + index + "'></div>"
+                        var element = "<div class='form-group'><label class='control-label' for='" + header.trim() + "'>" + header.trim() + ":</label><input class='form-control' id='edit_input_" + index + "'></div>"
 
                         if (index % 2 == 0) {
                             $("#edit-line-1").append(element);
                         } else {
                             $("#edit-line-2").append(element);
                         }
-
+                        console.log('++++++'+all_format_array[index]);                     
                         var reg = all_format_array[index].replace(/([a-zA-Z0-9])/g, "a");
+                        console.log(reg+'------');   
                         $('#edit_input_' + index).mask(reg);
                     });
                 }
@@ -245,8 +248,8 @@
         var btn_id = $(this).attr('id');
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
-
-        var selected_content = table_contents[id].key.trim()+" ".repeat(spaces_to_insert)+table_contents[id].content;
+        spaces_to_insert_key = tkLen- table_contents[id].key.trim().length+1;
+        var selected_content = table_contents[id].key.trim()+" ".repeat(spaces_to_insert_key)+table_contents[id].content;
         
         console.log(selected_content);
 
