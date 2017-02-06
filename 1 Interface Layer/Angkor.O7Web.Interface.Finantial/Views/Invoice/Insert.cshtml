@@ -457,6 +457,34 @@
             return false;
         });
 
+        function validate_ruc(p_ruc) {
+            if (p_ruc.substr(0, 2) == '10'
+               || p_ruc.substr(0, 2) == '15'
+               || p_ruc.substr(0, 2) == '17'
+               || p_ruc.substr(0, 2) == '20')
+                var primer = 5 * parseInt(p_ruc.substr(0, 1));
+            var segundo = 4 * parseInt(p_ruc.substr(1, 1));
+            var tercero = 3 * parseInt(p_ruc.substr(2, 1));
+            var cuarto = 2 * parseInt(p_ruc.substr(3, 1));
+            var quinto = 7 * parseInt(p_ruc.substr(4, 1));
+            var sexto = 6 * parseInt(p_ruc.substr(5, 1));
+            var septimo = 5 * parseInt(p_ruc.substr(6, 1));
+            var octavo = 4 * parseInt(p_ruc.substr(7, 1));
+            var noveno = 3 * parseInt(p_ruc.substr(8, 1));
+            var decimo = 2 * parseInt(p_ruc.substr(9, 1));
+            var sumaTotal = primer + segundo + tercero + cuarto + quinto + sexto + septimo + octavo + noveno + decimo;
+            var division = Math.round(sumaTotal / 11);
+            var calculoFinal = 11 - (sumaTotal - (division * 11));
+            var ultimoDigito = parseInt(p_ruc.substr(10, 1));
+            if (calculoFinal = 10)
+                calculoFinal = 0;
+            if (calculoFinal = 11)
+                calculoFinal = 1;
+            if (ultimoDigito == calculoFinal)
+                return 1
+            return 0;
+        }
+
     </script>
 }
 
@@ -763,6 +791,10 @@
 
     $(".docFlgTrigger").hide();
 
+    $("#docInput").change(function(){
+        validateRuc($(this).val());
+    });
+
     //Fin ComboBox Tab1
 
     //ComboBox Tab2
@@ -1023,6 +1055,7 @@
 
 
     var clientCode = parentRow.children('td').eq(0).text();
+    validateRuc(parentRow.children('td').eq(2).text());
 
             $.ajax({
                     method: "GET",
@@ -1430,6 +1463,17 @@
     });
     });
     });
+    }
+
+    function validateRuc(ruc) {
+        var valid_ruc = validate_ruc(ruc);
+        if (valid_ruc == 0) {
+            $("#invoiceType option[value='FCC']").hide();
+        }
+        else {
+            $("#invoiceType option[value='FCC']").show();
+        }
+        $("#invoiceType").trigger("chosen:updated");
     }
 
 

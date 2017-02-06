@@ -128,11 +128,11 @@
              action: function(e, dt, node, config) {
                 $("#txtModalTitle").text("Crear");
                 $('#edit_form').attr('action', '/Finantial/Settings/AddExchange');
-                $("#date").datepicker('setDate', new Date());
+                $("#date").datepicker('setDate', new Date());    
+                $("#date").datepicker('maxDate', 0);
 
                 $('#dateOld').val("");
                 $('#currencyBeginOld').val("");
-                $('#currencyBegin').val("");
                 $('#buyValue').val("");
                 $('#sellValue').val("");
 
@@ -233,18 +233,24 @@
         $('#editModal').modal('show');
     }
 
-    $("#btnSaveEdit").submit(function(){
-        swal({
-            title: "Confirmación",
-            text: "¿Está seguro que desea guardar sus cambios?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Sí",
-            closeOnConfirm: false
-        }, function(){
-            $("#edit_form").submit();
-        });
+    
+
+    $("#btnSaveEdit").click(function(){
+        
+        if($("#buyValue").val() != "" && $("#sellValue").val() != "" && $("#date").val() != ""){
+            swal({
+                title: "Confirmación",
+                text: "¿Está seguro que desea guardar sus cambios?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function(){
+                $("#edit_form").submit();
+            });
+        }
+        
     })
 
     function loadTable() {
@@ -305,12 +311,11 @@
         todayBtn: "linked",
         keyboardNavigation: false,
         forceParse: false,
-        calendarWeeks: true,
-        autoclose: true,
-        maxDate: 0
+        autoclose: true
     });
 
     $("#date").datepicker('setDate', new Date());
+    $("#date").datepicker('maxDate', new Date());
 
     $("#currencyBegin").chosen({
         width: "100%",
