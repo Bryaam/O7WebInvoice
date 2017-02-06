@@ -128,7 +128,8 @@
              action: function(e, dt, node, config) {
                 $("#txtModalTitle").text("Crear");
                 $('#edit_form').attr('action', '/Finantial/Settings/AddExchange');
-                $("#date").datepicker('setDate', new Date());
+                $("#date").datepicker('setDate', new Date());    
+                $("#date").datepicker('maxDate', 0);
 
                 $('#dateOld').val("");
                 $('#currencyBeginOld').val("");
@@ -310,12 +311,11 @@
         todayBtn: "linked",
         keyboardNavigation: false,
         forceParse: false,
-        calendarWeeks: true,
-        autoclose: true,
-        maxDate: 0
+        autoclose: true
     });
 
     $("#date").datepicker('setDate', new Date());
+    $("#date").datepicker('maxDate', new Date());
 
     $("#currencyBegin").chosen({
         width: "100%",
