@@ -197,7 +197,7 @@ namespace Angkor.O7Web.Data.Finantial
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
-            return DataAccess.ExecuteFunction<Exchange>("crud_tipo_cambio.view_tipos_cambio", parameters, ExchangeMapper.cla);
+            return DataAccess.ExecuteFunction<Exchange>("crud_tipo_cambio.view_tipos_cambio", parameters, ExchangeMapper.Class);
         }
 
         public virtual List<InvoiceTypeAhead> GetTTNames()
