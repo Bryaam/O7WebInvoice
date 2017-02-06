@@ -102,4 +102,11 @@ function rowValidate(i,tblName,curName, buttonName) {
     });
 }
 
+function iterate_Combo(documentType, objResult) {
+    $.each(objResult, function (index, value) {
+        documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
+    });
+    documentType.trigger("chosen:updated");
+}
+
 
