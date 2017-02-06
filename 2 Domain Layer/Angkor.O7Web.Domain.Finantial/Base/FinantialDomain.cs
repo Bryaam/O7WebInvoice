@@ -130,6 +130,9 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             string documentIdRef, string documentOC,
             string guiRem, string addressId, string serieExtRef, string nroDoceExt);
 
+        public abstract O7Response GeneratePdf(string companyId, string branchId, string documentType, string documentId);
+
+
         public abstract O7Response getExpirationDate(string companyId, string branchId, string payment, string documentDate);
 
         public abstract O7Response GetInvoice(string companyId, string branchId, string documentType, string documentId);

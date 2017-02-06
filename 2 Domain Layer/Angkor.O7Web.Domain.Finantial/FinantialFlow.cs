@@ -352,6 +352,12 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(pdf);
         }
 
+        public override O7Response GeneratePdf(string companyId, string branchId, string documentType, string documentId)
+        {
+            var pdf = FinantialDataService.GeneratePDF(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(pdf);
+        }
+
         public override O7Response UpdateInvoice(string companyId, string branchId,
                                         string documentType, string documentId,
                                        string currency, string documentDate,

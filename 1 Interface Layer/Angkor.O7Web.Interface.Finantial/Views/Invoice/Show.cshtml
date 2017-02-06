@@ -195,7 +195,7 @@
             });
     });
 
-    $('#btnPDF').click(function () {
+    $('#btnImprimir').click(function () {
         swal({
             title: "¿Estás seguro?",
             text: "Recuerda que si imprimes la factura se enviará a Sunat.",
@@ -219,6 +219,13 @@
                     });
             });
     });
+
+     $('#btnPDF').click(function () {
+        
+                var url = "./GeneratePdf?documentType=" +  '@ViewBag.documentType' + "&documentId=" +  '@ViewBag.documentId';
+                window.location.href = url;
+    });
+                
 
     $('#btnEditar').click(function () {
     var url = "./Edit?invoiceSerie=" + '@ViewBag.documentType' + "&invoiceNumber=" + '@ViewBag.documentId';
@@ -522,8 +529,16 @@
                         {
                             <button id="btnAnular" type="button" class="btn btn btn-primary"><i class="fa fa-close" aria-hidden="true"></i> Anular</button>
                         }
-                        <button id="btnPDF" type="button" class="btn btn btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Imprimir</button>
+                        @if (ViewBag.estado == "0" || ViewBag.estado == "2")
+                        {
+                            <button id="btnPDF" type="button" class="btn btn btn-primary"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>Ver PDF</button>
+                        }
                         @if (ViewBag.estado == "1")
+                        {
+                            <button id="btnImprimir" type="button" class="btn btn btn-primary"><i class="fa fa-print" aria-hidden="true"></i> Imprimir</button>
+
+                        }
+                          @if (ViewBag.estado == "1")
                         {
                             <button id="btnEditar" type="button" class="btn btn btn-primary"><i class="fa fa-pencil" aria-hidden="true"></i> Editar</button>
                         }

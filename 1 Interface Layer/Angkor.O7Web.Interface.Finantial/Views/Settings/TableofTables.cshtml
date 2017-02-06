@@ -143,6 +143,49 @@
             }
             return listIndex;
         }
+        function enable_input(btnId) {
+            //var btn = $("#" + btnId);
+            console.log("#" + btnId);
+            console.log("--------------");
+            //btn.closest(".key-input").prop("disabled", false);
+            //btn.closest(".content-input").prop("disabled", false);
+        }
+
+        function rpad(cad,len,caracter) {
+            var numSpaces = len - cad.length;
+            var cadNew = cad;
+            for (i = 0; i < numSpaces; i++) {
+                cadNew.append(caracter);
+            }
+            
+            return cadNew;
+        }
+        String.prototype.replaceAt = function (index, character) {
+            return this.substr(0, index) + character + this.substr(index + character.length);
+        }
+        function ponerCadena(cad, cadInsert, ini,fin) {
+            
+            var cadNew = cad;
+            
+            for (i = 0; i < cadInsert.length ; i++) {                    
+                cadNew = cadNew.replaceAt(ini+i, cadInsert[i]);
+            }  
+            
+            return cadNew;
+        }
+        function getCursor(format_tuples_dato,allFormatDato,offset) {
+            var myStringArray = format_tuples_dato;
+            var arrayLength = format_tuples_dato.length;
+            var allNew;
+            for (var i = 0; i < arrayLength; i++) {
+                var value = myStringArray[i];
+                if (i == 0)
+                    allNew = allFormatDato.replace(/([a-zA-Z0-9])/g, " ");                
+                allNew = ponerCadena(allNew, $('#edit_input_' + (i + offset)).val(), value[0], value[1]);
+                
+            }
+            return allNew;
+        }
     </script>
 }
 
@@ -153,8 +196,12 @@
     var table_contents = [];
     var format_tuples;
     var tkLen;
+    var allFormatDato;
+    var format_tuples_dato;
+    var allFormatKey;
+    var format_tuples_Key;
     $.mask.definitions['a'] = "[A-Za-z0-9 ]";
-
+    
     function loadHeaders(codTable) {
 
         $.ajax({
@@ -174,7 +221,7 @@
                         "bFilter": false,
                         "bInfo": false,
                         "bAutoWidth": false,
-                        "paging": false,
+                        "paging": false,                         
                         "columns": [{
                                 data: "edit",
                                 width: "1%",
@@ -202,10 +249,12 @@
                     var all_headers = jsonResult[0].TK+" "+jsonResult[0].TF;
               
                     var all_format = jsonResult[0].CK+" ".repeat(spaces_to_insert)+jsonResult[0].CF;
-        
+                    allFormatDato =jsonResult[0].CF;
+                    allFormatKey =jsonResult[0].CK;
                     var all_format_array = all_format.split(/\s+/);
                     format_tuples = getIndexes(all_format);
-
+                    format_tuples_dato=getIndexes(allFormatDato);
+                    format_tuples_Key=getIndexes(jsonResult[0].CK);
 
                     $("#edit-line-1").empty();
                     $("#edit-line-2").empty();
@@ -230,9 +279,9 @@
                             $("#edit-line-2").append(element);
                         }
                         console.log('++++++'+all_format_array[index]);                     
-                        var reg = all_format_array[index].replace(/([a-zA-Z0-9])/g, "a");
+                        var reg = all_format_array[index].replace(/([a-zA-Z0-9])/g, "*");
                         console.log(reg+'------');   
-                        $('#edit_input_' + index).mask(reg);
+                        $('#edit_input_' + index).attr('maxlength',reg.length);
                     });
                 }
             })
@@ -244,18 +293,84 @@
 
     }
 
-    function btn_edit_click() {
+    $('#botonAgregar').click(function() {
+         $("#txtModalTitle").text("Crear");
+         $.each(format_tuples, function(index, value) {            
+            $('#edit_input_' + index).val('');
+        });
+        $('#editLineModal').modal('show');
+    });
+
+    function getCodeByName(source, name) {
+        var code = "";
+        $.each(source, function(key, value) {
+            if (name === value.name) {
+                code = value.Value;
+                return false;
+            }
+        });
+        return code;
+    }
+    function getCodTable(){
+        var tt = $('#primary_table_id').val();
+        var typett = $('#primary_table_id');
+        var ttSource = typett.data('typeahead').source;
+        return  getCodeByName(ttSource, tt);
+    }
+    function DeleteTT(data){
+         $.ajax({
+                method: "POST",
+                url: "/Finantial/Settings/DeleteTTData",
+                data: data
+            })
+            .done(function(result) {
+
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
+    }
+
+    function btn_delete_click() {
+        
         var btn_id = $(this).attr('id');
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
-        spaces_to_insert_key = tkLen- table_contents[id].key.trim().length+1;
-        var selected_content = table_contents[id].key.trim()+" ".repeat(spaces_to_insert_key)+table_contents[id].content;
-        
-        console.log(selected_content);
+        var key=table_contents[id].key.trim();
+        var ttValue = getCodTable();
+        var data = {
+            codtabl: ttValue,
+            key: key
+        }        
+        swal({
+                title: "Confirmación",
+                text: "¿Desea eliminar el registro?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                DeleteTT(data);
+                swal({title:"", timer:1,type: "success"});
+                drawTableGrid(ttValue);
+            });  
+    }
 
+    function btn_edit_click() {
+        $("#txtModalTitle").text("Editar");
+        var btn_id = $(this).attr('id');
+        var btn_id_split = btn_id.split('_');
+        var id = btn_id_split[1];
+        spaces_to_insert_key = tkLen - table_contents[id].key.trim().length+1;
+        var selected_content = table_contents[id].key.trim()+" ".repeat(spaces_to_insert_key)+table_contents[id].content;
+        $("#txtKeyOld").val(table_contents[id].key.trim());    
         $.each(format_tuples, function(index, value) {
             var input_value = selected_content.substring(value[0], value[1] + 1);
-            $('#edit_input_' + index).val(input_value);
+            
+            $('#edit_input_' + index).val(input_value.trim());
         });
 
         $('#editLineModal').modal('show');
@@ -292,6 +407,7 @@
 
                         tableOfTables.rows.add(dataSet).draw();
                         $('#btnedit_' + index).bind('click', btn_edit_click);
+                        $('#btndelete_' + index).bind('click', btn_delete_click);
                     });
                 }
             })
@@ -350,23 +466,24 @@
 
     load_table_names();
     load_table_names_second();
-    load_table(1, null);
+    //load_table(1, null);
+
+    function drawTableGrid(primary_id){
+         
+        if (tableOfTables!=null){
+            tableOfTables.clear().draw();
+            $('#tableOfTables').dataTable().fnDestroy();
+        }
+        load_table(primary_id, null);
+        $('#botonAgregar').prop("disabled", false);
+    }
 
     $('#primary_table_id').change(function() {
         var primary_id = $(this).typeahead("getActive").Value;
-        if (primary_id == "999") {
-            $("#secondgroup").removeClass("hidden");
-            return;
-        } else {
-            $("#secondgroup").addClass("hidden");
-        }
-
-        tableOfTables.clear().draw();
-        $('#tableOfTables').dataTable().fnDestroy();
-
-        load_table(primary_id, null);
+        drawTableGrid(primary_id);
 
     });
+
 
     $('#second_table_id').change(function() {
         var primary_id = $('#primary_table_id').typeahead("getActive").Value;
@@ -378,9 +495,89 @@
         load_table(primary_id, second_id);
 
     });
+    function InsertTT(data){
+         $.ajax({
+                method: "POST",
+                url: "/Finantial/Settings/InsertTTData",
+                data: data
+            })
+            .done(function(result) {
 
-    $('#btnSaveEdit').click(function(){
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
+    }
+    function UpdateTT(data){
+         $.ajax({
+                method: "POST",
+                url: "/Finantial/Settings/UpdateTTData",
+                data: data
+            })
+            .done(function(result) {
 
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
+    }
+
+    $('#btnSaveEdit').click(function(){     
+        var allKey=getCursor(format_tuples_Key,allFormatKey,0);   
+        var offset=format_tuples_Key.length;
+        var allNew=getCursor(format_tuples_dato,allFormatDato,offset); 
+        var ttValue = getCodTable();
+        if  (allKey==''){
+            toastr.error("La llave del registro no puede ser nulo", "Campo obligatorio", {
+                    positionClass: "toast-top-right",
+                    preventDuplicates: true});
+            return ;
+        }
+        var keyold= $("#txtKeyOld").val().trim();
+        var data = {
+            codtabl: ttValue,
+            key: $("#txtKeyOld").val().trim(),
+            keynew: allKey ,
+            dato: allNew
+        }
+        if (keyold ==''){
+            
+            data.key= allKey;
+            swal({
+                    title: "Confirmación",
+                    text: "¿Dese crear el registro?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sí",
+                    closeOnConfirm: false
+                }, function() {
+                    InsertTT(data); 
+                    $('#editLineModal').modal('hide');
+                    swal({title:"", timer:1,type: "success"});
+                    drawTableGrid(ttValue);
+                    
+                });  
+        }else{        
+             swal({
+                    title: "Confirmación",
+                    text: "¿Guardar Cambios?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sí",
+                    closeOnConfirm: false
+                }, function() {
+                    UpdateTT(data);
+                    $('#editLineModal').modal('hide');
+                    swal({title:"", timer:1,type: "success"});
+                    drawTableGrid(ttValue);            
+                });     
+        }   
     });
 
 }
@@ -401,6 +598,7 @@
                         <div class="col-sm-10"><input id="second_table_id" style="width:60%;" type="text" class="form-control"></div>
                     </div>
                 </div>
+                <button id="botonAgregar" type="button" class="btn btn btn-primary pull-left" disabled><i class="fa fa-plus" aria-hidden="true"></i></button>
                 <div style="width:100%; height:500px; overflow:scroll;">
                     <table class="table table-striped table-bordered table-hover" id="tableOfTables" style="font-family: monospace !important;">
                         <thead></thead>
@@ -416,8 +614,9 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <input id="txtKeyOld" type="hidden" />
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Editar</h4>
+                <h4 id="txtModalTitle" class="modal-title">Editar</h4>
             </div>
             <div style="height:500px; overflow-y:scroll; overflow-x:hidden;">
                 <div class="modal-body">
