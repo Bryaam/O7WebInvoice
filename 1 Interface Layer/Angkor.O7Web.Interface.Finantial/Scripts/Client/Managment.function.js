@@ -122,9 +122,7 @@ function allTypeDocument(urlName, clientTypeName, idName) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
 }
-<<<<<<< HEAD
 
-=======
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
     row.Address = "<input class='form-control' style='width:100%' name='txtInvoicerAddress_" + reciber_count + "'>";
@@ -146,7 +144,7 @@ function onClickBtnAddReciber() {
     rowCollection.push(row);
     tblInvoicer.rows.add(rowCollection).draw();
 
-    var departmentField = [],provinceField = [],districtField = [],countryField = [], zoneField = [], postaleField = [];
+    var departmentField = {},provinceField = [],districtField = [],countryField = [], zoneField = [], postaleField = [];
     departmentField.auto = "#txtInvoicerDepartment_" + reciber_count; departmentField.hidden = "#txtInvoicerDepartmentId_" + reciber_count;
     provinceField.auto = "#txtInvoicerProvince_" + reciber_count; provinceField.hidden = "#txtInvoicerProvinceId_" + reciber_count;
     districtField.auto = "#txtInvoicerDistrict_" + reciber_count; districtField.hidden = "#txtInvoicerDistrictId_" + reciber_count;
@@ -164,4 +162,3 @@ function onClickBtnAddReciber() {
         disableFadeOut: false
     });
 }
->>>>>>> aaadb5ea76fd20d19cdac7611029cddadd06895a
