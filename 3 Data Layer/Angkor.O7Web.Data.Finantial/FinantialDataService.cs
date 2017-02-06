@@ -193,6 +193,13 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<TTHeads>("table_tables.get_tablehead", parameters,TTHeadMapper.Class) ;
         }
 
+        public virtual List<Exchange> GetExchanges(string companyId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_company", companyId));
+            return DataAccess.ExecuteFunction<Exchange>("crud_tipo_cambio.view_tipos_cambio", parameters, ExchangeMapper.Class);
+        }
+
         public virtual List<InvoiceTypeAhead> GetTTNames()
         {
             var parameters = O7DbParameterCollection.Make;
