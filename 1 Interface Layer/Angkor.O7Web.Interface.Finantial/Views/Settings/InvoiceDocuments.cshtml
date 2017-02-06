@@ -7,22 +7,26 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
-    @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")    
+    @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")   
+    @Html.StyleLink("css/plugins/sweetalert/sweetalert.css")
+ 
 }
 
 @section scripts_link {
     <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+    @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
     <script>
-        function delete_action(id, start, end, current, type, digital) {
+        function delete_action(id, start, end, current, type, digital, defaultV) {
             $("#txtModalTitle").text("Eliminar serie");
             $("#btnConfirm").show();
             $("#btnConfirm").attr("action", "3");
             var txtSerie = $("#txtSerie");
             var txtStart = $("#txtStart");
             var txtFinal = $("#txtFinal");
+            var checbokD = $("#checkbox2");
             var txtCurrent = $("#txtCurrent");
             var slcDocumentType = $("#chkDocumentType");
             var slcInvoiceType = $("#chkInvoiceType");
@@ -40,15 +44,21 @@
             txtFinal.attr('readonly', true);
             txtCurrent.val(current);
             txtCurrent.attr('readonly', true);
+            if (defaultV == "true")
+                $("#checkbox2").prop('checked', true);
+            else
+                $("#checkbox2").prop('checked', false);
+            checkboxD.attr('readonly', true);
         }
 
-        function detail(id, start, end, current, type, digital, prefix) {
+        function detail(id, start, end, current, type, digital, prefix,defaultV) {
             $("#txtModalTitle").text("Detalle serie");
             $("#btnConfirm").hide();
             var txtSerie = $("#txtSerie");
             var txtStart = $("#txtStart");
             var txtFinal = $("#txtFinal");
             var txtCurrent = $("#txtCurrent");
+            var checbokD = $("#checkbox2");
             var slcDocumentType = $("#chkDocumentType");
             var slcInvoiceType = $("#chkInvoiceType");
             var txtPrefix = $("#txtPrefix");
@@ -68,9 +78,14 @@
             txtCurrent.attr('readonly', true);
             txtPrefix.val(prefix);
             txtPrefix.attr('readonly', true);
+            if (defaultV == "true")
+                $("#checkbox2").prop('checked', true);
+            else
+                $("#checkbox2").prop('checked', false);
+            checkboxD.attr('readonly', true);
         }
         
-        function update(id, start, end, current, type, digital, prefix) {
+        function update(id, start, end, current, type, digital, prefix,defaultV) {
             $("#txtModalTitle").text("Actualizar serie");
             $("#btnConfirm").show();
             $("#btnConfirm").attr("action", "2");
@@ -81,6 +96,7 @@
             var slcDocumentType = $("#chkDocumentType");
             var slcInvoiceType = $("#chkInvoiceType");
             var txtPrefix = $("#txtPrefix");
+            var checkboxD = $("#checkbox2");
             slcDocumentType.attr("disabled", false);
             slcDocumentType.val(digital);
             slcDocumentType.trigger("chosen:updated");
@@ -103,6 +119,14 @@
             } else {
                 $("#txtSerieOld").val(txtSerie.val());
             }
+           
+
+            if (defaultV == "true")
+                $("#checkbox2").prop('checked', true);
+            else
+                $("#checkbox2").prop('checked', false);
+
+            checkboxD.attr('readonly', false);
             
             if(prefix == '--')
                 txtPrefix.attr('readonly', true);
@@ -169,7 +193,8 @@
                 {  orderable: false,
                    className: "text-center",
                     render: function(data, type, full, meta){
-                        var invoiceId = '"'+full.Id+'",'+'"'+full.Max+'",'+'"'+full.Min+'",'+'"'+full.Current+'",'+'"'+full.DocumentType+'",'+'"'+full.Digital+'",'+'"'+full.Prefix+'"';
+                        console.log(full);
+                        var invoiceId = '"'+full.Id+'",'+'"'+full.Max+'",'+'"'+full.Min+'",'+'"'+full.Current+'",'+'"'+full.DocumentType+'",'+'"'+full.Digital+'",'+'"'+full.Prefix+'",'+'"'+full.Default+'"';
                         var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
                         var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
                         var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
@@ -218,6 +243,7 @@
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
+
     
     $("#btnConfirm").on("click", function () {
         var value = $(this).attr("action");
@@ -234,38 +260,87 @@
             }
                 
             var _max = $("#txtStart").val();                   
-
-            $.ajax({method: "POST", url: "/Finantial/Settings/AddSeries", data: { documentType: $("#chkInvoiceType").val(), id: _id, current: $("#txtCurrent").val(), 
-                    max: $("#txtFinal").val(), min: _max, default: "true", prefix:_prefix} })
-            .done(function (result){
-                console.log(result);
-                toastr.success(result, "Mensaje", {positionClass: "toast-top-full-width" });
-            }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width" });
-            });                
+            var serieF = $("#txtSerie").val();
+            var defaultSerie= $("#checkbox2").is(":checked") == true ? "true" : "false";
+            swal({
+                title: "Desea Crear la serie",
+                text: "¿Crear serie?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                $.ajax({method: "POST", url: "/Finantial/Settings/AddSeries", data: { documentType: $("#chkInvoiceType").val(), id:_id, current: $("#txtCurrent").val(),
+                    max: $("#txtFinal").val(), min: _max, default: defaultSerie, prefix:_prefix} })
+                .done(function (result){
+                    console.log(result);
+                    toastr.success(result, "Mensaje", {positionClass: "toast-top-full-width" });
+                }).fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width" });
+                }); 
+              
+            swal({
+                title: "Generado",
+                text: "Serie creado exitosamente",
+                type: "success",
+                confirmButtonText: "Continuar"
+                }, function () {
+                    location.reload();  
+                    
+                });
+            });
+                       
         }
         else{
             if(value == "2") {
                 var prefixVal = $("#chkDocumentType").val();
                 var serie = $("#txtSerie").val();
                 var _prefix = "";
+                var _id = "";
                 if(prefixVal == "true") {
                     _prefix = serie.substring(0, 1);
+                    _id = serie.substring(1, 4);
+                }else{
+                    _id = serie.substring(0, 3);
                 }
+                var prefixVal = $("#chkDocumentType").val();
+            
 
                 var _id = serie.substring(1, 4);
                 var _max = $("#txtStart").val();
+                var defaultSerie= $("#checkbox2").is(":checked") == true ? "true" : "false";
 
-            $.ajax({method: "POST", url: "/Finantial/Settings/UpdateSeries", data: { documentType: $("#txtInvoiceTypeOld").val(), id: $("#txtSerieOld").val(), 
-                current:$("#txtCurrent").val(), max: $("#txtFinal").val(), min: _max, default: $("#checkbox2").val(), prefix:_prefix, idUpdate:_id, 
-                documentTypeUpdate:$("#chkInvoiceType").val()} })
-            .done(function (result) {
-                console.log(result);
-                toastr.success(result, "Mensaje", {
-                    positionClass: "toast-top-full-width" });
-                }).fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width" });
+            swal({
+                title: "Confirmación",
+                text: "¿Actualizar Serie?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                $.ajax({method: "POST", url: "/Finantial/Settings/UpdateSeries", data: { documentType: $("#txtInvoiceTypeOld").val(), id: $("#txtSerieOld").val(),
+                    current:$("#txtCurrent").val(), max: $("#txtFinal").val(), min: _max, default: defaultSerie, prefix:_prefix, idUpdate:_id,
+                    documentTypeUpdate:$("#chkInvoiceType").val()} })
+                .done(function (result) {
+                    ;
+                   
+                    }).fail(function (result) {
+                        toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width" });
+                    });
+                
+                swal({
+                    title: "Actualizado",
+                    text: "Documento creado exitosamente",
+                    type: "success",
+                    confirmButtonText: "Continuar"
+                    }, function () {
+                         location.reload();
+                      
+                    });
                 });
+            
             }
             else
                 if (value == "3") alert("eliminar");
@@ -349,7 +424,7 @@
                     <div class="form-group">
                         <div class="col-md-12">
                             <div class="checkbox checkbox-primary">
-                                <input id="checkbox2" type="checkbox" checked="">
+                                <input id="checkbox2" type="checkbox" checked="" value="true">
                                 <label for="checkbox2">
                                     Por defecto
                                 </label>
