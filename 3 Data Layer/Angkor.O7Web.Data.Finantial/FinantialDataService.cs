@@ -1,4 +1,6 @@
 ﻿// O7ERP Web created by felix_dev
+
+using System.CodeDom;
 using System.Collections.Generic;
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Data.Tool;
@@ -7,6 +9,7 @@ using Angkor.O7Web.Common.Finantial.Entity;
 using Angkor.O7Web.Data.Finantial.DataMapper;
 using System.IO;
 using System.Reflection.Emit;
+using System.Security.Principal;
 
 namespace Angkor.O7Web.Data.Finantial
 {
@@ -765,6 +768,28 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_tipo_doc", documentType));
             parameters.Add(O7Parameter.Make("p_nro_doc", documentId));
             return DataAccess.ExecuteFunction<InvoiceDetail>("finantial_invoice.search_fact_detail", parameters, InvoiceDetailMapper.Class);
+        }
+    
+        public virtual bool AddCco(string companyId, string branchId,
+                            string code, string codeDim,string description,string dateB,
+                            string dateE,string accountC,string accountT,string codeCat,
+                            string flgDet,string flgPresup,string flgIng)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_codigo", code));
+            parameters.Add(O7Parameter.Make("p_fecini", dateB));
+            parameters.Add(O7Parameter.Make("p_descripcion", description));
+            parameters.Add(O7Parameter.Make("p_cuenta", accountC));
+            parameters.Add(O7Parameter.Make("p_fecfin", dateE));
+            parameters.Add(O7Parameter.Make("p_flgdet", flgDet));
+            parameters.Add(O7Parameter.Make("p_flgpto", flgPresup));
+            parameters.Add(O7Parameter.Make("p_dimension", codeDim));
+            parameters.Add(O7Parameter.Make("p_cuentatrans", accountT));
+            parameters.Add(O7Parameter.Make("p_flging", flgIng));
+            parameters.Add(O7Parameter.Make("p_codcat", codeCat));
+            return DataAccess.ExecuteFunction<int>("cost_centers.insert_cost_center", parameters)==1;
         }
 
         public virtual List<InvoiceSeries> Series(string companyId, string branchId, string docType)
