@@ -14,6 +14,14 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
+        [HttpPost]
+        public JsonResult ChangeState(string clientId)
+        {
+            var domain = ProxyDomain.Instance.ClientDomain(User.Identity.Name, User.Password);
+            var response = domain.ClientChangeState(User.Company, User.Branch, clientId);
+            return new O7JsonResult(response);
+        }
+
         public JsonResult AllRoute()
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);            

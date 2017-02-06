@@ -22,5 +22,14 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_filter", filter));
             return DataAccess.Execute<ClientDbEntity>("pkg_client_managment.get_clients", parameters);
         }
+
+        public virtual bool ClientChangeState(string companyId, string branchId, string clientId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_company", companyId));
+            parameters.Add(O7Parameter.Make("p_branch", branchId));
+            parameters.Add(O7Parameter.Make("p_client_id", clientId));
+            return DataAccess.ExecuteFunction<int>("pkg_client_managment.change_state_client", parameters) == 1;
+        }
     }
 }

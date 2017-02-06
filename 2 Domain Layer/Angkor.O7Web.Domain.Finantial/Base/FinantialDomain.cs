@@ -17,6 +17,7 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             FinantialDataService = O7DataInstanceMaker.MakeInstance<FinantialDataService>(new object[] {login, password});
         }
 
+        public abstract O7Response GetCco(string companyId, string branchId, string dateB, string code);
         public abstract O7Response GetExchanges(string companyId,string dateIni,string dateFin);
         public abstract O7Response AddCco(string companyId, string branchId,
             string code, string codeDim, string description, string dateB,
@@ -47,6 +48,10 @@ namespace Angkor.O7Web.Domain.Finantial.Base
         public abstract O7Response InsertTTData(string codtabl, string keyocur, string datocur);
         public abstract O7Response UpdateTTData(string codtabl, string keyocur, string keyocurNew, string datocur);
 
+        public abstract O7Response UpdateCco(string companyId, string branchId,
+            string code, string codeOld, string dateBOld, string codeDim, string description, string dateB,
+            string dateE, string accountC, string accountT, string codeCat,
+            string flgDet, string flgPresup, string flgIng);
         public abstract O7Response DeleteTTData(string codtabl, string keyocur);
         public abstract O7Response AllPostales();
 
