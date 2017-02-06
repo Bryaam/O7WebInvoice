@@ -126,6 +126,7 @@
                 var countryAutocomplete = "#txtReciberCountry_"+reciber_count;
                 var zoneAutocomplete = "#txtReciberZone_"+reciber_count;
                 var postaleAutocomplete = "#txtReciberPostal_"+reciber_count;
+<<<<<<< HEAD
                 /*
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
                     .done(function (resultPostale) {
@@ -143,6 +144,12 @@
                 getAutoCompleteDataNested(countryAutocomplete,departmentAutoComplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete);
 
 
+=======
+
+
+                getAutocompleteDataSingle(postaleAutocomplete,"/Finantial/Client/AllPostales");
+            
+>>>>>>> 8c8d91e0b490059e0a4e65ef828a7057c984988e
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
                         resultCountry = resultCountry.replace(/Description/g, 'name');

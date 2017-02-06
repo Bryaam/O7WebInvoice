@@ -113,6 +113,10 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Client\Index.data.js" />
     <Content Include="Scripts\Client\Index.function.js" />
+<<<<<<< HEAD
+=======
+    <Content Include="Scripts\Client\Managment.data.js" />
+>>>>>>> 8c8d91e0b490059e0a4e65ef828a7057c984988e
     <Content Include="Scripts\Client\Managment.function.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
