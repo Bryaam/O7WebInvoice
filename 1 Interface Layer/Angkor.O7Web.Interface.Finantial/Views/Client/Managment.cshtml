@@ -152,7 +152,11 @@
                         $(postaleAutocomplete).typeahead({ source: objResultPostale});            
                     }).fail(function (result) {
                         toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                });  
+                });
+    
+                //Now:
+                getAutocompleteDataSingle(postaleAutocomplete,"/Finantial/Client/AllPostales");
+                
             
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
@@ -248,7 +252,7 @@
                         });
                     }).fail(function (result) {
                             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                    });
+                });
                 
                 $("#tblReciber input[name*="+curReciberRow+"][class]:lt(7)").each(function(){
                     $(this).change(function(){
