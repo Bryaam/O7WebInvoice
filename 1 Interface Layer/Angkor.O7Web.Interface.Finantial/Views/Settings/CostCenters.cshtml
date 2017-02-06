@@ -350,24 +350,36 @@
             type: "success",
             confirmButtonText: "Continuar"
             }, function () {
-                submit_cco();
+                submit_cco("#btnConfirm");
                 location.reload();
             });
         });
     });
 
-    function submit_cco(){
-        var ctaContableVal = $("#txtCtaContable").typeahead("getActive");
-        var ctaContableTransfVal = $("#txtCtaContableTransf").typeahead("getActive");
-        var categoryVal = $("#txtCategoria").typeahead("getActive");
+    $("#txtCtaContable").change(function(){
+        get_typeahead_content("#txtCtaContable","#txtCtaContableVal");
+    });
 
-        $("#txtCtaContableVal").val(ctaContableVal.Value);
-        $("#txtCtaContableTransfVal").val(ctaContableTransfVal.Value);
-        $("#txtCategoriaVal").val(categoryVal.Value);
+    $("#txtCtaContableTransf").change(function(){
+        get_typeahead_content("#txtCtaContableTransf","#txtCtaContableTransfVal");
+    });
 
-        var value = $(this).attr("action");
+    $("#txtCategoria").change(function(){
+        get_typeahead_content("#txtCategoria","#txtCategoriaVal");
+    });
+
+
+    function get_typeahead_content(typeahead, container){
+        var value = $(typeahead).typeahead("getActive");
+        $(container).val(value.Value);
+    }
+
+    function submit_cco(id){
+        var value = $(id).attr("action");
+        console.log("----------------------");
+        console.log(value);
         if (value == "1") {
-
+            console.log("INSERT");
             $.ajax({
                     method: "POST",
                     url: "/Finantial/Settings/AddCco",
@@ -394,6 +406,13 @@
                 });
         } else {
             if (value == "2") {
+                console.log("UPDATE");
+                if($.trim($("#txtCtaContable").val()) == "")
+                    $("#txtCtaContableVal").val("");
+                if($.trim($("#txtCtaContableTransf").val()) == "")
+                    $("#txtCtaContableTransfVal").val("");
+                if($.trim($("#txtCategoria").val()) == "")
+                    $("#txtCategoriaVal").val("");
                 $.ajax({
                         method: "POST",
                         url: "/Finantial/Settings/UpdateCco",
