@@ -108,14 +108,101 @@
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
 
     @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
+    @Html.JavaScriptLink("js/plugins/jquery-maskedinput/jquery.maskedinput.js")
+    
+    <script>
+        function enable_input(btnId) {
+            //var btn = $("#" + btnId);
+            console.log("#" + btnId);
+            console.log("--------------");
+            //btn.closest(".key-input").prop("disabled", false);
+            //btn.closest(".content-input").prop("disabled", false);
+        }
 
+        function getIndexes(cad) {
+            var l = cad.length;
+            var cAnt = ' ';
+            var ini = 0;
+            var listIndex = [];
+            var tupla = [];
+
+            for (i = 0; i < l; i++) {
+                if (cAnt == ' ' && cad.substr(i, 1) != ' ') {
+                    ini = i;
+                }
+
+                if (cAnt != ' ' && cad.substr(i, 1) == ' ') {
+                    tupla = [ini, i - 1];
+                    listIndex.push(tupla);
+                }
+                cAnt = cad.substr(i, 1);
+            }
+            if (cAnt != ' ') {
+                tupla = [ini, l - 1];
+                listIndex.push(tupla);
+            }
+            return listIndex;
+        }
+        function enable_input(btnId) {
+            //var btn = $("#" + btnId);
+            console.log("#" + btnId);
+            console.log("--------------");
+            //btn.closest(".key-input").prop("disabled", false);
+            //btn.closest(".content-input").prop("disabled", false);
+        }
+
+        function rpad(cad,len,caracter) {
+            var numSpaces = len - cad.length;
+            var cadNew = cad;
+            for (i = 0; i < numSpaces; i++) {
+                cadNew.append(caracter);
+            }
+            
+            return cadNew;
+        }
+        String.prototype.replaceAt = function (index, character) {
+            return this.substr(0, index) + character + this.substr(index + character.length);
+        }
+        function ponerCadena(cad, cadInsert, ini,fin) {
+            
+            var cadNew = cad;
+            
+            for (i = 0; i < cadInsert.length ; i++) {                    
+                cadNew = cadNew.replaceAt(ini+i, cadInsert[i]);
+            }  
+            
+            return cadNew;
+        }
+        function getCursor(format_tuples_dato,allFormatDato,offset) {
+            var myStringArray = format_tuples_dato;
+            var arrayLength = format_tuples_dato.length;
+            var allNew;
+            for (var i = 0; i < arrayLength; i++) {
+                var value = myStringArray[i];
+                if (i == 0)
+                    allNew = allFormatDato.replace(/([a-zA-Z0-9])/g, " ");                
+                allNew = ponerCadena(allNew, $('#edit_input_' + (i + offset)).val(), value[0], value[1]);
+                
+            }
+            return allNew;
+        }
+    </script>
 }
 
 @section section_script {
 
     var tableOfTables;
+    var table_contents = [];
+    var format_tuples;
+    var tkLen;
+    var allFormatDato;
+    var format_tuples_dato;
+    var allFormatKey;
+    var format_tuples_Key;
 
-    function loadHeaders(codTable){
+    $.mask.definitions['a'] = "[A-Za-z0-9 ]";
+
+    function loadHeaders(codTable) {
 
         $.ajax({
             method: "GET",
@@ -128,60 +215,215 @@
         .done(function(result) {
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
-                tableOfTables = $('#tableOfTables').DataTable({
+                tableOfTables = $(' #tableOfTables').DataTable({
                     "bPaginate": false,
                     "bLengthChange": false,
                     "bFilter": false,
                     "bInfo": false,
                     "bAutoWidth": false,
                     "paging": false,
-                    "columns": [
-                        {
-                            data : "key",
-                            width: "1%",
-                            title: "<div style='White-space:pre; padding-left:1%; font-family: monospace !important;'>"+jsonResult[0].TK+"<br />"+jsonResult[0].CK+"</div>"
-                        },
-                        {
-                            data : "content",
-                            title: "<div style='White-space:pre; padding-left:1%; font-size:14px;'>"+jsonResult[0].TF+"<br />"+jsonResult[0].CF+"</div>"
-                        }
+                    "columns": [{
+                        data: "edit",
+                        width: "1%",
+                        title: ""
+                    },
+                    {
+                        data: "delete",
+                        width: "1%",
+                        title: ""
+                    },
+                    {
+                        data: "key",
+                        width: "1%",
+                        title: "<div>" + jsonResult[0].TK + "<br />" + jsonResult[0].CK + "</div>"
+                    },
+                    {
+                        data: "content",
+                        title: "<div style='White-space:pre;'>" + jsonResult[0].TF + "<br />" + jsonResult[0].CF + "</div>"
+                    }
                     ]
+                });
+                
+                var spaces = " ";
+                var dif = jsonResult[0].TK.length - jsonResult[0].CK.length;
+                if (dif > 0) {
+                    spaces = spaces.repeat(dif+1);
+                }
+
+                tkLen = jsonResult[0].TK.length;
+                var all_headers = jsonResult[0].TK+" "+jsonResult[0].TF;
+
+                var all_format = jsonResult[0].CK+spaces+jsonResult[0].CF;
+                allFormatDato = jsonResult[0].CF;
+                allFormatKey = jsonResult[0].CK;
+
+                var all_format_array = all_format.split(/\s+/);
+                format_tuples = getIndexes(all_format);
+                format_tuples_dato=getIndexes(allFormatDato);
+                format_tuples_Key=getIndexes(jsonResult[0].CK);
+
+                $("#edit-line-1").empty();
+                $("#edit-line-2").empty();
+
+                var cant_tuples = format_tuples.length;
+                var next_header_position;
+
+                $.each(format_tuples, function(index, value) {
+
+                    if (index == cant_tuples-1){
+                        next_header_position = all_headers.length;
+                    } else {
+                        next_header_position = format_tuples[index+1][0]-1;
+                    }
+
+                    //MIRAR LA TT867
+                    var header = all_headers.substring(value[0],next_header_position);
+                    var element = "<div class='form-group'><label class='control-label' for='" + header.trim() + "'>" + header.trim() + ":</label><input class='form-control' id='edit_input_" + index + "'></div>"
+
+                    if (index % 2 == 0) {
+                        $("#edit-line-1").append(element);
+                    } else {
+                        $("#edit-line-2").append(element);
+                    }
+
+                    var reg = all_format_array[index].replace(/([a-zA-Z0-9])/g, "*");
+                    $('#edit_input_' + index).attr('maxlength',reg.length);
                 });
             }
         })
         .fail(function(result) {
             toastr.error(result.statusText, "Mensaje", {
-            positionClass: "toast-top-full-width"
-        });
+                positionClass: "toast-top-full-width"
+            });
         });
 
     }
 
-    function loadData(primaryCode, secondCode){
+    $('#botonAgregar').click(function() {
+        $("#txtModalTitle").text("Crear");
+        $.each(format_tuples, function(index, value) {
+            $('#edit_input_' + index).val('');
+        });
+        $('#editLineModal').modal('show');
+    });
+
+    function getCodeByName(source, name) {
+        var code = "";
+        $.each(source, function(key, value) {
+            if (name === value.name) {
+                code = value.Value;
+                return false;
+            }
+        });
+        return code;
+    }
+
+    function getCodTable(){
+        var tt = $('#primary_table_id').val();
+        var typett = $('#primary_table_id');
+        var ttSource = typett.data('typeahead').source;
+        return  getCodeByName(ttSource, tt);
+    }
+
+    function DeleteTT(data){
+        $.ajax({
+            method: "POST",
+            url: "/Finantial/Settings/DeleteTTData",
+            data: data
+        })
+        .done(function(result) {
+
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+    }
+
+    function btn_delete_click() {
+
+        var btn_id = $(this).attr('id');
+        var btn_id_split = btn_id.split('_');
+        var id = btn_id_split[1];
+        var key=table_contents[id].key.trim();
+        var ttValue = getCodTable();
+        var data = {
+            codtabl: ttValue,
+            key: key
+        }
+
+        swal({
+            title: "Confirmación",
+            text: "¿Desea eliminar el registro?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            closeOnConfirm: false
+        }, function() {
+            DeleteTT(data);
+            swal({title:"", timer:1,type: "success"});
+            drawTableGrid(ttValue);
+        });
+    }
+
+    function btn_edit_click() {
+        $("#txtModalTitle").text("Editar");
+        var btn_id = $(this).attr('id');
+        var btn_id_split = btn_id.split('_');
+        var id = btn_id_split[1];
+
+        var spaces = " ";
+        var dif = tkLen - table_contents[id].key.trim().length;
+        if (dif > 0) {
+            spaces = spaces.repeat(dif+1);
+        }
+
+        var selected_content = table_contents[id].key.trim()+spaces+table_contents[id].content;
+        $("#txtKeyOld").val(table_contents[id].key.trim());
+
+        $.each(format_tuples, function(index, value) {
+            var input_value = selected_content.substring(value[0], value[1] + 1);
+            $('#edit_input_' + index).val(input_value.trim());
+        });
+
+        $('#editLineModal').modal('show');
+    }
+
+    function loadData(primaryCode, secondCode) {
         var data = {
             primaryCode: primaryCode
         }
 
-        if (secondCode != null){
+        if (secondCode != null) {
             data.secondCode = secondCode;
         }
-        
+
         $.ajax({
             method: "GET",
             url: "/Finantial/Settings/GetData",
             data: data
         })
         .done(function(result) {
+            result = result.replace(/\\/g,'/');
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
-                $.each(jsonResult, function (index, value) {
+                table_contents = jsonResult;
+                $.each(jsonResult, function(index, value) {
                     var dataUnit = {};
-                    dataUnit.key = "<input class='form-control' style='width:100%' value='"+value.key+"'>";
-                    dataUnit.content = "<input class='form-control' style='width:100%' value='"+value.content+"'>";
+                    var nameDelete = 'btndelete_' + index;
+                    var nameEdit = 'btnedit_' + index;
+                    dataUnit.edit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
+                    dataUnit.delete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+                    dataUnit.key = "<div>" + value.key + "</div>";
+                    dataUnit.content = "<div style='White-space:pre;'>" + value.content + "</div>";
                     var dataSet = [];
                     dataSet.push(dataUnit);
 
                     tableOfTables.rows.add(dataSet).draw();
+                    $('#btnedit_' + index).bind('click', btn_edit_click);
+                    $('#btndelete_' + index).bind('click', btn_delete_click);
                 });
             }
         })
@@ -192,12 +434,13 @@
         });
     }
 
-    function load_table(primaryCode, secondCode){
+
+    function load_table(primaryCode, secondCode) {
         loadHeaders(primaryCode);
         loadData(primaryCode, secondCode);
     }
 
-    function load_table_names(){
+    function load_table_names() {
         $.ajax({
             method: "GET",
             url: "/Finantial/Settings/GetTTNames"
@@ -217,37 +460,195 @@
         });
     }
 
-    load_table_names();
-    load_table(2,null);
+    function load_table_names_second() {
+        $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/GetTTNames"
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                $('#second_table_id').typeahead({
+                    source: jsonResult
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+    }
 
-    $('#primary_table_id').change(function(){
+    load_table_names();
+    load_table_names_second();
+
+    function drawTableGrid(primary_id){
+        if (tableOfTables!=null){
+            tableOfTables.clear().draw();
+            $('#tableOfTables').dataTable().fnDestroy();
+        }
+        load_table(primary_id, null);
+        $('#botonAgregar').prop("disabled", false);
+    }
+
+    $('#primary_table_id').change(function() {
         var primary_id = $(this).typeahead("getActive").Value;
+        drawTableGrid(primary_id);
+    });
+
+
+    $('#second_table_id').change(function() {
+        var primary_id = $('#primary_table_id').typeahead("getActive").Value;
+        var second_id = $(this).typeahead("getActive").Value;
+
         tableOfTables.clear().draw();
         $('#tableOfTables').dataTable().fnDestroy();
 
-        load_table(primary_id,null);
-        
+        load_table(primary_id, second_id);
     });
+
+    function InsertTT(data){
+        $.ajax({
+            method: "POST",
+            url: "/Finantial/Settings/InsertTTData",
+            data: data
+        })
+        .done(function(result) {
+
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+    }
+
+    function UpdateTT(data){
+        $.ajax({
+            method: "POST",
+            url: "/Finantial/Settings/UpdateTTData",
+            data: data
+        })
+       .done(function(result) {
+
+        })
+       .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+    }
+
+    $('#btnSaveEdit').click(function(){
+        var allKey=getCursor(format_tuples_Key,allFormatKey,0);
+        var offset=format_tuples_Key.length;
+        var allNew=getCursor(format_tuples_dato,allFormatDato,offset);
+        var ttValue = getCodTable();
+
+        if  (allKey==''){
+            toastr.error("La llave del registro no puede ser nulo", "Campo obligatorio", {
+                positionClass: "toast-top-right",
+                preventDuplicates: true
+            });
+            return ;
+        }
+
+        var keyold= $("#txtKeyOld").val().trim();
+        var data = {
+            codtabl: ttValue,
+            key: $("#txtKeyOld").val().trim(),
+            keynew: allKey ,
+            dato: allNew
+        }
+
+        if (keyold == ''){
+            data.key = allKey;
+
+            swal({
+                title: "Confirmación",
+                text: "¿Dese crear el registro?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                InsertTT(data);
+                $('#editLineModal').modal('hide');
+                swal({title:"", timer:1,type: "success"});
+                drawTableGrid(ttValue);
+
+            });
+        } else {
+            swal({
+                title: "Confirmación",
+                text: "¿Guardar Cambios?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                UpdateTT(data);
+                $('#editLineModal').modal('hide');
+                swal({title:"", timer:1,type: "success"});
+                drawTableGrid(ttValue);
+            });
+        }
+    });
+
 }
 
 <div class="row">
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
-                <div class="row">
-                    <div class="col-lg-1">
-                        <p>Tabla: </p>
-                    </div>
-                    <div class="col-lg-11">
-                        <input id="primary_table_id" style="width:60%;"/>
+                <div id="primarygroup" class="row">
+                    <div class="form-group" style="padding-bottom: 50px; padding-top: 20px;">
+                        <label class="col-sm-2 control-label">Ingrese Una Tabla</label>
+                        <div class="col-sm-10"><input id="primary_table_id" style="width:60%;" type="text" class="form-control"></div>
                     </div>
                 </div>
+                <div id="secondgroup" class="row hidden" style="padding-bottom: 20px;">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Ingrese la tabla que desea editar</label>
+                        <div class="col-sm-10"><input id="second_table_id" style="width:60%;" type="text" class="form-control"></div>
+                    </div>
+                </div>
+                <button id="botonAgregar" type="button" class="btn btn btn-primary pull-right" disabled><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
                 <div style="width:100%; height:500px; overflow:scroll;">
                     <table class="table table-striped table-bordered table-hover" id="tableOfTables" style="font-family: monospace !important;">
                         <thead></thead>
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="editLineModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <input id="txtKeyOld" type="hidden" />
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 id="txtModalTitle" class="modal-title">Editar</h4>
+            </div>
+            <div style="height:500px; overflow-y:scroll; overflow-x:hidden;">
+                <div class="modal-body">
+                    <form id="edit_form">
+                        <div class="row">
+                            <div class="col-lg-6" id="edit-line-1"></div>
+                            <div class="col-lg-6" id="edit-line-2"></div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnSaveEdit">Guardar</button>
             </div>
         </div>
     </div>

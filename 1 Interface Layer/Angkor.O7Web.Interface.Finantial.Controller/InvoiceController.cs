@@ -206,7 +206,13 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.GenerateReporte(User.Company, User.Branch, documentType, documentId);
             return File(((O7SuccessResponse<Stream>)response).Value1, "application/pdf", documentType + "-" + documentId + ".pdf");
+        }
 
+        public FileResult GeneratePdf(string documentType, string documentId)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.GeneratePdf(User.Company, User.Branch, documentType, documentId);
+            return File(((O7SuccessResponse<Stream>)response).Value1, "application/pdf", documentType + "-" + documentId + ".pdf");
         }
 
 
@@ -509,6 +515,8 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
                 ccoContent = ""
             };
         }
+
+        
         public void UpdateInvoiceHead(string documentType, string documentId,
             string currency, string documentDate,
             string documentExpiration, string clienteCode

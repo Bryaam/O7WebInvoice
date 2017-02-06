@@ -1,6 +1,7 @@
 ﻿// O7ERP Web created by felix_dev
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Utility;
+using Angkor.O7Web.Data.Security.DataMapper;
 using Angkor.O7Web.Domain.Finantial.Base;
 
 namespace Angkor.O7Web.Domain.Finantial
@@ -37,11 +38,80 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(ccosSerialized);
         }
 
+        public override O7Response GetExchanges(string companyId, string dateIni, string dateFin)
+        {
+            var ccos = FinantialDataService.GetExchanges(companyId,dateIni,dateFin);
+            var ccosSerialized = O7JsonSerealizer.Serialize(ccos);
+            return O7SuccessResponse.MakeResponse(ccosSerialized);
+        }
+
+        public override O7Response GetCco(string companyId,string branchId, string dateB, string code)
+        {
+            var ccos = FinantialDataService.GetCco(companyId, branchId, code,dateB);
+            var ccosSerialized = O7JsonSerealizer.Serialize(ccos);
+            return O7SuccessResponse.MakeResponse(ccosSerialized);
+        }
+        public override O7Response AddExchange(string date, string currencyBegin, string buyValue, string sellValue)
+        {
+            var respuesta = FinantialDataService.AddExchange(date,currencyBegin,buyValue,sellValue);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
+        }
+        public override O7Response UpdateExchange(string date, string currencyBegin, string dateNew, string currencyBeginNew, string buyValue, string sellValue)
+        {
+            var respuesta = FinantialDataService.AddExchange(date, currencyBegin, buyValue, sellValue);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
+        }
+
+
+
+        public override O7Response AddCco(string companyId, string branchId,
+            string code, string codeDim, string description, string dateB,
+            string dateE, string accountC, string accountT, string codeCat,
+            string flgDet, string flgPresup, string flgIng)
+        {
+            var respuesta = FinantialDataService.AddCco( companyId,  branchId,
+             code,  codeDim,  description,  dateB,
+             dateE,  accountC,  accountT,  codeCat,
+             flgDet,  flgPresup,  flgIng);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
+        }
+
         public override O7Response GetTTHeads(string codtabl)
         {
             var heads = FinantialDataService.GetTTHeads(codtabl);
             var headsSerialized = O7JsonSerealizer.Serialize(heads);
             return O7SuccessResponse.MakeResponse(headsSerialized);
+        }
+
+        public override O7Response getDimensions()
+        {
+            var dimensiones = FinantialDataService.getDimensions();
+            var dimensionesSerialized = O7JsonSerealizer.Serialize(dimensiones);
+            return O7SuccessResponse.MakeResponse(dimensionesSerialized);
+        }
+
+        public override O7Response getAccountsC(string companyId,string branchId)
+        {
+            var accounts = FinantialDataService.getAccountsC(companyId,branchId);
+            var accountsSerialized = O7JsonSerealizer.Serialize(accounts);
+            return O7SuccessResponse.MakeResponse(accountsSerialized);
+        }
+
+        public override O7Response getAccountsT(string companyId, string branchId)
+        {
+            var accounts = FinantialDataService.getAccountsT(companyId, branchId);
+            var accountsSerialized = O7JsonSerealizer.Serialize(accounts);
+            return O7SuccessResponse.MakeResponse(accountsSerialized);
+        }
+
+        public override O7Response getCategories()
+        {
+            var accounts = FinantialDataService.getCategories();
+            var accountsSerialized = O7JsonSerealizer.Serialize(accounts);
+            return O7SuccessResponse.MakeResponse(accountsSerialized);
         }
 
         public override O7Response GetTTData(string primary,string secondary)
@@ -352,6 +422,12 @@ namespace Angkor.O7Web.Domain.Finantial
             return O7SuccessResponse.MakeResponse(pdf);
         }
 
+        public override O7Response GeneratePdf(string companyId, string branchId, string documentType, string documentId)
+        {
+            var pdf = FinantialDataService.GeneratePDF(companyId, branchId, documentType, documentId);
+            return O7SuccessResponse.MakeResponse(pdf);
+        }
+
         public override O7Response UpdateInvoice(string companyId, string branchId,
                                         string documentType, string documentId,
                                        string currency, string documentDate,
@@ -567,6 +643,13 @@ namespace Angkor.O7Web.Domain.Finantial
         public override O7Response Currencies()
         {
             var invoiceadresses = FinantialDataService.AllCurrencies();
+            var invoiceadressesSerialized = O7JsonSerealizer.Serialize(invoiceadresses);
+            return O7SuccessResponse.MakeResponse(invoiceadressesSerialized);
+        }
+
+        public override O7Response Currencies_Exchanges(string companyId)
+        {
+            var invoiceadresses = FinantialDataService.AllCurrencies_Tip_Cambios(companyId);
             var invoiceadressesSerialized = O7JsonSerealizer.Serialize(invoiceadresses);
             return O7SuccessResponse.MakeResponse(invoiceadressesSerialized);
         }

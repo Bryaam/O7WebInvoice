@@ -52,12 +52,21 @@
     <Compile Include="CommonDataService.cs" />
     <Compile Include="DataMapper\CentroCostoDataMapper.cs" />
     <Compile Include="DataMapper\SupervisorDataMapper.cs" />
+    <Compile Include="DeliverDataService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Common.Entity\Angkor.O7Web.Common.Entity.csproj">
       <Project>{A34E6D60-9763-4163-A416-735075CEDC48}</Project>
       <Name>Angkor.O7Web.Common.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Data.Common.Entity\Angkor.O7Web.Data.Common.Entity.csproj">
+      <Project>{DC60FAE8-F8E3-4DE7-BB56-541AF773DE88}</Project>
+      <Name>Angkor.O7Web.Data.Common.Entity</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Angkor.O7Web.Data.Finantial\Angkor.O7Web.Data.Finantial.csproj">
+      <Project>{8059BAA3-67B3-4A58-93BE-5E9EE64BFE68}</Project>
+      <Name>Angkor.O7Web.Data.Finantial</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

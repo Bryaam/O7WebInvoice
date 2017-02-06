@@ -494,6 +494,7 @@
     <Content Include="js\plugins\fullcalendar\fullcalendar.min.js" />
     <Content Include="js\plugins\fullcalendar\locale-all.js" />
     <Content Include="js\plugins\jquery-confirm-master\jquery-confirm.js" />
+    <Content Include="js\plugins\jquery-maskedinput\jquery.maskedinput.js" />
     <Content Include="js\plugins\moment\moment.min.js" />
     <Content Include="js\plugins\gritter\images\gritter-light.png" />
     <Content Include="js\plugins\gritter\images\gritter-long.png" />
