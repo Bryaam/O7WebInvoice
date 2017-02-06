@@ -11,8 +11,8 @@ namespace Angkor.O7Web.Common.Finantial.Entity
         public string date { get; set; }
         public string currencyBegin { get; set; }
         public string currencyEnd { get; set; }
-        public string BuyValue { get; set; }
+        public string buyValue { get; set; }
 
-        public string SellValue { get; set; }
+        public string sellValue { get; set; }
     }
 }

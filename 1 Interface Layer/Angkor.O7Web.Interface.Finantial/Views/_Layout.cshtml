@@ -87,7 +87,11 @@
                             <a href="@menu.Url">
                                 <i class="@menu.Icon"></i>
                                 <span class="nav-label">@menu.Title</span>
-                                <span class="fa arrow"></span>
+                                @if (menu.Menus.Count > 0)
+                                {
+                                    <span class="fa arrow"></span>
+                                }
+                                
                             </a>
                             @if (menu.Menus.Count > 0) {
                                 <ul class="nav nav-second-level collapse">
