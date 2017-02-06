@@ -73,11 +73,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         }
 
         public ActionResult UpdateExchange(string date, string currencyBegin,
-                                        string dateNew, string currencyBeginNew,
+                                        string dateOld, string currencyBeginOld,
             string buyValue, string sellValue)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.UpdateExchange(date, currencyBegin,dateNew,currencyBeginNew, buyValue, sellValue);
+            var response = domain.UpdateExchange(dateOld, currencyBeginOld,date,currencyBegin, buyValue, sellValue);
             return RedirectToAction("Exchange");
         }
 
