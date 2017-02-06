@@ -335,6 +335,12 @@
         });
 
     $("#btnConfirm").on("click", function() {
+        if($("#txtCode").val() == "" || $("#txtStartDate").val() == ""){
+            toastr.error("Complete los campos de Código y Fecha Inicial", "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+            return false;
+        }
         swal({
             title: "Confirmación",
             text: "¿Crear registro?",
