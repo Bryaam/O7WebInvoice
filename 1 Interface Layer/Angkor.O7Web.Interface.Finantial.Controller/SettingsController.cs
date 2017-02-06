@@ -45,6 +45,19 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
+        public JsonResult AddCco(string code, string codeDim, string description, string dateB,
+            string dateE, string accountC, string accountT, string codeCat,
+            string flgDet, string flgPresup, string flgIng)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.AddCco(User.Company, User.Branch,
+             code, codeDim, description, dateB,
+             dateE, accountC, accountT, codeCat,
+             flgDet, flgPresup, flgIng);
+            return new O7JsonResult(response);
+
+        }
+
 
 
 
