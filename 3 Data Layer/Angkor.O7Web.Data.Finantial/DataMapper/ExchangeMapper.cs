@@ -15,8 +15,8 @@ namespace Angkor.O7Web.Data.Finantial.DataMapper
                 date = Source.GetValue<string>(0),
                 currencyBegin = Source.GetValue<string>(1),
                 currencyEnd = Source.GetValue<string>(2),
-                BuyValue = Source.GetValue<string>(3),
-                SellValue = Source.GetValue<string>(4),
+                buyValue = Source.GetValue<string>(3),
+                sellValue = Source.GetValue<string>(4),
             };
     }
 }
