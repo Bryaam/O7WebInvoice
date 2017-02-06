@@ -208,9 +208,12 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response InvoiceAdresses(string companyId, string branchId, string clientId);
 
-        public abstract O7Response AddExchange(string date, string currencyBegin, string BuyValue, string SellValue);
+        public abstract O7Response AddExchange(string date, string currencyBegin, string buyValue, string sellValue);
 
+        public abstract O7Response UpdateExchange(string date, string currencyBegin, string dateNew,
+            string currencyBeginNew, string buyValue, string sellValue);
 
+        public abstract O7Response Currencies_Exchanges(string companyId);
         public abstract O7Response Currencies();
 
         public abstract O7Response Languages();

@@ -44,14 +44,20 @@ namespace Angkor.O7Web.Domain.Finantial
             var ccosSerialized = O7JsonSerealizer.Serialize(ccos);
             return O7SuccessResponse.MakeResponse(ccosSerialized);
         }
-        public override O7Response AddExchange(string date, string currencyBegin, string BuyValue, string SellValue)
+        public override O7Response AddExchange(string date, string currencyBegin, string buyValue, string sellValue)
         {
-            var ccos = FinantialDataService.AddExchange(date,currencyBegin,BuyValue,SellValue);
-            var ccosSerialized = O7JsonSerealizer.Serialize(ccos);
-            return O7SuccessResponse.MakeResponse(ccosSerialized);
+            var respuesta = FinantialDataService.AddExchange(date,currencyBegin,buyValue,sellValue);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
+        }
+        public override O7Response UpdateExchange(string date, string currencyBegin, string dateNew, string currencyBeginNew, string buyValue, string sellValue)
+        {
+            var respuesta = FinantialDataService.AddExchange(date, currencyBegin, buyValue, sellValue);
+            var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
+            return O7SuccessResponse.MakeResponse(respuestaSerialized);
         }
 
-        
+
 
         public override O7Response AddCco(string companyId, string branchId,
             string code, string codeDim, string description, string dateB,
@@ -630,6 +636,13 @@ namespace Angkor.O7Web.Domain.Finantial
         public override O7Response Currencies()
         {
             var invoiceadresses = FinantialDataService.AllCurrencies();
+            var invoiceadressesSerialized = O7JsonSerealizer.Serialize(invoiceadresses);
+            return O7SuccessResponse.MakeResponse(invoiceadressesSerialized);
+        }
+
+        public override O7Response Currencies_Exchanges(string companyId)
+        {
+            var invoiceadresses = FinantialDataService.AllCurrencies_Tip_Cambios(companyId);
             var invoiceadressesSerialized = O7JsonSerealizer.Serialize(invoiceadresses);
             return O7SuccessResponse.MakeResponse(invoiceadressesSerialized);
         }

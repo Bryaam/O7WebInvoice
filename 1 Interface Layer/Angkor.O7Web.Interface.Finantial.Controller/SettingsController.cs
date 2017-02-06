@@ -61,16 +61,26 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         public JsonResult GetCurrencies()
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.Currencies();
+            var response = domain.Currencies_Exchanges(User.Company);
             return new O7JsonResult(response);
         }
 
-        public JsonResult AddExchange(string fecha,string currencyBegin,string BuyValue,string SellValue)
+        public JsonResult AddExchange(string date,string currencyBegin,string buyValue,string sellValue)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.AddExchange(fecha,currencyBegin,BuyValue,SellValue);
+            var response = domain.AddExchange(date, currencyBegin,buyValue,sellValue);
             return new O7JsonResult(response);
         }
+
+        public JsonResult UpdateExchange(string date, string currencyBegin,
+                                        string dateNew, string currencyBeginNew,
+            string buyValue, string sellValue)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.UpdateExchange(date, currencyBegin,dateNew,currencyBeginNew, buyValue, sellValue);
+            return new O7JsonResult(response);
+        }
+
 
         public JsonResult GetExchanges()
         {
