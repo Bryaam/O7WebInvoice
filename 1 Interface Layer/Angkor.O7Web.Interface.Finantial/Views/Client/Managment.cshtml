@@ -1,4 +1,6 @@
-﻿@{
+﻿@using Angkor.O7Web.Interface.Finantial.ViewModel.Client;
+@{
+    var vmodel = (ManagmentViewModel) ViewData["model"];
     var action = ViewData["action"];
     ViewBag.Title = "Agregar";
     if (action != null && (string)action == "2") {
@@ -1209,7 +1211,7 @@
                                 <div class="col-md-12">
                                     <label class="col-md-2 control-label" style="width: 12%;">Razón social</label>
                                     <div class="col-md-10">
-                                        <input id="txtName" name="txtName" type="text" class="form-control" style="width: 106%;">
+                                        <input id="txtName" name="txtName" type="text" class="form-control" style="width: 106%;" value="@vmodel.Name">
                                     </div>
                                 </div>
                             </div>
@@ -1232,7 +1234,7 @@
                                 <div class="col-md-6">
                                     <label class="col-md-3 control-label">R.U.C.</label>
                                     <div class="col-md-9">
-                                        <input id="txtRucNumber" name="txtRucNumber" type="text" class="form-control">
+                                        <input id="txtRucNumber" name="txtRucNumber" type="text" class="form-control" value="@vmodel.Ruc">
                                     </div>
                                 </div>
                             </div>
@@ -1246,7 +1248,7 @@
                                 <div class="col-md-6">
                                     <label class="col-md-3 control-label">Numero</label>
                                     <div class="col-md-9">
-                                        <input id="txtDocumentNumber" name="txtDocumentNumber" type="text" class="form-control">
+                                        <input id="txtDocumentNumber" name="txtDocumentNumber" type="text" class="form-control" value="@vmodel.DocumentIdentifier">
                                     </div>
                                 </div>
                             </div>
@@ -1258,7 +1260,7 @@
                                 <div class="col-md-12">
                                     <label class="col-md-2 control-label" style="width: 12%;">Dirección</label>
                                     <div class="col-md-10">
-                                        <input id="txtAddress" name="txtAddress" type="text" class="form-control" style="width: 106%;">
+                                        <input id="txtAddress" name="txtAddress" type="text" class="form-control" style="width: 106%;" value="@vmodel.Address">
                                     </div>
                                 </div>
                             </div>
@@ -1272,7 +1274,7 @@
                                 <div class="col-md-6">
                                     <label class="col-md-3 control-label">Ciudad</label>
                                     <div class="col-md-9">
-                                        <input id="txtCity" name="txtCity" type="text" class="form-control">
+                                        <input id="txtCity" name="txtCity" type="text" class="form-control" value="@vmodel.City">
                                     </div>
                                 </div>
                             </div>
@@ -1298,7 +1300,7 @@
                                 <div class="col-md-4">
                                     <label class="col-sm-6 control-label">Telefono</label>
                                     <div class="col-sm-6">
-                                        <input id="txtPhone" name="txtPhone" type="text" class="form-control">
+                                        <input id="txtPhone" name="txtPhone" type="text" class="form-control" value="@vmodel.Phone" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -1316,49 +1318,23 @@
                                 <div class="col-md-8">
                                     <label class="col-md-2 control-label">Correo</label>
                                     <div class="col-md-10">
-                                        <input id="txtEmail" name="txtEmail" type="text" class="form-control" />
+                                        <input id="txtEmail" name="txtEmail" type="text" class="form-control" value="@vmodel.Email" />
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="col-md-4 control-label">Ingreso</label>
                                     <div class="col-md-8">
                                         <div class="input-group date">
-                                            <input type="text" class="form-control" name="dpckRegister" id="dpckRegister">
+                                            <input type="text" class="form-control" name="dpckRegister" id="dpckRegister" value="@vmodel.EntryDate">
                                             <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="dirSection" class="col-md-12">
-                                <div class="form-group">
-                                    <div class="p-xxs border-bottom col-md-12">
-                                        <strong>Direcciones</strong>
-                                    </div>
-                                </div>
-                            </div>
+                            @Html.Partial("_PartialManagmentAddress", vmodel)
                             <div class="form-group">
-                                <div class="col-md-6">
-                                    <label class="col-md-3 control-label">Entrega</label>
-                                    <div class="col-md-9">
-                                        <a data-toggle="modal" data-target="#mdlReciber" class="btn btn-info btn-rounded">
-                                            <i class="fa fa-search" aria-hidden="true"></i>
-                                            Ver
-                                        </a>
-                                    </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="col-md-3 control-label">Facturacion</label>
-                                    <div class="col-md-9">
-                                        <a data-toggle="modal" data-target="#mdlInvoicer" class="btn btn-info btn-rounded">
-                                            <i class="fa fa-search" aria-hidden="true"></i>
-                                            Ver
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                            <label class="col-md-3 control-label">Registro</label>
-                            <div class="col-sm-9">
-                                <p class="form-control-static">1</p>
+                                <label class="col-md-3 control-label">Registro</label>
+                                <div class="col-sm-9"><p class="form-control-static">1</p></div>
                             </div>
                         </div>
                     </div>
@@ -1366,83 +1342,7 @@
             </div>
         </div>
         <div class="ibox-footer text-right">
-            <a class="btn btn-white" href="Index"><i class="fa fa-reply" aria-hidden="true"></i> Atras</a>
-            <button id="btnSubmit" class="btn btn-primary" type="submit">Guardar <i class="fa fa-floppy-o" aria-hidden="true"></i></button>
-        </div>
-        <div class="modal inmodal" id="mdlReciber" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" style="width: 1280px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Dirección de entrega</h4>
-                    </div>
-                    <div class="modal-body" style="padding-bottom: 5px; padding-top:10px;">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-content" style="padding-bottom: 0px !important;">
-                                <div class="table-responsive">
-                                    <table id="tblReciber" class="table table-striped table-bordered table-hover" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Codigo</th>
-                                                <th>País</th>
-                                                <th>Depa.</th>
-                                                <th>Prov.</th>
-                                                <th>Dist.</th>
-                                                <th>Dirección</th>
-                                                <th>Ciudad</th>
-                                                <th>Zona</th>
-                                                <th>Telef.</th>
-                                                <th>Conta.</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="modal inmodal" id="mdlInvoicer" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg" style="width: 1280px;">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">Dirección de facturacion</h4>
-                    </div>
-                    <div class="modal-body" style="padding-bottom: 5px; padding-top:10px;">
-                        <div class="ibox float-e-margins">
-                            <div class="ibox-content" style="padding-bottom: 0px !important;">
-                                <div class="table-responsive">
-                                    <table id="tblInvoicer" class="table table-striped table-bordered table-hover" style="width:100%;">
-                                        <thead>
-                                            <tr>
-                                                <th>Codigo</th>
-                                                <th>País</th>
-                                                <th>Depa.</th>
-                                                <th>Prov.</th>
-                                                <th>Dist.</th>
-                                                <th>Dirección</th>
-                                                <th>Ciudad</th>
-                                                <th>Zona</th>
-                                                <th>Telef.</th>
-                                                <th>Conta.</th>
-                                            </tr>
-                                        </thead>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
-                    </div>
-                </div>
-            </div>
+            @Html.Partial("_PartialManagmentButtons", vmodel)
         </div>
     </form>
 </div>

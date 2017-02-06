@@ -1,0 +1,99 @@
+﻿@using Angkor.O7Web.Interface.Finantial.ViewModel.Client
+@{
+    var vmodel = (ManagmentViewModel)Model;
+}
+@if (vmodel.Action != "1") {
+    <div id="dirSection" class="col-md-12">
+        <div class="form-group">
+            <div class="p-xxs border-bottom col-md-12"><strong>Direcciones</strong></div>
+        </div>
+    </div>
+    <div class="form-group">
+        <div class="col-md-6">
+            <label class="col-md-3 control-label">Entrega</label>
+            <div class="col-md-9">
+                <a data-toggle="modal" data-target="#mdlReciber" class="btn btn-info btn-rounded"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Ver</a>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <label class="col-md-3 control-label">Facturación</label>
+            <div class="col-md-9">
+                <a data-toggle="modal" data-target="#mdlInvoicer" class="btn btn-info btn-rounded"><i class="fa fa-search" aria-hidden="true"></i>&nbsp;Ver</a>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal" id="mdlReciber" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width: 1280px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Dirección de entrega</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 5px; padding-top:10px;">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content" style="padding-bottom: 0px !important;">
+                            <div class="table-responsive">
+                                <table id="tblReciber" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>País</th>
+                                            <th>Depa.</th>
+                                            <th>Prov.</th>
+                                            <th>Dist.</th>
+                                            <th>Dirección</th>
+                                            <th>Ciudad</th>
+                                            <th>Zona</th>
+                                            <th>Telef.</th>
+                                            <th>Conta.</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal inmodal" id="mdlInvoicer" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog modal-lg" style="width: 1280px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Dirección de facturación</h4>
+                </div>
+                <div class="modal-body" style="padding-bottom: 5px; padding-top:10px;">
+                    <div class="ibox float-e-margins">
+                        <div class="ibox-content" style="padding-bottom: 0px !important;">
+                            <div class="table-responsive">
+                                <table id="tblInvoicer" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th>Codigo</th>
+                                            <th>País</th>
+                                            <th>Depa.</th>
+                                            <th>Prov.</th>
+                                            <th>Dist.</th>
+                                            <th>Dirección</th>
+                                            <th>Ciudad</th>
+                                            <th>Zona</th>
+                                            <th>Telef.</th>
+                                            <th>Conta.</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Confirmar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

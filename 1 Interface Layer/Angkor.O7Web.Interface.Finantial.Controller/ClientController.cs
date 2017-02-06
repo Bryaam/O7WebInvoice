@@ -2,11 +2,15 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Angkor.O7Framework.Common.Model;
+using Angkor.O7Framework.Utility;
 using Angkor.O7Framework.Web.Base;
+using Angkor.O7Framework.Web.HtmlHelper;
 using Angkor.O7Framework.Web.Utility;
 using Angkor.O7Framework.Web.WebResult;
 using Angkor.O7Web.Common.Finantial.Entity;
 using Angkor.O7Web.Comunication;
+using Angkor.O7Web.Domain.Finantial.Model;
+using Angkor.O7Web.Interface.Finantial.ViewModel.Client;
 
 namespace Angkor.O7Web.Interface.Finantial.Controller
 {
@@ -31,6 +35,18 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return View();
         }
 
+        public ActionResult Detail(string id)
+        {
+            var domain = ProxyDomain.Instance.ClientDomain(User.Identity.Name, User.Password);
+            var clientResponse = domain.Client(User.Company, User.Branch, id) as O7SuccessResponse<ClientEntity>;
+            if (clientResponse == null) return Redirect(LinkHelper.SourceLink("Security", "Signout"));
+            var mapper = O7EntityMapper<ManagmentViewModel>.Make(clientResponse.Value1);
+            var viewmodel = mapper.MapTarget();
+            viewmodel.Action = "3";
+            ViewData["model"] = viewmodel;
+            return View("Managment");
+        }
+
         public ActionResult ViewDetail(string idClient)
         {
             ViewData["action"] = "3";
@@ -43,7 +59,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["action"] = "1";
             return View("Managment");
         }
-        //"oli"
+        
         public ActionResult Edit(string idClient)
         {
             ViewData["action"] = "2";

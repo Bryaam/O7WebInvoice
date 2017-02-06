@@ -106,6 +106,10 @@
       <Project>{9C6779FB-7CC4-4891-AE05-6AD0E07C2CE2}</Project>
       <Name>Angkor.O7Web.Domain.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\2 Domain Layer\Angkor.O7Web.Domain.Finantial.Model\Angkor.O7Web.Domain.Finantial.Model.csproj">
+      <Project>{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}</Project>
+      <Name>Angkor.O7Web.Domain.Finantial.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\2 Domain Layer\Angkor.O7Web.Domain.Finantial\Angkor.O7Web.Domain.Finantial.csproj">
       <Project>{691A7691-1E29-4225-868D-48A513F57C91}</Project>
       <Name>Angkor.O7Web.Domain.Finantial</Name>
@@ -125,6 +129,10 @@
     <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Common.Utility\Angkor.O7Web.Common.Utility.csproj">
       <Project>{8B44343C-AB45-46B6-9310-AA21152D8268}</Project>
       <Name>Angkor.O7Web.Common.Utility</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Angkor.O7Web.Interface.Finantial.ViewModel\Angkor.O7Web.Interface.Finantial.ViewModel.csproj">
+      <Project>{814CF789-1705-485F-B4B9-14A3281EACEB}</Project>
+      <Name>Angkor.O7Web.Interface.Finantial.ViewModel</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
