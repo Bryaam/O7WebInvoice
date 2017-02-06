@@ -53,6 +53,7 @@
     <Compile Include="ClientDataService.cs" />
     <Compile Include="DataMapper\AddressEntryMapper.cs" />
     <Compile Include="DataMapper\AddressFactMapper.cs" />
+    <Compile Include="DataMapper\CcoMapper.cs" />
     <Compile Include="DataMapper\ExchangeMapper.cs" />
     <Compile Include="DataMapper\CcoViewMapper.cs" />
     <Compile Include="DataMapper\ClientCountryMapper.cs" />

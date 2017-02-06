@@ -48,6 +48,10 @@ namespace Angkor.O7Web.Domain.Finantial.Base
         public abstract O7Response InsertTTData(string codtabl, string keyocur, string datocur);
         public abstract O7Response UpdateTTData(string codtabl, string keyocur, string keyocurNew, string datocur);
 
+        public abstract O7Response UpdateCco(string companyId, string branchId,
+            string code, string codeOld, string dateBOld, string codeDim, string description, string dateB,
+            string dateE, string accountC, string accountT, string codeCat,
+            string flgDet, string flgPresup, string flgIng);
         public abstract O7Response DeleteTTData(string codtabl, string keyocur);
         public abstract O7Response AllPostales();
 
