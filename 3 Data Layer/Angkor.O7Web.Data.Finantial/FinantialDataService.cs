@@ -197,7 +197,7 @@ namespace Angkor.O7Web.Data.Finantial
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_company", companyId));
-            return DataAccess.ExecuteFunction<Exchange>("crud_tipo_cambio.view_tipos_cambio", parameters, ExchangeMapper.Class);
+            return DataAccess.ExecuteFunction<Exchange>("crud_tipo_cambio.view_tipos_cambio", parameters, ExchangeMapper.cla);
         }
 
         public virtual List<InvoiceTypeAhead> GetTTNames()
@@ -570,7 +570,7 @@ namespace Angkor.O7Web.Data.Finantial
         public virtual List<GenericListValue> AllCurrencies()
         {
             var parameters = O7DbParameterCollection.Make;
-            return DataAccess.ExecuteFunction<GenericListValue>("cost_centers.money_type", parameters, InvoiceGenericListMapper.Class);
+            return DataAccess.ExecuteFunction<GenericListValue>("finantial_invoice.money_type", parameters, InvoiceGenericListMapper.Class);
 
         }
 
