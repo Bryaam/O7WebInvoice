@@ -69,24 +69,24 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.AddExchange(date, currencyBegin,buyValue,sellValue);
-            return 
+            return RedirectToAction("Exchange");
         }
 
-        public JsonResult UpdateExchange(string date, string currencyBegin,
+        public ActionResult UpdateExchange(string date, string currencyBegin,
                                         string dateNew, string currencyBeginNew,
             string buyValue, string sellValue)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.UpdateExchange(date, currencyBegin,dateNew,currencyBeginNew, buyValue, sellValue);
-            return new O7JsonResult(response);
+            return RedirectToAction("Exchange");
         }
 
 
-        public ActionResult GetExchanges(string dateIni=null,string dateFin=null)
+        public JsonResult GetExchanges(string dateIni=null,string dateFin=null)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.GetExchanges(User.Company,dateIni,dateFin);
-            return Exchange();//new O7JsonResult(response);
+            return new O7JsonResult(response);
         }
 
 
