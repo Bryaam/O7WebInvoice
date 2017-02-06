@@ -126,10 +126,30 @@
                 var countryAutocomplete = "#txtReciberCountry_"+reciber_count;
                 var zoneAutocomplete = "#txtReciberZone_"+reciber_count;
                 var postaleAutocomplete = "#txtReciberPostal_"+reciber_count;
+<<<<<<< HEAD
+                /*
+                $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
+                    .done(function (resultPostale) {
+                        resultPostale = resultPostale.replace(/Description/g, 'name');
+                        resultPostale = resultPostale.replace(/Id/g, 'id');
+                        var objResultPostale = jQuery.parseJSON(resultPostale);
+                        $(postaleAutocomplete).typeahead({ source: objResultPostale });            
+                    }).fail(function (result) {
+                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                }); */
+    
+                //Now:
+                getAutocompleteDataSingle(postaleAutocomplete,null,"/Finantial/Client/AllPostales");
+                
+                getAutoCompleteDataNested(countryAutocomplete,departmentAutoComplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete);
+
+
+=======
 
 
                 getAutocompleteDataSingle(postaleAutocomplete,"/Finantial/Client/AllPostales");
             
+>>>>>>> 8c8d91e0b490059e0a4e65ef828a7057c984988e
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
                         resultCountry = resultCountry.replace(/Description/g, 'name');
