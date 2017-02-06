@@ -468,7 +468,6 @@
         $('input[required]').each(function(){
             if ($(this).val() == ""){
                 if (firstInput){
-                    console.log("Muchas veces?");
                     var requiredTab = $(this).closest('.panel-collapse');
                     $('#'+curTabOpen.id).removeClass('in');
                     document.getElementById(curTabOpen.id).setAttribute("aria-expanded","false");
