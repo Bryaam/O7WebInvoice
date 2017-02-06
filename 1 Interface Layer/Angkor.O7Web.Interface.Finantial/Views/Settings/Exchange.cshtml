@@ -116,50 +116,63 @@
     var array_exchanges;
 
     tableExchanges = $('#tableExchanges').DataTable({
-        "bPaginate": false,
+        "bPaginate": true,
         "bLengthChange": false,
-        "bFilter": false,
+        "bFilter": true,
         "bInfo": false,
         "bAutoWidth": false,
         "paging": false,
+        "dom": 'Bfrtip',
+        "buttons": [{
+             text: 'Agregar',
+             action: function(e, dt, node, config) {
+                $("#txtModalTitle").text("Crear");
+                $('#edit_form').attr('action', '/Finantial/Settings/AddExchange');
+                $("#date").datepicker('setDate', new Date());
+
+                $('#dateOld').val("");
+                $('#currencyBeginOld').val("");
+                $('#currencyBegin').val("");
+                $('#buyValue').val("");
+                $('#sellValue').val("");
+
+                $('#editModal').modal('show');
+             }
+         }],
         "columns": [{
-            data: "edit",
-            width: "1%",
-            title: ""
-        },
-        {
-            data: "delete",
-            width: "1%",
-            title: ""
-        },
-        {
             data: "date",
             title: "Fecha"
         },
         {
-            data: "monOri",
-            title: "Mes origen"
+            data: "currencyBegin",
+            title: "Moneda origen"
         },
         {
-            data: "monFin",
-            title: "Mes fin"
+            data: "currencyEnd",
+            title: "Moneda fin"
         },
         {
-            data: "valCom",
+            data: "buyValue",
             title: "Valor de compra"
         },
         {
-            data: "valVen",
+            data: "sellValue",
             title: "Valor de venta"
+        },
+        {
+            orderable: false,
+            className: "text-center",
+            title: "Acciones",
+            render: function(data, type, full, meta){
+                var nameDelete = 'btndelete_' + meta.row;
+                var nameEdit = 'btnedit_' + meta.row;
+                var buttonEdit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary btn_edit'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
+                var buttonDelete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger btn_delete'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+
+                return buttonEdit + buttonDelete;
+            }
         }]
     });
-
-    function drawTableGrid(){
-        if (tableExchanges != null){
-            tableExchanges.clear().draw();
-        }
-        loadTable();
-    }
 
     function DeleteExchange(data){
         $.ajax({
@@ -167,7 +180,7 @@
             url: "/Finantial/Settings/DeleteExchange",
             data: data
         })
-        .done(drawTableGrid())
+        .done(loadTable())
         .fail(function(result) {
             toastr.error(result.statusText, "Mensaje", {
                 positionClass: "toast-top-full-width"
@@ -175,22 +188,16 @@
         });
     }
 
-    $('#btnAgregar').click(function(){
-        $("#txtModalTitle").text("Crear");
-        $('#editModal').attr('action', '/Finantial/Settings/CreateExchange');
-        $('#editModal').modal('show');
-    });
-
     function btn_delete_click() {
         var btn_id = $(this).attr('id');
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
 
-        var exchange = table_contents[id];
+        var exchange = array_exchanges[id];
 
         var data = {
             date: exchange.date,
-            monOri: exchange.monOri
+            currencyBegin: exchange.currencyBegin
         }
 
         swal({
@@ -201,28 +208,44 @@
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Sí",
             closeOnConfirm: false
-        }, DeleteExchange(data));
+        }, function(){
+            DeleteExchange(data);
+        });
     }
 
     function btn_edit_click() {
         $("#txtModalTitle").text("Editar");
-        $('#editModal').attr('action', '/Finantial/Settings/UpdateExchange');
+        $('#edit_form').attr('action', '/Finantial/Settings/UpdateExchange');
         
         var btn_id = $(this).attr('id');
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
 
-        var currencies = loadCurrencies();
-
-        var selected_exchange = tables_exchanges[id];
+        var selected_exchange = array_exchanges[id];
+        $('#dateOld').val(selected_exchange.date);
+        $('#currencyBeginOld').val(selected_exchange.currencyBegin);
         $('#date').val(selected_exchange.date);
-        $('#monOri').val(selected_exchange.monOri);
-        $('#monFin').val(selected_exchange.monFin);
-        $('#valCom').val(selected_exchange.valCom);
-        $('#valVen').val(selected_exchange.valVen);
+        $('#currencyBegin').val(selected_exchange.currencyBegin);
+        $('#buyValue').val(selected_exchange.buyValue);
+        $('#sellValue').val(selected_exchange.sellValue);
 
+        $("#currencyBegin").trigger("chosen:updated");
         $('#editModal').modal('show');
     }
+
+    $("#btnSaveEdit").submit(function(){
+        swal({
+            title: "Confirmación",
+            text: "¿Está seguro que desea guardar sus cambios?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            closeOnConfirm: false
+        }, function(){
+            $("#edit_form").submit();
+        });
+    })
 
     function loadTable() {
 
@@ -234,25 +257,9 @@
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
                 array_exchanges = jsonResult;
-                $.each(jsonResult, function(index, value) {
-                    var dataUnit = {};
-                    var nameDelete = 'btndelete_' + index;
-                    var nameEdit = 'btnedit_' + index;
-                    dataUnit.edit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
-                    dataUnit.delete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-                    dataUnit.date = value.date;
-                    dataUnit.monOri = value.monOri;
-                    dataUnit.monFin = value.monFin;
-                    dataUnit.valCom = value.valCom;
-                    dataUnit.valVen = value.valVen;
-
-                    var dataSet = [];
-                    dataSet.push(dataUnit);
-
-                    tableExchanges.rows.add(dataSet).draw();
-                    $('#'+nameEdit).bind('click', btn_edit_click);
-                    $('#'+nameDelete).bind('click', btn_delete_click);
-                });
+                tableExchanges.clear().rows.add(jsonResult).draw();
+                $('.btn_edit').bind('click', btn_edit_click);
+                $('.btn_delete').bind('click', btn_delete_click);
             }
         })
         .fail(function(result) {
@@ -262,17 +269,17 @@
         });
     }
 
-    function loadCurrencies() {
-        var currencies = [];
+    //Function que por request AJAX llena un comboBox
+    function initialize_combo_ajax(idSelect, url, async = true) {
         $.ajax({
             method: "GET",
-            url: "/Finantial/Settings/GetCurrencies",
-            async: false
+            url: url,
+            async: async
         })
         .done(function(result) {
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
-                currencies = jsonResult;
+                populate_combo_box(idSelect, jsonResult);
             }
         })
         .fail(function(result) {
@@ -280,9 +287,37 @@
                 positionClass: "toast-top-full-width"
             });
         });
-
-        return currencies;
     }
+
+    //Function que llena un comboBox
+    function populate_combo_box(idCombo, data) {
+        combo_box = $(idCombo);
+        combo_box.empty();
+        combo_box.trigger("chosen:updated");
+        $.each(data, function(index, value) {
+            combo_box.append("<option value='" + value.Value + "'>" + value.Content + "</option>");
+        });
+        combo_box.trigger("chosen:updated");
+    }
+
+    $('#date').datepicker({
+        format: 'dd/mm/yyyy',
+        todayBtn: "linked",
+        keyboardNavigation: false,
+        forceParse: false,
+        calendarWeeks: true,
+        autoclose: true,
+        maxDate: 0
+    });
+
+    $("#date").datepicker('setDate', new Date());
+
+    $("#currencyBegin").chosen({
+        width: "100%",
+        disable_search: true
+    });
+
+    initialize_combo_ajax("#currencyBegin", "/Finantial/Settings/GetCurrencies");
 
     loadTable();
 
@@ -293,7 +328,6 @@
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-content">
-                <button id="btnAgregar" type="button" class="btn btn btn-primary pull-right"><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
                 <table class="table table-striped table-bordered table-hover" id="tableExchanges">
                     <thead></thead>
                     <tbody></tbody>
@@ -306,40 +340,49 @@
 <div id="editModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" id="edit_form" action="/Finantial/Settings/UpdateExchange" method="post">
+            <form id="edit_form" action="/Finantial/Settings/UpdateExchange" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 id="txtModalTitle" class="modal-title">Editar</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="date">Fecha</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="date" name="date">
+                    <input type="hidden" id="dateOld" name="dateOld"/>
+                    <input type="hidden" id="currencyBeginOld" name="currencyBeginOld"/>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="date">Fecha</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input class="form-control input-sm" id="date" name="date" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="monOri">Mes origen</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="monOri" name="monOri">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="currencyBegin">Moneda origen</label>
+                                <select class="form-control" id="currencyBegin" name="currencyBegin"></select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="monFin">Mes fin</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="monFin" name="monFin" disabled>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="currencyEnd">Moneda fin</label>
+                                <input class="form-control input-sm" id="currencyEnd" name="currencyEnd" value="SOLES" disabled>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="valCom">Valor de compra</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="valCom" name="valCom">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="buyValue">Valor de compra</label>
+                                <input class="form-control input-sm" id="buyValue" name="buyValue" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="valVen">Valor de venta</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="valVen" name="valVen">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="sellValue">Valor de venta</label>
+                                <input class="form-control input-sm" id="sellValue" name="sellValue" required>
+                            </div>
                         </div>
                     </div>
                 </div>
