@@ -132,7 +132,6 @@
 
                 $('#dateOld').val("");
                 $('#currencyBeginOld').val("");
-                $('#currencyBegin').val("");
                 $('#buyValue').val("");
                 $('#sellValue').val("");
 
@@ -233,18 +232,24 @@
         $('#editModal').modal('show');
     }
 
-    $("#btnSaveEdit").submit(function(){
-        swal({
-            title: "Confirmación",
-            text: "¿Está seguro que desea guardar sus cambios?",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Sí",
-            closeOnConfirm: false
-        }, function(){
-            $("#edit_form").submit();
-        });
+    
+
+    $("#btnSaveEdit").click(function(){
+        
+        if($("#buyValue").val() != "" && $("#sellValue").val() != "" && $("#date").val() != ""){
+            swal({
+                title: "Confirmación",
+                text: "¿Está seguro que desea guardar sus cambios?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function(){
+                $("#edit_form").submit();
+            });
+        }
+        
     })
 
     function loadTable() {
