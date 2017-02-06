@@ -570,7 +570,7 @@ namespace Angkor.O7Web.Data.Finantial
         public virtual List<GenericListValue> AllCurrencies()
         {
             var parameters = O7DbParameterCollection.Make;
-            return DataAccess.ExecuteFunction<GenericListValue>("finantial_invoice.money_type", parameters, InvoiceGenericListMapper.Class);
+            return DataAccess.ExecuteFunction<GenericListValue>("cost_centers.money_type", parameters, InvoiceGenericListMapper.Class);
 
         }
 
