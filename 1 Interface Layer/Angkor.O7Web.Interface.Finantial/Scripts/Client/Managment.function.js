@@ -9,17 +9,7 @@
                 $(hiddenId).val(field.id);
             }
         }
-        //if (hiddenId==null) {
-         //   $(id).typeahead({ source: objResult });
-       // } else {
-           // $(id).typeahead({
-               // source: objResult,
-               // afterSelect: function () {
-                //    var field = $(id).typeahead("getActive");
-              //      $(hiddenId).val(field.id);
-            //    }
-          //  });
-        //}
+
     }).fail(function (result) {
         toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
@@ -78,7 +68,6 @@ function getAutoCompleteDataNested(counAuto,depAuto,proAuto,disAuto,zoneAuto) {
                             });
                         }
                     });
-
                 }).fail(function (result) {
                     toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                 });
@@ -113,10 +102,4 @@ function rowValidate(i,tblName,curName, buttonName) {
     });
 }
 
-function iterate_Combo(documentType, objResult) {
-    $.each(objResult, function (index, value) {
-        documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
-    });
-    documentType.trigger("chosen:updated");
-}
 
