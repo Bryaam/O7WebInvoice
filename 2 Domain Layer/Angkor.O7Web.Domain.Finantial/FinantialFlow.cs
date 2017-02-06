@@ -52,7 +52,7 @@ namespace Angkor.O7Web.Domain.Finantial
         }
         public override O7Response UpdateExchange(string date, string currencyBegin, string dateNew, string currencyBeginNew, string buyValue, string sellValue)
         {
-            var respuesta = FinantialDataService.AddExchange(date, currencyBegin, buyValue, sellValue);
+            var respuesta = FinantialDataService.UpdateExchange(date, currencyBegin, dateNew, currencyBeginNew, buyValue, sellValue);
             var respuestaSerialized = O7JsonSerealizer.Serialize(respuesta);
             return O7SuccessResponse.MakeResponse(respuestaSerialized);
         }

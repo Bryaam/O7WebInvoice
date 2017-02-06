@@ -128,20 +128,18 @@
              action: function(e, dt, node, config) {
                 $("#txtModalTitle").text("Crear");
                 $('#edit_form').attr('action', '/Finantial/Settings/AddExchange');
+                $("#date").datepicker('setDate', new Date());
+
+                $('#dateOld').val("");
+                $('#currencyBeginOld').val("");
+                $('#currencyBegin').val("");
+                $('#buyValue').val("");
+                $('#sellValue').val("");
+
                 $('#editModal').modal('show');
              }
          }],
         "columns": [{
-            data: "edit",
-            width: "1%",
-            title: ""
-        },
-        {
-            data: "delete",
-            width: "1%",
-            title: ""
-        },
-        {
             data: "date",
             title: "Fecha"
         },
@@ -160,15 +158,21 @@
         {
             data: "sellValue",
             title: "Valor de venta"
+        },
+        {
+            orderable: false,
+            className: "text-center",
+            title: "Acciones",
+            render: function(data, type, full, meta){
+                var nameDelete = 'btndelete_' + meta.row;
+                var nameEdit = 'btnedit_' + meta.row;
+                var buttonEdit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary btn_edit'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
+                var buttonDelete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger btn_delete'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+
+                return buttonEdit + buttonDelete;
+            }
         }]
     });
-
-    function drawTableGrid(){
-        if (tableExchanges != null){
-            tableExchanges.clear().draw();
-        }
-        loadTable();
-    }
 
     function DeleteExchange(data){
         $.ajax({
@@ -176,7 +180,7 @@
             url: "/Finantial/Settings/DeleteExchange",
             data: data
         })
-        .done(drawTableGrid())
+        .done(loadTable())
         .fail(function(result) {
             toastr.error(result.statusText, "Mensaje", {
                 positionClass: "toast-top-full-width"
@@ -204,7 +208,9 @@
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Sí",
             closeOnConfirm: false
-        }, DeleteExchange(data));
+        }, function(){
+            DeleteExchange(data);
+        });
     }
 
     function btn_edit_click() {
@@ -216,15 +222,30 @@
         var id = btn_id_split[1];
 
         var selected_exchange = array_exchanges[id];
+        $('#dateOld').val(selected_exchange.date);
+        $('#currencyBeginOld').val(selected_exchange.currencyBegin);
         $('#date').val(selected_exchange.date);
         $('#currencyBegin').val(selected_exchange.currencyBegin);
-        $('#currencyEnd').val(selected_exchange.currencyEnd);
         $('#buyValue').val(selected_exchange.buyValue);
         $('#sellValue').val(selected_exchange.sellValue);
 
         $("#currencyBegin").trigger("chosen:updated");
         $('#editModal').modal('show');
     }
+
+    $("#btnSaveEdit").submit(function(){
+        swal({
+            title: "Confirmación",
+            text: "¿Está seguro que desea guardar sus cambios?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            closeOnConfirm: false
+        }, function(){
+            $("#edit_form").submit();
+        });
+    })
 
     function loadTable() {
 
@@ -236,25 +257,9 @@
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
                 array_exchanges = jsonResult;
-                $.each(jsonResult, function(index, value) {
-                    var dataUnit = {};
-                    var nameDelete = 'btndelete_' + index;
-                    var nameEdit = 'btnedit_' + index;
-                    dataUnit.edit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
-                    dataUnit.delete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-                    dataUnit.date = value.date;
-                    dataUnit.currencyBegin = value.currencyBegin;
-                    dataUnit.currencyEnd = value.currencyEnd;
-                    dataUnit.buyValue = value.buyValue;
-                    dataUnit.sellValue = value.sellValue;
-
-                    var dataSet = [];
-                    dataSet.push(dataUnit);
-
-                    tableExchanges.rows.add(dataSet).draw();
-                    $('#'+nameEdit).bind('click', btn_edit_click);
-                    $('#'+nameDelete).bind('click', btn_delete_click);
-                });
+                tableExchanges.clear().rows.add(jsonResult).draw();
+                $('.btn_edit').bind('click', btn_edit_click);
+                $('.btn_delete').bind('click', btn_delete_click);
             }
         })
         .fail(function(result) {
@@ -295,6 +300,18 @@
         combo_box.trigger("chosen:updated");
     }
 
+    $('#date').datepicker({
+        format: 'dd/mm/yyyy',
+        todayBtn: "linked",
+        keyboardNavigation: false,
+        forceParse: false,
+        calendarWeeks: true,
+        autoclose: true,
+        maxDate: 0
+    });
+
+    $("#date").datepicker('setDate', new Date());
+
     $("#currencyBegin").chosen({
         width: "100%",
         disable_search: true
@@ -323,40 +340,49 @@
 <div id="editModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" id="edit_form" action="/Finantial/Settings/UpdateExchange" method="post">
+            <form id="edit_form" action="/Finantial/Settings/UpdateExchange" method="post">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h4 id="txtModalTitle" class="modal-title">Editar</h4>
                 </div>
                 <div class="modal-body">
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="date">Fecha</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="date" name="date">
+                    <input type="hidden" id="dateOld" name="dateOld"/>
+                    <input type="hidden" id="currencyBeginOld" name="currencyBeginOld"/>
+
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="date">Fecha</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon"><i class="fa fa-calendar"></i></span><input class="form-control input-sm" id="date" name="date" required>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="currencyBegin">Moneda origen</label>
-                        <div class="col-lg-9">
-                            <select class="form-control" id="currencyBegin" name="currencyBegin"></select>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="currencyBegin">Moneda origen</label>
+                                <select class="form-control" id="currencyBegin" name="currencyBegin"></select>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="currencyEnd">Moneda fin</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="currencyEnd" name="currencyEnd" value="S/." disabled>
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="currencyEnd">Moneda fin</label>
+                                <input class="form-control input-sm" id="currencyEnd" name="currencyEnd" value="SOLES" disabled>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="buyValue">Valor de compra</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="buyValue" name="buyValue">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="buyValue">Valor de compra</label>
+                                <input class="form-control input-sm" id="buyValue" name="buyValue" required>
+                            </div>
                         </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-lg-3" for="sellValue">Valor de venta</label>
-                        <div class="col-lg-9">
-                            <input class="form-control" id="sellValue" name="sellValue">
+                        <div class="col-lg-6">
+                            <div class="form-group">
+                                <label class="control-label" for="sellValue">Valor de venta</label>
+                                <input class="form-control input-sm" id="sellValue" name="sellValue" required>
+                            </div>
                         </div>
                     </div>
                 </div>
