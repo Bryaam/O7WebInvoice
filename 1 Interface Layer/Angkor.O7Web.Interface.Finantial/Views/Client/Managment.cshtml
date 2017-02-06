@@ -29,6 +29,12 @@
         .dataTables_wrapper {
             padding-bottom: 1px !important;
         }
+        .dataTables_scrollHeadInner{
+            width: 100% !important;
+        }
+        .dataTables_scrollHeadInner > table{
+            width: 100% !important;
+        }
     </style>
 }
 
@@ -63,13 +69,18 @@
     if(action=="3") {
         $("#btnSubmit").hide();
     }
-
+    var curReciberRow = 0;
+    var i=0;
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
         dom: 'Bfrtip',
         buttons:buttonTblReciber,
         columns:columnTblReciber,
         columnDefs:columnDefsTblReciber,
+        "createdRow": function ( row, data, index ) {
+            curReciberRow = index;
+            i = 0;
+        },
         scrollY : '30hv',
         "scrollCollapse" : true,
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
@@ -87,7 +98,8 @@
                 btnAddReciber.hide();
             }
 
-            btnAddReciber.on("click", function () {                                
+            btnAddReciber.on("click", function () {     
+                btnAddReciber.hide();                           
                 var reciber_count = parseInt($("#hddCountReciber").val());
                 var row = {};
                 row.CodDir = "";
@@ -115,15 +127,8 @@
                 var zoneAutocomplete = "#txtReciberZone_"+reciber_count;
                 var postaleAutocomplete = "#txtReciberPostal_"+reciber_count;
 
-                $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
-                    .done(function (resultPostale) {
-                        resultPostale = resultPostale.replace(/Description/g, 'name');
-                        resultPostale = resultPostale.replace(/Id/g, 'id');
-                        var objResultPostale = jQuery.parseJSON(resultPostale);
-                        $(postaleAutocomplete).typeahead({ source: objResultPostale});            
-                    }).fail(function (result) {
-                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                });  
+
+                getAutocompleteDataSingle(postaleAutocomplete,"/Finantial/Client/AllPostales");
             
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
@@ -174,7 +179,6 @@
                                     .done(function (result) {
                                         result = result.replace(/Description/g, 'name');
                                         result = result.replace(/Id/g, 'id');
-                                        console.log(result);
                                         var objResult = jQuery.parseJSON(result);                                        
                                         $(departmentAutocomplete).typeahead({
                                             source: objResult,
@@ -185,7 +189,6 @@
                                                     .done(function (resultProv) {
                                                         resultProv = resultProv.replace(/Description/g, 'name');
                                                         resultProv = resultProv.replace(/Id/g, 'id');
-                                                        console.log(resultProv);
                                                         var objResultProv = jQuery.parseJSON(resultProv);
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
@@ -196,7 +199,6 @@
                                                                     .done(function (resultDistrict) {
                                                                         resultDistrict = resultDistrict.replace(/Description/g, 'name');
                                                                         resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        console.log(resultDistrict);
                                                                         var objResultDis = jQuery.parseJSON(resultDistrict);
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
@@ -222,26 +224,36 @@
                         });
                     }).fail(function (result) {
                             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                    });
-        
+                });
+
+                rowValidate(i,tblReciber,curReciberRow, btnAddReciber);
+                
                 reciber_count = reciber_count + 1;
                 $("#hddCountReciber").val(reciber_count);
                     
-                 $('.dataTables_scrollBody').slimscroll({
+                $('.dataTables_scrollBody').slimscroll({
                       height: '30vh',
                       disableFadeOut : false
-                 });
+                });
             });
-        }            
+        }
 
-    });   
+    });
 
+    var curInvoicerRow=0;
+    var i=0;
     var tblInvoicer = $("#tblInvoicer").DataTable({
         searching: false,
         dom: 'Bfrtip',
         buttons: buttonTblInvoicer,
         columns:columnTblInvoicer,
         columnDefs:columnDefTblInvoicer,
+        "createdRow": function ( row, data, index ) {
+            curInvoicerRow = index;
+            i = 0;
+        },
+        scrollY : '30hv',
+        "scrollCollapse" : true,   
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
         initComplete: function( settings, json ) {
             if (action == '1') {
@@ -346,7 +358,6 @@
                                     .done(function (result) {
                                         result = result.replace(/Description/g, 'name');
                                         result = result.replace(/Id/g, 'id');
-                                        console.log(result);
                                         var objResult = jQuery.parseJSON(result);
 
                                         $(departmentAutocomplete).typeahead({
@@ -358,7 +369,6 @@
                                                     .done(function (resultProv) {
                                                         resultProv = resultProv.replace(/Description/g, 'name');
                                                         resultProv = resultProv.replace(/Id/g, 'id');
-                                                        console.log(resultProv);
                                                         var objResultProv = jQuery.parseJSON(resultProv);
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
@@ -369,7 +379,6 @@
                                                                     .done(function (resultDistrict) {
                                                                         resultDistrict = resultDistrict.replace(/Description/g, 'name');
                                                                         resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        console.log(resultDistrict);
                                                                         var objResultDis = jQuery.parseJSON(resultDistrict);
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
@@ -395,11 +404,14 @@
                         });
                     }).fail(function (result) {
                             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                    }); 
-        
+                });
+                rowValidate(i,tblInvoicer,curInvoicerRow, btnAddReciber);
                 reciber_count = reciber_count + 1;
                 $("#hddCountInvoicer").val(reciber_count);
-
+                $('.dataTables_scrollBody').slimscroll({
+                        height: '30vh',
+                        disableFadeOut : false
+                });
             });
         }
     });
@@ -425,20 +437,9 @@
         var personType = $(this).val();
 
         if(personType=="N") $("#divRuc").removeAttr("style");
-        else $("#divRuc").attr("style","visibility:hidden;");        
-    
-        $.ajax({ method: "GET", url: "/Finantial/Client/DocumentType", data: { clientType:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDocumentType");
-                documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
-            }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width"});
-            });
+        else $("#divRuc").attr("style","visibility:hidden;");
+
+        allTypeDocument("/Finantial/Client/DocumentType",personType,chkDocumentType);
     });
     
      $("#chkDocumentType").chosen({
@@ -456,8 +457,9 @@
     
     $("#chkPostale").chosen({
         width: "100%"
-    }); 
-    
+    });
+
+
     $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
@@ -496,11 +498,9 @@
             }).fail(function (result) {
                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });
-        console.log("estoy aqui");
         $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId:$("#chkCountry").val() } , async: false })
             .done(function (result) {
                 var objResult = jQuery.parseJSON(result);
-                console.log(objResult);
                 var documentType = $("#chkDepartment");
                 documentType.html("");
                 $.each(objResult, function (index, value) {
@@ -643,7 +643,6 @@
         $("#btnSubmit").append("<i class='fa fa-floppy-o' aria-hidden='true'></i>");
         $.ajax({ method: "GET", url: "/Finantial/Client/OneClient_Populate", data: { codClient:clientId }, async: false })
             .done(function (result) {
-                console.log(result);
                 var objResult = jQuery.parseJSON(result);
                 var obj = objResult[0];    
                 $("#header-detail").html(obj.BussinessName+" ("+clientId+")");
@@ -652,7 +651,6 @@
                 $("#chkOriginClient").val(obj.TypeClient);
                 $("#chkOriginClient").trigger("chosen:updated");
                 $("#txtName").val(obj.BussinessName);
-                console.log(obj.Person);
                 $("#chkpersonType").val(obj.Person);
                 $("#chkpersonType").trigger("chosen:updated");
                 $("#chkpersonType").trigger("change");
@@ -687,7 +685,6 @@
         $.ajax({ method: "GET", url: "/Finantial/Client/InvoicerAddressPopulate", data: { clientId: clientId }, async: false })
             .done(function (result) {
                 var objResult = jQuery.parseJSON(result);
-                console.log(objResult);
                 tblInvoicer.clear().rows.add(objResult).draw();                    
             }).fail(function (result) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
@@ -696,7 +693,6 @@
         $.ajax({ method: "GET", url: "/Finantial/Client/EntryAddressPopulate", data: { clientId: clientId }, async: false })
             .done(function (result) {
                 var objResult = jQuery.parseJSON(result);
-                console.log(objResult);
                 tblReciber.clear().rows.add(objResult).draw();
             }).fail(function (result) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
@@ -803,7 +799,6 @@
                                                     .done(function (resultProv) {
                                                         resultProv = resultProv.replace(/Description/g, 'name');
                                                         resultProv = resultProv.replace(/Id/g, 'id');
-                                                        console.log(resultProv);
                                                         var objResultProv = jQuery.parseJSON(resultProv);
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
@@ -814,7 +809,6 @@
                                                                     .done(function (resultDistrict) {
                                                                         resultDistrict = resultDistrict.replace(/Description/g, 'name');
                                                                         resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        console.log(resultDistrict);
                                                                         objResultDis = jQuery.parseJSON(resultDistrict);
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
@@ -882,7 +876,6 @@
                             .done(function (resultProv) {
                                 resultProv = resultProv.replace(/Description/g, 'name');
                                 resultProv = resultProv.replace(/Id/g, 'id');
-                                console.log(resultProv);
                                 var objResultProv = jQuery.parseJSON(resultProv);
     							$(provinceAutocomplete).typeahead({
 								    source: objResultProv,
@@ -898,7 +891,6 @@
                             .done(function (resultDistrict) {
                                 resultDistrict = resultDistrict.replace(/Description/g, 'name');
                                 resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                console.log(resultDistrict);
                                 objResultDis = jQuery.parseJSON(resultDistrict); 
     							$(districtAutocomplete).typeahead({
 								    source: objResultDis,
@@ -1011,7 +1003,6 @@
                                                     .done(function (resultProv) {
                                                         resultProv = resultProv.replace(/Description/g, 'name');
                                                         resultProv = resultProv.replace(/Id/g, 'id');
-                                                        console.log(resultProv);
                                                         var objResultProv = jQuery.parseJSON(resultProv);
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
@@ -1022,7 +1013,6 @@
                                                                     .done(function (resultDistrict) {
                                                                         resultDistrict = resultDistrict.replace(/Description/g, 'name');
                                                                         resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        console.log(resultDistrict);
                                                                         objResultDis = jQuery.parseJSON(resultDistrict);
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
@@ -1158,7 +1148,7 @@
         }
     });
 
-    $(".btn-remove-reciber").onclick( function () {
+    $(".btn-remove-reciber").click( function () {
         tblReciber.row(".selected").remove().draw( false );
     });
 }
@@ -1401,26 +1391,30 @@
             <div class="modal-dialog modal-lg" style="width: 1280px;">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 class="modal-title">Direccion de facturacion</h4>
+                        <h4 class="modal-title">Dirección de facturacion</h4>
                     </div>
-                    <div class="modal-body">
-                        <div class="table-responsive">
-                            <table id="tblInvoicer" class="table table-striped table-bordered table-hover" style="width:100%;">
-                                <thead>
-                                    <tr>
-                                        <th>Codigo</th>
-                                        <th>País</th>
-                                        <th>Depa.</th>
-                                        <th>Prov.</th>
-                                        <th>Dist.</th>
-                                        <th>Dirección</th>
-                                        <th>Ciudad</th>
-                                        <th>Zona</th>
-                                        <th>Telef.</th>
-                                        <th>Conta.</th>
-                                    </tr>
-                                </thead>
-                            </table>
+                    <div class="modal-body" style="padding-bottom: 5px; padding-top:10px;">
+                        <div class="ibox float-e-margins">
+                            <div class="ibox-content" style="padding-bottom: 0px !important;">
+                                <div class="table-responsive">
+                                    <table id="tblInvoicer" class="table table-striped table-bordered table-hover" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th>Codigo</th>
+                                                <th>País</th>
+                                                <th>Depa.</th>
+                                                <th>Prov.</th>
+                                                <th>Dist.</th>
+                                                <th>Dirección</th>
+                                                <th>Ciudad</th>
+                                                <th>Zona</th>
+                                                <th>Telef.</th>
+                                                <th>Conta.</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="modal-footer">

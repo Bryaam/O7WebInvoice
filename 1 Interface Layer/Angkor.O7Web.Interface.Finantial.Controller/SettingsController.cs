@@ -58,6 +58,19 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 
         }
 
+        public JsonResult UpdateCco(string code,string codeOld,string dateBOld, string codeDim, string description, string dateB,
+            string dateE, string accountC, string accountT, string codeCat,
+            string flgDet, string flgPresup, string flgIng)
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.UpdateCco(User.Company, User.Branch,
+             code,codeOld,dateBOld, codeDim, description, dateB,
+             dateE, accountC, accountT, codeCat,
+             flgDet, flgPresup, flgIng);
+            return new O7JsonResult(response);
+
+        }
+
         public JsonResult GetCurrencies()
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);

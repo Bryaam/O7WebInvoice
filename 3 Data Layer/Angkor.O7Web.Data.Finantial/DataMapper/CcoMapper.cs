@@ -23,6 +23,10 @@ namespace Angkor.O7Web.Data.Finantial.DataMapper
                 accountC = Source.GetValue<string>(8),
                 accountT = Source.GetValue<string>(9),
                 codeCat = Source.GetValue<string>(10),
+                accountCContent = Source.GetValue<string>(11),
+                accountTContent = Source.GetValue<string>(12),
+                codeCatContent = Source.GetValue<string>(13),
+
             };
     }
 }

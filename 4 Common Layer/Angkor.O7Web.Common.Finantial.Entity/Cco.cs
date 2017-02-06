@@ -23,6 +23,11 @@ namespace Angkor.O7Web.Common.Finantial.Entity
 
         public string flgIng { get; set; }
 
+        public string accountCContent { get; set; }
+        public string accountTContent { get; set; }
+
+        public string codeCatContent { get; set; }
+
 
 
     }
