@@ -137,19 +137,19 @@
             title: "Fecha"
         },
         {
-            data: "monOri",
+            data: "currencyBegin",
             title: "Mes origen"
         },
         {
-            data: "monFin",
+            data: "currencyEnd",
             title: "Mes fin"
         },
         {
-            data: "valCom",
+            data: "buyValue",
             title: "Valor de compra"
         },
         {
-            data: "valVen",
+            data: "sellValue",
             title: "Valor de venta"
         }]
     });
@@ -177,7 +177,7 @@
 
     $('#btnAgregar').click(function(){
         $("#txtModalTitle").text("Crear");
-        $('#editModal').attr('action', '/Finantial/Settings/CreateExchange');
+        $('#edit_form').attr('action', '/Finantial/Settings/AddExchange');
         $('#editModal').modal('show');
     });
 
@@ -186,11 +186,11 @@
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
 
-        var exchange = table_contents[id];
+        var exchange = array_exchanges[id];
 
         var data = {
             date: exchange.date,
-            monOri: exchange.monOri
+            currencyBegin: exchange.currencyBegin
         }
 
         swal({
@@ -206,20 +206,18 @@
 
     function btn_edit_click() {
         $("#txtModalTitle").text("Editar");
-        $('#editModal').attr('action', '/Finantial/Settings/UpdateExchange');
+        $('#edit_form').attr('action', '/Finantial/Settings/UpdateExchange');
         
         var btn_id = $(this).attr('id');
         var btn_id_split = btn_id.split('_');
         var id = btn_id_split[1];
 
-        var currencies = loadCurrencies();
-
-        var selected_exchange = tables_exchanges[id];
+        var selected_exchange = array_exchanges[id];
         $('#date').val(selected_exchange.date);
-        $('#monOri').val(selected_exchange.monOri);
-        $('#monFin').val(selected_exchange.monFin);
-        $('#valCom').val(selected_exchange.valCom);
-        $('#valVen').val(selected_exchange.valVen);
+        $('#currencyBegin').val(selected_exchange.currencyBegin);
+        $('#currencyEnd').val(selected_exchange.currencyEnd);
+        $('#buyValue').val(selected_exchange.buyValue);
+        $('#sellValue').val(selected_exchange.sellValue);
 
         $('#editModal').modal('show');
     }
@@ -241,10 +239,10 @@
                     dataUnit.edit = "<button type='button' id='" + nameEdit + "' class='btn btn-outline btn-primary'><i class='fa fa-pencil' aria-hidden='true'></i></button>";
                     dataUnit.delete = "<button type='button' id='" + nameDelete + "' class='btn btn-outline btn-danger'><i class='fa fa-trash' aria-hidden='true'></i></button>";
                     dataUnit.date = value.date;
-                    dataUnit.monOri = value.monOri;
-                    dataUnit.monFin = value.monFin;
-                    dataUnit.valCom = value.valCom;
-                    dataUnit.valVen = value.valVen;
+                    dataUnit.currencyBegin = value.currencyBegin;
+                    dataUnit.currencyEnd = value.currencyEnd;
+                    dataUnit.buyValue = value.buyValue;
+                    dataUnit.sellValue = value.sellValue;
 
                     var dataSet = [];
                     dataSet.push(dataUnit);
@@ -262,17 +260,17 @@
         });
     }
 
-    function loadCurrencies() {
-        var currencies = [];
+    //Function que por request AJAX llena un comboBox
+    function initialize_combo_ajax(idSelect, url, async = true) {
         $.ajax({
             method: "GET",
-            url: "/Finantial/Settings/GetCurrencies",
-            async: false
+            url: url,
+            async: async
         })
         .done(function(result) {
             var jsonResult = jQuery.parseJSON(result);
             if (!jQuery.isEmptyObject(jsonResult)) {
-                currencies = jsonResult;
+                populate_combo_box(idSelect, jsonResult);
             }
         })
         .fail(function(result) {
@@ -280,9 +278,25 @@
                 positionClass: "toast-top-full-width"
             });
         });
-
-        return currencies;
     }
+
+    //Function que llena un comboBox
+    function populate_combo_box(idCombo, data) {
+        combo_box = $(idCombo);
+        combo_box.empty();
+        combo_box.trigger("chosen:updated");
+        $.each(data, function(index, value) {
+            combo_box.append("<option value='" + value.Value + "'>" + value.Content + "</option>");
+        });
+        combo_box.trigger("chosen:updated");
+    }
+
+    $("#currencyBegin").chosen({
+        width: "100%",
+        disable_search: true
+    });
+
+    initialize_combo_ajax("#currencyBegin", "/Finantial/Settings/GetCurrencies");
 
     loadTable();
 
@@ -319,27 +333,27 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="monOri">Mes origen</label>
+                        <label class="control-label col-lg-3" for="currencyBegin">Moneda origen</label>
                         <div class="col-lg-9">
-                            <input class="form-control" id="monOri" name="monOri">
+                            <select class="form-control" id="currencyBegin" name="currencyBegin"></select>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="monFin">Mes fin</label>
+                        <label class="control-label col-lg-3" for="currencyEnd">Moneda fin</label>
                         <div class="col-lg-9">
-                            <input class="form-control" id="monFin" name="monFin" disabled>
+                            <input class="form-control" id="currencyEnd" name="currencyEnd" value="S/." disabled>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="valCom">Valor de compra</label>
+                        <label class="control-label col-lg-3" for="buyValue">Valor de compra</label>
                         <div class="col-lg-9">
-                            <input class="form-control" id="valCom" name="valCom">
+                            <input class="form-control" id="buyValue" name="buyValue">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-lg-3" for="valVen">Valor de venta</label>
+                        <label class="control-label col-lg-3" for="sellValue">Valor de venta</label>
                         <div class="col-lg-9">
-                            <input class="form-control" id="valVen" name="valVen">
+                            <input class="form-control" id="sellValue" name="sellValue">
                         </div>
                     </div>
                 </div>
