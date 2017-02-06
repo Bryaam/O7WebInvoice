@@ -458,8 +458,16 @@
 
         if(personType=="N") $("#divRuc").removeAttr("style");
         else $("#divRuc").attr("style","visibility:hidden;");
-
-        allTypeDocument("/Finantial/Client/DocumentType",personType,chkDocumentType);
+        
+        $.ajax({ method: "GET", url: "/Finantial/Client/DocumentType", data: { clientType: personType }, async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                var documentType = $("#chkDocumentType");
+                documentType.html("");
+                iterate_Combo(documentType, objResult);
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
     });
     
      $("#chkDocumentType").chosen({
@@ -484,10 +492,7 @@
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkCountry");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
@@ -497,10 +502,7 @@
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkZone");
             documentType.html("");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
@@ -511,10 +513,7 @@
                 var objResult = jQuery.parseJSON(result);
                 var documentType = $("#chkZone");
                 documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
+                iterate_Combo(documentType, objResult);
             }).fail(function (result) {
                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });
@@ -523,10 +522,7 @@
                 var objResult = jQuery.parseJSON(result);
                 var documentType = $("#chkDepartment");
                 documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
+                iterate_Combo(documentType, objResult);
             }).fail(function (result) {
                     toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
@@ -536,10 +532,7 @@
                 var objResult = jQuery.parseJSON(result);
                 var documentType = $("#chkDistrict");
                 documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
+                iterate_Combo(documentType, objResult);
             }).fail(function (result) {
                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });    
@@ -549,10 +542,7 @@
                 var objResult = jQuery.parseJSON(result);
                 var documentType = $("#chkProvince");
                 documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
+                iterate_Combo(documentType, objResult);
             }).fail(function (result) {
                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });   
@@ -563,10 +553,7 @@
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkPostale");
             documentType.html("");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });    
@@ -585,10 +572,7 @@
                 var objResult = jQuery.parseJSON(result);
                 var documentType = $("#chkDistrict");
                 documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
+                iterate_Combo(documentType, objResult);
             }).fail(function (result) {
                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
@@ -600,10 +584,7 @@
                 var objResult = jQuery.parseJSON(result);
                 var documentType = $("#chkProvince");
                 documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
+                iterate_Combo(documentType, objResult);
             }).fail(function (result) {
                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
             });
@@ -613,10 +594,7 @@
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkOriginClient");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });
@@ -625,10 +603,7 @@
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkClientState");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });
@@ -637,10 +612,7 @@
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkpersonType");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });        
@@ -649,10 +621,7 @@
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
             var documentType = $("#chkDepartment");
-            $.each(objResult, function (index, value) {
-                documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-            });
-            documentType.trigger("chosen:updated");
+            iterate_Combo(documentType, objResult);
         }).fail(function (result) {
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });

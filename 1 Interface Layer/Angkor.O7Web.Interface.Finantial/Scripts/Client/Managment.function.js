@@ -68,7 +68,6 @@ function getAutoCompleteDataNested(counAuto,depAuto,proAuto,disAuto,zoneAuto) {
                             });
                         }
                     });
-<<<<<<< HEAD
                 }).fail(function (result) {
                     toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                 });
@@ -83,8 +82,6 @@ function parseAutocomplete(json) {
     json = json.replace(/Description/g, 'name');
     json = json.replace(/Id/g, 'id');
     return json;
-=======
->>>>>>> 8c8d91e0b490059e0a4e65ef828a7057c984988e
 }
 
 function rowValidate(i,tblName,curName, buttonName) {
@@ -105,23 +102,4 @@ function rowValidate(i,tblName,curName, buttonName) {
     });
 }
 
-function allTypeDocument(urlName, clientTypeName, idName) {
-        $.ajax({ method: "GET", url: urlName, data: { clientType: clientTypeName }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $(idName);
 
-                documentType.html("");
-                
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
-                });
-                documentType.trigger("chosen:updated");
-            }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
-}
-<<<<<<< HEAD
-=======
-
->>>>>>> 8c8d91e0b490059e0a4e65ef828a7057c984988e
