@@ -214,14 +214,28 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<TTData>("table_tables.get_data", parameters, TTDataMapper.Class);
         }
 
-        public virtual bool AddExchange(string date, string currencyBegin,string BuyValue,string SellValue)
+        public virtual bool AddExchange(string date, string currencyBegin,string buyValue,string sellValue)
         {
             var parameters = O7DbParameterCollection.Make;
             parameters.Add(O7Parameter.Make("p_fecha", date));
             parameters.Add(O7Parameter.Make("p_mon", currencyBegin));
-            parameters.Add(O7Parameter.Make("p_val_comp", BuyValue));
-            parameters.Add(O7Parameter.Make("p_val_vta", SellValue));
+            parameters.Add(O7Parameter.Make("p_val_comp", buyValue));
+            parameters.Add(O7Parameter.Make("p_val_vta", sellValue));
             return DataAccess.ExecuteFunction<int>("crud_tipo_cambio.insert_tipo_cambio", parameters)==1;
+        }
+
+        
+
+        public virtual bool UpdateExchange(string date, string currencyBegin,string dateNew, string currencyBeginNew, string buyValue, string sellValue)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_fecha_ant", date));
+            parameters.Add(O7Parameter.Make("p_mon_ant", currencyBegin));
+            parameters.Add(O7Parameter.Make("p_fecha_nue", dateNew));
+            parameters.Add(O7Parameter.Make("p_mon_nue", currencyBeginNew));
+            parameters.Add(O7Parameter.Make("p_val_comp", buyValue));
+            parameters.Add(O7Parameter.Make("p_val_vta", sellValue));
+            return DataAccess.ExecuteFunction<int>("crud_tipo_cambio.update_tipo_cambio", parameters) == 1;
         }
 
         public virtual bool ValidateCountryInvoicer(string countryId)
@@ -581,6 +595,14 @@ namespace Angkor.O7Web.Data.Finantial
         {
             var parameters = O7DbParameterCollection.Make;
             return DataAccess.ExecuteFunction<GenericListValue>("finantial_invoice.money_type", parameters, InvoiceGenericListMapper.Class);
+
+        }
+
+        public virtual List<GenericListValue> AllCurrencies_Tip_Cambios(string companyId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            return DataAccess.ExecuteFunction<GenericListValue>("crud_tipo_cambio.money_type", parameters, InvoiceGenericListMapper.Class);
 
         }
 
