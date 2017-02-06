@@ -65,11 +65,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        public JsonResult AddExchange(string date,string currencyBegin,string buyValue,string sellValue)
+        public ActionResult AddExchange(string date,string currencyBegin,string buyValue,string sellValue)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.AddExchange(date, currencyBegin,buyValue,sellValue);
-            return new O7JsonResult(response);
+            return 
         }
 
         public JsonResult UpdateExchange(string date, string currencyBegin,
@@ -82,11 +82,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
         }
 
 
-        public JsonResult GetExchanges(string dateIni=null,string dateFin=null)
+        public ActionResult GetExchanges(string dateIni=null,string dateFin=null)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
             var response = domain.GetExchanges(User.Company,dateIni,dateFin);
-            return new O7JsonResult(response);
+            return Exchange();//new O7JsonResult(response);
         }
 
 
