@@ -14,8 +14,23 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         protected FinantialDomain(string login, string password)
         {
-            FinantialDataService = O7DataInstanceMaker.MakeInstance<FinantialDataService>(new object[] { login, password });
+            FinantialDataService = O7DataInstanceMaker.MakeInstance<FinantialDataService>(new object[] {login, password});
         }
+
+        public abstract O7Response GetCco(string companyId, string branchId, string dateB, string code);
+        public abstract O7Response GetExchanges(string companyId,string dateIni,string dateFin);
+        public abstract O7Response AddCco(string companyId, string branchId,
+            string code, string codeDim, string description, string dateB,
+            string dateE, string accountC, string accountT, string codeCat,
+            string flgDet, string flgPresup, string flgIng);
+
+        public abstract O7Response getDimensions();
+
+        public abstract O7Response getAccountsC(string companyId, string branchId);
+        public abstract O7Response getAccountsT(string companyId, string branchId);
+        
+
+        public abstract O7Response getCategories();
 
         public abstract O7Response ClientChangeState(string companyId, string branchId, string clientId);
 
@@ -130,6 +145,9 @@ namespace Angkor.O7Web.Domain.Finantial.Base
             string documentIdRef, string documentOC,
             string guiRem, string addressId, string serieExtRef, string nroDoceExt);
 
+        public abstract O7Response GeneratePdf(string companyId, string branchId, string documentType, string documentId);
+
+
         public abstract O7Response getExpirationDate(string companyId, string branchId, string payment, string documentDate);
 
         public abstract O7Response GetInvoice(string companyId, string branchId, string documentType, string documentId);
@@ -191,6 +209,12 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         public abstract O7Response InvoiceAdresses(string companyId, string branchId, string clientId);
 
+        public abstract O7Response AddExchange(string date, string currencyBegin, string buyValue, string sellValue);
+
+        public abstract O7Response UpdateExchange(string date, string currencyBegin, string dateNew,
+            string currencyBeginNew, string buyValue, string sellValue);
+
+        public abstract O7Response Currencies_Exchanges(string companyId);
         public abstract O7Response Currencies();
 
         public abstract O7Response Languages();

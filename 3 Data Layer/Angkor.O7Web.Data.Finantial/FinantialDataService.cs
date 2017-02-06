@@ -1,4 +1,6 @@
 ﻿// O7ERP Web created by felix_dev
+
+using System.CodeDom;
 using System.Collections.Generic;
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Data.Tool;
@@ -6,6 +8,8 @@ using Angkor.O7Framework.Infrastructure.Data;
 using Angkor.O7Web.Common.Finantial.Entity;
 using Angkor.O7Web.Data.Finantial.DataMapper;
 using System.IO;
+using System.Reflection.Emit;
+using System.Security.Principal;
 
 namespace Angkor.O7Web.Data.Finantial
 {
@@ -189,6 +193,15 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<TTHeads>("table_tables.get_tablehead", parameters,TTHeadMapper.Class) ;
         }
 
+        public virtual List<Exchange> GetExchanges(string companyId,string dateIni,string dateFin)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_company", companyId));
+            parameters.Add(O7Parameter.Make("p_ini", dateIni));
+            parameters.Add(O7Parameter.Make("p_fin", dateFin));
+            return DataAccess.ExecuteFunction<Exchange>("crud_tipo_cambio.view_tipos_cambio", parameters, ExchangeMapper.Class);
+        }
+
         public virtual List<InvoiceTypeAhead> GetTTNames()
         {
             var parameters = O7DbParameterCollection.Make;
@@ -201,6 +214,30 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_primary", primary));
             parameters.Add(O7Parameter.Make("p_secondary", secondary));
             return DataAccess.ExecuteFunction<TTData>("table_tables.get_data", parameters, TTDataMapper.Class);
+        }
+
+        public virtual bool AddExchange(string date, string currencyBegin,string buyValue,string sellValue)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_fecha", date));
+            parameters.Add(O7Parameter.Make("p_mon", currencyBegin));
+            parameters.Add(O7Parameter.Make("p_val_comp", buyValue));
+            parameters.Add(O7Parameter.Make("p_val_vta", sellValue));
+            return DataAccess.ExecuteFunction<int>("crud_tipo_cambio.insert_tipo_cambio", parameters)==1;
+        }
+
+        
+
+        public virtual bool UpdateExchange(string date, string currencyBegin,string dateNew, string currencyBeginNew, string buyValue, string sellValue)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_fecha_ant", date));
+            parameters.Add(O7Parameter.Make("p_mon_ant", currencyBegin));
+            parameters.Add(O7Parameter.Make("p_fecha_nue", dateNew));
+            parameters.Add(O7Parameter.Make("p_mon_nue", currencyBeginNew));
+            parameters.Add(O7Parameter.Make("p_val_comp", buyValue));
+            parameters.Add(O7Parameter.Make("p_val_vta", sellValue));
+            return DataAccess.ExecuteFunction<int>("crud_tipo_cambio.update_tipo_cambio", parameters) == 1;
         }
 
         public virtual bool ValidateCountryInvoicer(string countryId)
@@ -563,6 +600,14 @@ namespace Angkor.O7Web.Data.Finantial
 
         }
 
+        public virtual List<GenericListValue> AllCurrencies_Tip_Cambios(string companyId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            return DataAccess.ExecuteFunction<GenericListValue>("crud_tipo_cambio.money_type", parameters, InvoiceGenericListMapper.Class);
+
+        }
+
         public virtual List<GenericListValue> AllLanguages()
         {
             var parameters = O7DbParameterCollection.Make;
@@ -728,6 +773,34 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<CcoView>("cost_centers.get_cost_centers", parameters, CcoViewMapper.Class);
         }
 
+        public virtual List<InvoiceTypeAhead> getCategories()
+        {
+            var parameters = O7DbParameterCollection.Make;
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_categories", parameters, TypeAheadMapper.Class);
+        }
+
+        public virtual List<InvoiceTypeAhead> getDimensions()
+        {
+            var parameters = O7DbParameterCollection.Make;
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_dimensiones", parameters, TypeAheadMapper.Class);
+        }
+
+        public virtual List<InvoiceTypeAhead> getAccountsC(string companyId, string branchId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_accounts", parameters, TypeAheadMapper.Class);
+        }
+
+        public virtual List<InvoiceTypeAhead> getAccountsT(string companyId, string branchId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_accountsT", parameters, TypeAheadMapper.Class);
+        }
+
         public virtual List<InvoiceDetail> GetInvoiceDetail(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;
@@ -736,6 +809,28 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_tipo_doc", documentType));
             parameters.Add(O7Parameter.Make("p_nro_doc", documentId));
             return DataAccess.ExecuteFunction<InvoiceDetail>("finantial_invoice.search_fact_detail", parameters, InvoiceDetailMapper.Class);
+        }
+    
+        public virtual bool AddCco(string companyId, string branchId,
+                            string code, string codeDim,string description,string dateB,
+                            string dateE,string accountC,string accountT,string codeCat,
+                            string flgDet,string flgPresup,string flgIng)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_codigo", code));
+            parameters.Add(O7Parameter.Make("p_fecini", dateB));
+            parameters.Add(O7Parameter.Make("p_descripcion", description));
+            parameters.Add(O7Parameter.Make("p_cuenta", accountC));
+            parameters.Add(O7Parameter.Make("p_fecfin", dateE));
+            parameters.Add(O7Parameter.Make("p_flgdet", flgDet));
+            parameters.Add(O7Parameter.Make("p_flgpto", flgPresup));
+            parameters.Add(O7Parameter.Make("p_dimension", codeDim));
+            parameters.Add(O7Parameter.Make("p_cuentatrans", accountT));
+            parameters.Add(O7Parameter.Make("p_flging", flgIng));
+            parameters.Add(O7Parameter.Make("p_codcat", codeCat));
+            return DataAccess.ExecuteFunction<int>("cost_centers.insert_cost_center", parameters)==1;
         }
 
         public virtual List<InvoiceSeries> Series(string companyId, string branchId, string docType)
@@ -756,17 +851,34 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
             parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
 
-            HeadInvoicePDF head =
-              DataAccess.ExecuteFunction<HeadInvoicePDF>("finantial_invoice.head_pdf", parameters,
-                  HeadInvoicePDFMapper.Class)[0];
-
-            List<DetailInvoicePDF> details = DataAccess.ExecuteFunction<DetailInvoicePDF>("finantial_invoice.detail_pdf", parameters, DetailInvoicePDFMapper.Class);
-
-
+            
             int result = DataAccess.ExecuteFunction<int>("finantial_invoice.facturar_electronica", parameters);
+            string url= DataAccess.ExecuteFunction<string>("finantial_invoice.generarpdf", parameters);
+
+            byte[] PDF = null;
+
+            using (var wc = new System.Net.WebClient())
+                PDF = wc.DownloadData(url);
+
+            return new MemoryStream(PDF);
+        }
+
+        public virtual Stream GeneratePDF(string companyId, string branchId, string documentType, string documentId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_tipdoc", documentType));
+            parameters.Add(O7Parameter.Make("p_nrodoc", documentId));
 
 
-            return PdfGenerator.generar(head, details, "tura.pdf");
+           string url = DataAccess.ExecuteFunction<string>("finantial_invoice.generarpdf", parameters);
+           byte[] PDF = null;
+
+            using (var wc = new System.Net.WebClient())
+                PDF = wc.DownloadData(url);
+
+            return new MemoryStream(PDF);
         }
 
         public virtual List<SingleValue> GetFecVto(string companyId, string branchId, string payment, string documentDate)
@@ -795,6 +907,16 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_suc", branchId));
             parameters.Add(O7Parameter.Make("p_codcli", clientCode));
             return DataAccess.ExecuteFunction<ClientDefaultValues>("finantial_invoice.confirm_client", parameters, ClientDefaultValueMapper.Class);
+        }
+
+        public virtual List<Cco> GetCco(string companyId, string branchId, string code,string dateB )
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_fecini", dateB));
+            parameters.Add(O7Parameter.Make("p_cco", code));
+            return DataAccess.ExecuteFunction<Cco>("cost_centers.get_cost_center", parameters, CcoMapper.Class);
         }
 
         public virtual bool AddInvoiceDetail(

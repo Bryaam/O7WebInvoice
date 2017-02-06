@@ -17,5 +17,11 @@ namespace Angkor.O7Web.Domain.Finantial
             var serealizedResponse = O7JsonSerealizer.Serialize(response);
             return O7SuccessResponse.MakeResponse(serealizedResponse);
         }
+
+        public override O7Response ClientChangeState(string companyId, string branchId, string clientId)
+        {
+            var response = ClientDataService.ClientChangeState(companyId, branchId, clientId);
+            return O7SuccessResponse.MakeResponse($"{response}");
+        }
     }
 }
