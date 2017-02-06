@@ -40,6 +40,7 @@
   <ItemGroup>
     <Compile Include="AddressEnt.cs" />
     <Compile Include="AddressFact.cs" />
+    <Compile Include="Cco.cs" />
     <Compile Include="ClientCountry.cs" />
     <Compile Include="ClientDefaultValues.cs" />
     <Compile Include="ClientDepartment.cs" />

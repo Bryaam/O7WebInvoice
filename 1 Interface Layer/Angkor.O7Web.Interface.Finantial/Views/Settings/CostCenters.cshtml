@@ -9,6 +9,8 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
     @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")
+
+    @Html.StyleLink("css/plugins/sweetalert/sweetalert.css")
 }
 
 @section scripts_link {
@@ -18,73 +20,20 @@
     
     @Html.JavaScriptLink("js/plugins/datapicker/bootstrap-datepicker.js")
     @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
+    @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
+
+    @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
     <script>
-        function delete_action(id, start, end, current, type, digital) {
-            $("#txtModalTitle").text("Eliminar serie");
-            $("#btnConfirm").show();
-            $("#btnConfirm").attr("action", "3");
-            var txtSerie = $("#txtSerie");
-            var txtStart = $("#txtStart");
-            var txtFinal = $("#txtFinal");
-            var txtCurrent = $("#txtCurrent");
-            var slcDocumentType = $("#chkDocumentType");
-            var slcInvoiceType = $("#chkInvoiceType");
-            slcDocumentType.attr("disabled", true);
-            slcDocumentType.val(digital);
-            slcDocumentType.trigger("chosen:updated");
-            slcInvoiceType.attr("disabled", true);
-            slcInvoiceType.val(type);
-            slcInvoiceType.trigger("chosen:updated");
-            txtSerie.val(id);
-            txtSerie.attr('readonly', true);
-            txtStart.val(start);
-            txtStart.attr('readonly', true);
-            txtFinal.val(end);
-            txtFinal.attr('readonly', true);
-            txtCurrent.val(current);
-            txtCurrent.attr('readonly', true);
-        }
-
-        function detail(codigo, fecini) {
-            $("#txtModalTitle").text("Detalle Centros de Costo");
-            $("#btnConfirm").hide();
-            $(".input-hidden").attr("disabled", true);
-
+        function delete_action(codigo, dimension, descripcion, fecini, fecfin) {
             $.ajax({
-                method: "GET",
-                url: "/Finantial/Settings/viewCco",
+                method: "POST",
+                url: "/Finantial/Settings/DeleteCco",
                 data: {
                     code: codigo,
                     date: fecini
                 }
             })
                 .done(function (result) {
-                    console.log(result);
-                    var jsonResult = jQuery.parseJSON(result);
-                    $("#txtCode").val(jsonResult[0].code);
-                    $("#txtCode").val(jsonResult[0].codeDim);
-                    $("#txtCode").val(jsonResult[0].description);
-                    $("#txtCode").val(jsonResult[0].dateB);
-                    $("#txtCode").val(jsonResult[0].dateE);
-                    $("#txtCode").val(jsonResult[0].accountC);
-                    $("#txtCode").val(jsonResult[0].accountT);
-                    $("#txtCode").val(jsonResult[0].codeCat);
-
-                    if (jsonResult[0].flgDet == "true")
-                        $("#checkboxDet").prop("checked", true);
-                    else
-                        $("#checkboxDet").prop("checked", false);
-
-                    if (jsonResult[0].flgPresup == "true")
-                        $("#checkboxPresup").prop("checked", true);
-                    else
-                        $("#checkboxPresup").prop("checked", false);
-
-                    if (jsonResult[0].flgIng == "true")
-                        $("#checkboxCenIng").prop("checked", true);
-                    else
-                        $("#checkboxCenIng").prop("checked", false);
-
                     toastr.success(result, "Mensaje", {
                         positionClass: "toast-top-full-width"
                     });
@@ -93,71 +42,118 @@
                         positionClass: "toast-top-full-width"
                     });
                 });
-
-
-
-            var txtSerie = $("#txtSerie");
-            var txtStart = $("#txtStart");
-            var txtFinal = $("#txtFinal");
-            var txtCurrent = $("#txtCurrent");
-            var slcDocumentType = $("#chkDocumentType");
-            var slcInvoiceType = $("#chkInvoiceType");
-            var txtPrefix = $("#txtPrefix");
-            slcDocumentType.attr("disabled", true);
-            slcDocumentType.val(digital);
-            slcDocumentType.trigger("chosen:updated");
-            slcInvoiceType.attr("disabled", true);
-            slcInvoiceType.val(type);
-            slcInvoiceType.trigger("chosen:updated");
-            txtSerie.val(id);
-            txtSerie.attr('readonly', true);
-            txtStart.val(start);
-            txtStart.attr('readonly', true);
-            txtFinal.val(end);
-            txtFinal.attr('readonly', true);
-            txtCurrent.val(current);
-            txtCurrent.attr('readonly', true);
-            txtPrefix.val(prefix);
-            txtPrefix.attr('readonly', true);
         }
 
-        function update(id, start, end, current, type, digital, prefix) {
+        function detail(codigo, dimension, descripcion, fecini, fecfin) {
+            $("#txtModalTitle").text("Detalle Centros de Costo");
+            $("#btnConfirm").hide();
+            $(".input-hidden").attr("disabled", true);
+
+            $("#originalCode").val(codigo);
+            $("#originalFechIni").val(fecini);
+
+            $.ajax({
+                method: "GET",
+                url: "/Finantial/Settings/GetCco",
+                data: {
+                    code: codigo,
+                    dateB: fecini
+                }
+            })
+                .done(function (result) {
+                    var jsonResult = jQuery.parseJSON(result);
+                    $("#txtCode").val(jsonResult[0].code);
+                    $("#txtDimension").val(jsonResult[0].codeDim);
+                    $("#txtDimension").trigger("chosen:updated");
+                    $("#txtDescription").val(jsonResult[0].description);
+                    $("#txtStartDate").val(jsonResult[0].dateB);
+                    $("#txtEndDate").val(jsonResult[0].dateE);
+                    $("#txtCtaContable").val(jsonResult[0].accountCContent);
+                    $("#txtCtaContableTransf").val(jsonResult[0].accountTContent);
+                    $("#txtCategoria").val(jsonResult[0].codeCatContent);
+
+                    $("#txtCtaContableVal").val(jsonResult[0].accountC);
+                    $("#txtCtaContableTransfVal").val(jsonResult[0].accountT);
+                    $("#txtCategoriaVal").val(jsonResult[0].codeCat);
+
+                    if (jsonResult[0].flgDet == "S")
+                        $("#checkboxDet").prop("checked", true);
+                    else
+                        $("#checkboxDet").prop("checked", false);
+
+                    if (jsonResult[0].flgPresup == "S")
+                        $("#checkboxPresup").prop("checked", true);
+                    else
+                        $("#checkboxPresup").prop("checked", false);
+
+                    if (jsonResult[0].flgIng == "S")
+                        $("#checkboxCenIng").prop("checked", true);
+                    else
+                        $("#checkboxCenIng").prop("checked", false);
+
+                }).fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
+
+        }
+
+        function update(codigo, dimension, descripcion, fecini, fecfin) {
             $("#txtModalTitle").text("Actualizar Centros de Costo");
             $("#btnConfirm").show();
             $("#btnConfirm").attr("action", "2");
             $(".input-hidden").attr("disabled", false);
-            var txtSerie = $("#txtSerie");
-            var txtStart = $("#txtStart");
-            var txtFinal = $("#txtFinal");
-            var txtCurrent = $("#txtCurrent");
-            var slcDocumentType = $("#chkDocumentType");
-            var slcInvoiceType = $("#chkInvoiceType");
-            var txtPrefix = $("#txtPrefix");
-            slcDocumentType.attr("disabled", false);
-            slcDocumentType.val(digital);
-            slcDocumentType.trigger("chosen:updated");
-            slcInvoiceType.attr("disabled", false);
-            slcInvoiceType.val(type);
-            slcInvoiceType.trigger("chosen:updated");
-            $("#txtInvoiceTypeOld").val(slcInvoiceType.val());
-            txtSerie.val(id);
-            txtSerie.attr('readonly', false);
-            txtStart.val(start);
-            txtStart.attr('readonly', false);
-            txtFinal.val(end);
-            txtFinal.attr('readonly', false);
-            txtCurrent.val(current);
-            txtCurrent.attr('readonly', false);
-            txtPrefix.val(prefix);
-            if (digital == "true") {
-                var serieNum = txtSerie.val();
-                $("#txtSerieOld").val(serieNum.substring(1,4));
-            } else {
-                $("#txtSerieOld").val(txtSerie.val());
-            }
 
-            if(prefix == '--')
-                txtPrefix.attr('readonly', true);
+            $("#originalCode").val(codigo);
+            $("#originalFechIni").val(fecini);
+
+            $.ajax({
+                method: "GET",
+                url: "/Finantial/Settings/GetCco",
+                data: {
+                    code: codigo,
+                    dateB: fecini
+                }
+            })
+                .done(function (result) {
+                    console.log(result);
+                    var jsonResult = jQuery.parseJSON(result);
+                    $("#txtCode").val(jsonResult[0].code);
+                    $("#txtDimension").val(jsonResult[0].codeDim);
+                    $("#txtDimension").trigger("chosen:updated");
+                    $("#txtDescription").val(jsonResult[0].description);
+                    $("#txtStartDate").val(jsonResult[0].dateB);
+                    $("#txtEndDate").val(jsonResult[0].dateE);
+                    $("#txtCtaContable").val(jsonResult[0].accountCContent);
+                    $("#txtCtaContableTransf").val(jsonResult[0].accountTContent);
+                    $("#txtCategoria").val(jsonResult[0].codeCatContent);
+
+                    $("#txtCtaContableVal").val(jsonResult[0].accountC);
+                    $("#txtCtaContableTransfVal").val(jsonResult[0].accountT);
+                    $("#txtCategoriaVal").val(jsonResult[0].codeCat);
+
+                    if (jsonResult[0].flgDet == "S")
+                        $("#checkboxDet").prop("checked", true);
+                    else
+                        $("#checkboxDet").prop("checked", false);
+
+                    if (jsonResult[0].flgPresup == "S")
+                        $("#checkboxPresup").prop("checked", true);
+                    else
+                        $("#checkboxPresup").prop("checked", false);
+
+                    if (jsonResult[0].flgIng == "S")
+                        $("#checkboxCenIng").prop("checked", true);
+                    else
+                        $("#checkboxCenIng").prop("checked", false);
+
+                }).fail(function (result) {
+                    toastr.error(result.statusText, "Mensaje", {
+                        positionClass: "toast-top-full-width"
+                    });
+                });
+
         }
 
 
@@ -175,6 +171,8 @@
         autoclose: true
     });
 
+    initialize_combo_ajax("#txtDimension", "/Finantial/Settings/getDimensions");
+
     var tblCenters = $("#tblCenters").DataTable({
         //searching: false,
         dom: 'Bfrtip',
@@ -185,26 +183,20 @@
                 $("#btnConfirm").attr("action", "1");
                 $("#btnConfirm").show();
                 $(".input-hidden").attr("disabled", false);
-                var txtSerie = $("#txtSerie");
-                var txtStart = $("#txtStart");
-                var txtFinal = $("#txtFinal");
-                var txtCurrent = $("#txtCurrent");
-                var slcDocumentType = $("#chkDocumentType");
-                var slcInvoiceType = $("#chkInvoiceType");
-                slcDocumentType.attr("disabled", false);
-                slcDocumentType.val("true");
-                slcDocumentType.trigger("chosen:updated");
-                slcInvoiceType.attr("disabled", false);
-                $("#chkInvoiceType option:first-child").attr("selected", "selected");
-                slcInvoiceType.trigger("chosen:updated");
-                txtSerie.val('');
-                txtSerie.attr('readonly', false);
-                txtStart.val('');
-                txtStart.attr('readonly', false);
-                txtFinal.val('');
-                txtFinal.attr('readonly', false);
-                txtCurrent.val('');
-                txtCurrent.attr('readonly', false);
+                
+                $("#txtCode").val("");
+                $("#txtDimension").val("");
+                $("#txtDimension").trigger("chosen:updated");
+                $("#txtDescription").val("");
+                $("#txtStartDate").val("");
+                $("#txtEndDate").val("");
+                $("#txtCtaContable").val("");
+                $("#txtCtaContableTransf").val("");
+                $("#txtCategoria").val("");
+
+                $("#checkboxDet").prop("checked", true);
+                $("#checkboxPresup").prop("checked", true);
+                $("#checkboxCenIng").prop("checked", true);
             }
         }],
         columns: [{
@@ -232,7 +224,7 @@
                 orderable: false,
                 className: "text-center",
                 render: function(data, type, full, meta) {
-                    var costCenterId = '"' + full.codigo + '",' +  '"' + full.fecini + '"';
+                    var costCenterId = '"' + full.codigo + '",' +  '"' + full.dimension + '",' + '"' + full.descripcion + '",' + '"' + full.fecini + '",' + '"' + full.fecfin + '"';
                     var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + costCenterId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
                     var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update(" + costCenterId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
                     var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action(" + costCenterId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
@@ -258,7 +250,7 @@
         });
 
     $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").attr("data-toggle", "modal").attr("data-target", "#mdlInsert");
-            
+
     //MODAL
 
     $("#txtDimension").chosen({
@@ -266,61 +258,62 @@
         disable_search: true
     });
 
-    initialize_combo_ajax("#txtDimension", "/Finantial/Settings/getDimensions");
+    
 
     $.ajax({
-        method: "GET",
-        url: "/Finantial/Settings/getAccountsC"
-      })
-      .done(function(result) {
-        var jsonResult = jQuery.parseJSON(result);
-        if (!jQuery.isEmptyObject(jsonResult)) {
-          $('txtCtaContable').typeahead({
-            source: jsonResult
-          });
-        }
-      })
-      .fail(function(result) {
-        toastr.error(result.statusText, "Mensaje", {
-          positionClass: "toast-top-full-width"
+            method: "GET",
+            url: "/Finantial/Settings/getAccountsC"
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                $('#txtCtaContable').typeahead({
+                    source: jsonResult
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
         });
-      });
 
     $.ajax({
-        method: "GET",
-        url: "/Finantial/Settings/getAccountsT"
-      })
-      .done(function(result) {
-        var jsonResult = jQuery.parseJSON(result);
-        if (!jQuery.isEmptyObject(jsonResult)) {
-          $('txtCtaContableTransf').typeahead({
-            source: jsonResult
-          });
-        }
-      })
-      .fail(function(result) {
-        toastr.error(result.statusText, "Mensaje", {
-          positionClass: "toast-top-full-width"
+            method: "GET",
+            url: "/Finantial/Settings/getAccountsT"
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                $('#txtCtaContableTransf').typeahead({
+                    source: jsonResult
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
         });
-      });
 
     $.ajax({
-        method: "GET",
-        url: "/Finantial/Settings/getCategories"
-      })
-      .done(function(result) {
-        var jsonResult = jQuery.parseJSON(result);
-        if (!jQuery.isEmptyObject(jsonResult)) {
-          $('txtCategoria').typeahead({
-            source: jsonResult
-          });
-        }
-      })
-      .fail(function(result) {
-        toastr.error(result.statusText, "Mensaje", {
-          positionClass: "toast-top-full-width"
+            method: "GET",
+            url: "/Finantial/Settings/getCategories"
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                $('#txtCategoria').typeahead({
+                    source: jsonResult
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
         });
-      });
+
 
     //FIN MODAL
 
@@ -342,30 +335,58 @@
         });
 
     $("#btnConfirm").on("click", function() {
+        swal({
+            title: "Confirmación",
+            text: "¿Crear registro?",
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Sí",
+            closeOnConfirm: false
+        }, function() {
+        swal({
+            title: "Generado",
+            text: "Registro creado exitosamente",
+            type: "success",
+            confirmButtonText: "Continuar"
+            }, function () {
+                submit_cco();
+                location.reload();
+            });
+        });
+    });
+
+    function submit_cco(){
+        var ctaContableVal = $("#txtCtaContable").typeahead("getActive");
+        var ctaContableTransfVal = $("#txtCtaContableTransf").typeahead("getActive");
+        var categoryVal = $("#txtCategoria").typeahead("getActive");
+
+        $("#txtCtaContableVal").val(ctaContableVal.Value);
+        $("#txtCtaContableTransfVal").val(ctaContableTransfVal.Value);
+        $("#txtCategoriaVal").val(categoryVal.Value);
+
         var value = $(this).attr("action");
         if (value == "1") {
+
             $.ajax({
                     method: "POST",
-                    url: "/Finantial/Settings/AddInvoice",
+                    url: "/Finantial/Settings/AddCco",
                     data: {
                         code: $("#txtCode").val(),
                         codeDim: $("#txtDimension").val(),
                         description: $("#txtDescription").val(),
                         dateB: $("#txtStartDate").val(),
                         dateE: $("#txtEndDate").val(),
-                        accountC: $("#txtCtaContable").val(),
-                        accountT: $("#txtCtaContableTransf").val(),
-                        codeCat: $("#txtCategoria").val(),
-                        flgDet: $('#checkboxDet').is(":checked"),
-                        flgPresup: $('#checkboxPresup').is(":checked"),
-                        flgIng: $('#checkboxCenIng').is(":checked")
+                        accountC: $("#txtCtaContableVal").val(),
+                        accountT: $("#txtCtaContableTransfVal").val(),
+                        codeCat: $("#txtCategoriaVal").val(),
+                        flgDet: $('#checkboxDet').is(":checked") ? "S" : "N" ,
+                        flgPresup: $('#checkboxPresup').is(":checked") ? "S" : "N",
+                        flgIng: $('#checkboxCenIng').is(":checked") ? "S" : "N"
                     }
                 })
                 .done(function(result) {
                     console.log(result);
-                    toastr.success(result, "Mensaje", {
-                        positionClass: "toast-top-full-width"
-                    });
                 }).fail(function(result) {
                     toastr.error(result.statusText, "Mensaje", {
                         positionClass: "toast-top-full-width"
@@ -373,29 +394,27 @@
                 });
         } else {
             if (value == "2") {
-
                 $.ajax({
                         method: "POST",
-                        url: "/Finantial/Settings/UpdateInvoice",
+                        url: "/Finantial/Settings/UpdateCco",
                         data: {
-                          code: $("#txtCode").val(),
-                          codeDim: $("#txtDimension").val(),
-                          description: $("#txtDescription").val(),
-                          dateB: $("#txtStartDate").val(),
-                          dateE: $("#txtEndDate").val(),
-                          accountC: $("#txtCtaContable").val(),
-                          accountT: $("#txtCtaContableTransf").val(),
-                          codeCat: $("#txtCategoria").val(),
-                          flgDet: $('#checkboxDet').is(":checked"),
-                          flgPresup: $('#checkboxPresup').is(":checked"),
-                          flgIng: $('#checkboxCenIng').is(":checked")
+                            codeOld: $("#originalCode").val(),
+                            dateBOld: $("#originalFechIni").val(),
+                            code: $("#txtCode").val(),
+                            codeDim: $("#txtDimension").val(),
+                            description: $("#txtDescription").val(),
+                            dateB: $("#txtStartDate").val(),
+                            dateE: $("#txtEndDate").val(),
+                            accountC: $("#txtCtaContableVal").val(),
+                            accountT: $("#txtCtaContableTransfVal").val(),
+                            codeCat: $("#txtCategoriaVal").val(),
+                            flgDet: $('#checkboxDet').is(":checked") ? "S" : "N" ,
+                            flgPresup: $('#checkboxPresup').is(":checked") ? "S" : "N",
+                            flgIng: $('#checkboxCenIng').is(":checked") ? "S" : "N"
                         }
                     })
                     .done(function(result) {
                         console.log(result);
-                        toastr.success(result, "Mensaje", {
-                            positionClass: "toast-top-full-width"
-                        });
                     }).fail(function(result) {
                         toastr.error(result.statusText, "Mensaje", {
                             positionClass: "toast-top-full-width"
@@ -404,46 +423,47 @@
             } else
             if (value == "3") alert("eliminar");
         }
-    });
+    }
 
     //Function que por request AJAX llena un comboBox
     function initialize_combo_ajax(idSelect, url, async = true) {
-    $.ajax({
-    method: "GET",
-    url: url,
-    async: async
-    })
-    .done(function(result) {
-    var jsonResult = jQuery.parseJSON(result);
-    if (!jQuery.isEmptyObject(jsonResult)) {
-    populate_combo_box(idSelect, jsonResult);
-    }
-    })
-    .fail(function(result) {
-    toastr.error(result.statusText, "Mensaje", {
-    positionClass: "toast-top-full-width"
-    });
-    });
+        $.ajax({
+                method: "GET",
+                url: url,
+                async: async
+            })
+            .done(function(result) {
+                console.log(result);
+                var jsonResult = jQuery.parseJSON(result);
+                if (!jQuery.isEmptyObject(jsonResult)) {
+                    populate_combo_box(idSelect, jsonResult);
+                }
+            })
+            .fail(function(result) {
+                toastr.error(result.statusText, "Mensaje", {
+                    positionClass: "toast-top-full-width"
+                });
+            });
     }
 
     //Function que llena un comboBox
     function populate_combo_box(idCombo, data) {
-    combo_box = $(idCombo);
-    combo_box.empty();
-    combo_box.trigger("chosen:updated");
-    $.each(data, function(index, value) {
-    combo_box.append("<option value='" + value.Value + "'>" + value.name + "</option>");
-    });
-    combo_box.trigger("chosen:updated");
+        combo_box = $(idCombo);
+        $.each(data, function(index, value) {
+            combo_box.append("<option value='" + value.Value + "'>" + value.name + "</option>");
+        });
+        combo_box.val("");
+        combo_box.trigger("chosen:updated");
     }
 
     //Function que hace update a un chosen select
     function update_chosen_select(chosenId, value) {
-    var chosenElement = $(chosenId);
-    //chosenElement.attr("disabled", true);
-    chosenElement.val(value);
-    chosenElement.trigger("chosen:updated");
+        var chosenElement = $(chosenId);
+        //chosenElement.attr("disabled", true);
+        chosenElement.val(value);
+        chosenElement.trigger("chosen:updated");
     }
+
 }
 
 
@@ -478,6 +498,8 @@
             </div>
             <div class="modal-body">
                 <div class="form-horizontal">
+                    <input id="originalCode" type="text" hidden>
+                    <input id="originalFechIni" type="text" hidden>
                     <div class="form-group">
                         <div class="col-md-6">
                             <label>Código</label>
@@ -488,7 +510,7 @@
                         <div class="col-md-6">
                             <label>Dimensión</label>
                             <div class="col-md-12">
-                                <input id="txtDimension" type="text" class="form-control input-hidden" placeholder="Dimensión" />
+                                <select id="txtDimension" type="text" class="form-control input-hidden" placeholder="Dimensión"></select>
                             </div>
                         </div>
                     </div>
@@ -527,18 +549,21 @@
                             <label>Cta. Contable</label>
                             <div class="col-md-12">
                                 <input id="txtCtaContable" type="text" class="form-control input-hidden" placeholder="" />
+                                <input id="txtCtaContableVal" hidden/>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label>Cta. Contable Transf.</label>
                             <div class="col-md-12">
                                 <input id="txtCtaContableTransf" type="text" class="form-control input-hidden" placeholder="" />
+                                <input id="txtCtaContableTransfVal" hidden />
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label>Categoría</label>
                             <div class="col-md-12">
                                 <input id="txtCategoria" type="text" class="form-control input-hidden" placeholder="" />
+                                <input id="txtCategoriaVal" hidden />
                             </div>
                         </div>
                     </div>
