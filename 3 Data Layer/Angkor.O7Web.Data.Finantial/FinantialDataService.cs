@@ -810,7 +810,31 @@ namespace Angkor.O7Web.Data.Finantial
             parameters.Add(O7Parameter.Make("p_nro_doc", documentId));
             return DataAccess.ExecuteFunction<InvoiceDetail>("finantial_invoice.search_fact_detail", parameters, InvoiceDetailMapper.Class);
         }
-    
+
+        public virtual bool UpdateCco(string companyId, string branchId,
+                           string code,string codeOld,string dateBOld, string codeDim, string description, string dateB,
+                           string dateE, string accountC, string accountT, string codeCat,
+                           string flgDet, string flgPresup, string flgIng)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_codigo_old", codeOld));
+            parameters.Add(O7Parameter.Make("p_fecini_old", dateBOld));
+            parameters.Add(O7Parameter.Make("p_codigo", code));
+            parameters.Add(O7Parameter.Make("p_fecini", dateB));
+            parameters.Add(O7Parameter.Make("p_descripcion", description));
+            parameters.Add(O7Parameter.Make("p_cuenta", accountC));
+            parameters.Add(O7Parameter.Make("p_fecfin", dateE));
+            parameters.Add(O7Parameter.Make("p_flgdet", flgDet));
+            parameters.Add(O7Parameter.Make("p_flgpto", flgPresup));
+            parameters.Add(O7Parameter.Make("p_dimension", codeDim));
+            parameters.Add(O7Parameter.Make("p_cuentatrans", accountT));
+            parameters.Add(O7Parameter.Make("p_flging", flgIng));
+            parameters.Add(O7Parameter.Make("p_codcat", codeCat));
+            return DataAccess.ExecuteFunction<int>("cost_centers.update_cost_center", parameters) == 1;
+        }
+
         public virtual bool AddCco(string companyId, string branchId,
                             string code, string codeDim,string description,string dateB,
                             string dateE,string accountC,string accountT,string codeCat,
