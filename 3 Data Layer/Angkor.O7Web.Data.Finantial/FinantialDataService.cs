@@ -909,6 +909,16 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<ClientDefaultValues>("finantial_invoice.confirm_client", parameters, ClientDefaultValueMapper.Class);
         }
 
+        public virtual List<Cco> GetCco(string companyId, string branchId, string code,string dateB )
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            parameters.Add(O7Parameter.Make("p_fecini", dateB));
+            parameters.Add(O7Parameter.Make("p_cco", code));
+            return DataAccess.ExecuteFunction<Cco>("cost_centers.get_cost_center", parameters, CcoMapper.Class);
+        }
+
         public virtual bool AddInvoiceDetail(
                                     string companyId, string branchId,
                                     string documentType, string documentId,

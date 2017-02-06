@@ -9,13 +9,13 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
 {
     public class SettingsController : O7Controller
     {
-
-        public JsonResult Ccos_Populate()
+        public JsonResult GetCco(string dateB,string code)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
-            var response = domain.AllSeries(User.Company, User.Branch);
+            var response = domain.GetCco(User.Company,User.Branch,dateB,code);
             return new O7JsonResult(response);
         }
+
 
         public JsonResult getCategories()
         {
