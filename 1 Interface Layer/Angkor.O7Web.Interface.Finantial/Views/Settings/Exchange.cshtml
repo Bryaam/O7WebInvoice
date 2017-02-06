@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewBag.Title = "Tipo de cambio";
+    ViewBag.Section = "Configuración";
+    Layout = "~/Views/_Layout.cshtml";
+}
+
+@section styles_link {
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.13/css/dataTables.bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.2.4/css/buttons.dataTables.min.css" />
+
+    @Html.StyleLink("css/bootstrap.min.css");
+    @Html.StyleLink("font-awesome/css/font-awesome.css");
+    @Html.StyleLink("css/plugins/iCheck/custom.css");
+    @Html.StyleLink("css/plugins/steps/jquery.steps.css");
+    @Html.StyleLink("css/animate.css");
+    @Html.StyleLink("css/style.css");
+
+    @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css");
+    @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css");
+
+    @Html.StyleLink("css/plugins/sweetalert/sweetalert.css")
+    <style type="text/css">
+        body {
+            padding-right: 0 !important;
+        }
+
+        .form-separation {
+            margin-bottom: 7px;
+            margin-top: 7px;
+        }
+
+        .form-label-separation {
+            margin-bottom: 10px;
+            margin-top: 7px;
+        }
+
+        .form-separation-extra {
+            margin-bottom: 11px;
+        }
+
+        .dataTables_filter {
+            width: 50%;
+            float: right;
+            text-align: right;
+        }
+
+        .button-separation {
+            margin-left: 12px;
+            margin-right: 12px;
+        }
+
+        .selected {
+            background-color: #acbad4 !important;
+        }
+
+        .emulate-label {
+            border-left: 0 !important;
+            border-right: 0 !important;
+            border-top: 0 !important;
+            background: #eee !important;
+        }
+
+        .labe-sum-underline {
+            border-bottom: 3px solid #000000 !important;
+        }
+
+        .modal-new-width {
+            width: 800px !important;
+        }
+
+        .tabIcon:before {
+            content: "\f192";
+            margin-right: 5px;
+        }
+
+        .tabIcon {
+            padding: 10px 20px !important;
+        }
+    </style>
+}
+@section scripts_link {
+    <script src="https://cdn.datatables.net/1.10.13/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.13/js/dataTables.bootstrap.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.2.4/js/dataTables.buttons.min.js"></script>
+
+    @Html.JavaScriptLink("js/jquery-2.1.1.js")
+    @Html.JavaScriptLink("js/bootstrap.min.js")
+    @Html.JavaScriptLink("js/plugins/metisMenu/jquery.metisMenu.js")
+    @Html.JavaScriptLink("js/plugins/slimscroll/jquery.slimscroll.min.js")
+
+    <!-- Custom and plugin javascript -->
+    @Html.JavaScriptLink("js/inspinia.js")
+    @Html.JavaScriptLink("js/plugins/pace/pace.min.js")
+
+    <!-- Steps -->
+    @Html.JavaScriptLink("js/plugins/staps/jquery.steps.min.js")
+
+    <!-- Jquery Validate -->
+    @Html.JavaScriptLink("js/plugins/validate/jquery.validate.min.js")
+
+    @Html.JavaScriptLink("js/plugins/dataTables/datatables.min.js")
+    @Html.JavaScriptLink("js/plugins/iCheck/icheck.min.js")
+
+    @Html.JavaScriptLink("js/plugins/datapicker/bootstrap-datepicker.js")
+    @Html.JavaScriptLink("js/plugins/chosen/chosen.jquery.js")
+    @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.min.js")
+
+    @Html.JavaScriptLink("js/plugins/sweetalert/sweetalert.min.js")
+    @Html.JavaScriptLink("js/plugins/jquery-maskedinput/jquery.maskedinput.js")
+
+}
+
+@section section_script {
+    var tableExchange;
+
+    function loadTable() {
+
+        $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/GetExchanges",
+            async: false
+        })
+        .done(function(result) {
+            var jsonResult = jQuery.parseJSON(result);
+            if (!jQuery.isEmptyObject(jsonResult)) {
+                tableExchange = $('#tableExchange').DataTable({
+                    "bPaginate": false,
+                    "bLengthChange": false,
+                    "bFilter": false,
+                    "bInfo": false,
+                    "bAutoWidth": false,
+                    "paging": false,
+                    "columns": [{
+                        data: "date",
+                        title: "Fecha"
+                    },
+                    {
+                        data: "numOri",
+                        title: ""
+                    },
+                    {
+                        data: "numFin",
+                        title: ""
+                    },
+                    {
+                        data: "valCom",
+                        title: "Valor de compra"
+                    },
+                    {
+                        data: "valVen",
+                        title: "Valor de venta"
+                    }]
+                });
+            }
+        })
+        .fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
+    }
+
+}
+    
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <button id="botonAgregar" type="button" class="btn btn btn-primary pull-right" disabled><i class="fa fa-plus" aria-hidden="true"></i> Agregar</button>
+                <table class="table table-striped table-bordered table-hover" id="tableExchange" style="font-family: monospace !important;">
+                    <thead></thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
