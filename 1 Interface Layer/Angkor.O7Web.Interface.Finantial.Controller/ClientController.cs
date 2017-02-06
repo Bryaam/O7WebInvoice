@@ -43,7 +43,7 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             ViewData["action"] = "1";
             return View("Managment");
         }
-
+        //"oli"
         public ActionResult Edit(string idClient)
         {
             ViewData["action"] = "2";
