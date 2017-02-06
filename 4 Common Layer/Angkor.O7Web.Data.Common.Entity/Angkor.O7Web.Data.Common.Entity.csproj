@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{44F5DC44-C4A1-474A-94FD-5770B97721BE}</ProjectGuid>
+    <ProjectGuid>{DC60FAE8-F8E3-4DE7-BB56-541AF773DE88}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Angkor.O7Web.Data.Common</RootNamespace>
-    <AssemblyName>Angkor.O7Web.Data.Common</AssemblyName>
+    <RootNamespace>Angkor.O7Web.Data.Common.Entity</RootNamespace>
+    <AssemblyName>Angkor.O7Web.Data.Common.Entity</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,47 +31,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Angkor.O7Framework.Common">
-      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Angkor.O7Framework.Data">
       <HintPath>..\..\6 Libraries\Angkor.O7Framework.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Angkor.O7Framework.Infrastructure">
-      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="Angkor.O7Framework.Utility">
-      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Utility.dll</HintPath>
-    </Reference>
-    <Reference Include="itextsharp, Version=5.5.10.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iTextSharp.5.5.10\lib\itextsharp.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommonDataService.cs" />
-    <Compile Include="DataMapper\CentroCostoDataMapper.cs" />
-    <Compile Include="DataMapper\SupervisorDataMapper.cs" />
-    <Compile Include="DeliverDataService.cs" />
+    <Compile Include="BasicDbEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Common.Entity\Angkor.O7Web.Common.Entity.csproj">
-      <Project>{A34E6D60-9763-4163-A416-735075CEDC48}</Project>
-      <Name>Angkor.O7Web.Common.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\4 Common Layer\Angkor.O7Web.Data.Common.Entity\Angkor.O7Web.Data.Common.Entity.csproj">
-      <Project>{DC60FAE8-F8E3-4DE7-BB56-541AF773DE88}</Project>
-      <Name>Angkor.O7Web.Data.Common.Entity</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Angkor.O7Web.Data.Finantial\Angkor.O7Web.Data.Finantial.csproj">
-      <Project>{8059BAA3-67B3-4A58-93BE-5E9EE64BFE68}</Project>
-      <Name>Angkor.O7Web.Data.Finantial</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

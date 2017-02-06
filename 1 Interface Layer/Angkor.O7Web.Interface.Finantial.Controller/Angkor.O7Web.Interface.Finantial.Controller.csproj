@@ -86,6 +86,7 @@
   <ItemGroup>
     <Compile Include="ClientController.cs" />
     <Compile Include="ClientController.json.cs" />
+    <Compile Include="DeliverController.cs" />
     <Compile Include="HomeController.cs" />
     <Compile Include="InvoiceController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
