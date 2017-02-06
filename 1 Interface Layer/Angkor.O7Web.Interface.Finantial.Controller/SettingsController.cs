@@ -93,6 +93,11 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return View();
         }
 
+        public ActionResult Exchange()
+        {
+            return View();
+        }
+
         public JsonResult GetHeads(string codTable)
         {
             var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
