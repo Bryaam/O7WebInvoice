@@ -93,3 +93,38 @@ function parseAutocomplete(json) {
     json = json.replace(/Id/g, 'id');
     return json;
 }
+
+function rowValidate(i,tblName,curName, buttonName) {
+    $("#tblName input[name*=" + curName + "][class]:lt(7)").each(function () {
+        $(this).change(function () {
+            i = 0;
+            $("#tblName input[name*=" + curName + "][class]:lt(7)").each(function () {
+                if ($(this).val() == "") {
+                    i++;
+                }
+            });
+            if (i == 0) {
+                buttonName.show();
+            } else {
+                buttonName.hide();
+            }
+        });
+    });
+}
+
+function allTypeDocument(urlName, clientTypeName, idName) {
+        $.ajax({ method: "GET", url: urlName, data: { clientType: clientTypeName }, async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                var documentType = $(idName);
+
+                documentType.html("");
+                
+                $.each(objResult, function (index, value) {
+                    documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
+                });
+                documentType.trigger("chosen:updated");
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
+}

@@ -113,6 +113,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Client\Index.data.js" />
     <Content Include="Scripts\Client\Index.function.js" />
+    <Content Include="Scripts\Client\Managment.function.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

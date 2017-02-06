@@ -20,7 +20,7 @@
     @Html.StyleLink("css/plugins/steps/jquery.steps.css")
     @Html.StyleLink("css/plugins/datapicker/datepicker3.css")
     <style>
-        .btn-remove-invoicer {
+        .btnRemoveReciber {
             margin-left: 15px;
         }
         .selected{
@@ -47,6 +47,7 @@
     @Html.JavaScriptLink("js/plugins/moment/moment.min.js")
     @Html.JavaScriptLink("js/plugins/moment/moment-es.js")
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.js")
+    <script src="~/Scripts/Client/Managment.data.js"></script>
 }
 
 @section section_script {
@@ -73,32 +74,13 @@
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
         dom: 'Bfrtip',
+        buttons:buttonTblReciber,
+        columns:columnTblReciber,
+        columnDefs:columnDefsTblReciber,
         "createdRow": function ( row, data, index ) {
             curReciberRow = index;
             i = 0;
         },
-        buttons:[{ text: 'Agregar',
-                className: 'btn-add-reciber'}],
-        columns:[{ data: "CodDir" },
-                 { data: "Country" },
-                 { data: "Department" },
-                 { data: "Province" },
-                 { data: "District" },
-                 { data: "Address" },
-                 { data: "City" },
-                 { data: "Zone" },
-                 { data: "Phone" },
-                 { data: "Contact" }],
-        columnDefs:[{ targets: 0, width: "5%" },
-                 { targets: 1, width: "14%" },
-                 { targets: 2, width: "10%" },
-                 { targets: 3, width: "10%" },
-                 { targets: 4, width: "10%" },
-                 { targets: 5, width: "10%" },
-                 { targets: 6, width: "9%" },
-                 { targets: 7, width: "9%" },
-                 { targets: 8, width: "9%" },
-                 { targets: 9, width: "10%" }],
         scrollY : '30hv',
         "scrollCollapse" : true,
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
@@ -106,11 +88,12 @@
             if (action == '1') {
                 tblReciber.column(0).visible(false);
             }
-            var btnRemoveReciber = $(".btn-remove-reciber");
+            var btnAddReciber = $(".btnAddReciber");
+            btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
+
+            var btnRemoveReciber = $(".btnRemoveReciber");
             btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
             
-            var btnAddReciber = $(".btn-add-reciber");
-            btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
             if (action == '3'){
                 btnAddReciber.hide();
             }
@@ -158,6 +141,8 @@
                 getAutocompleteDataSingle(postaleAutocomplete,null,"/Finantial/Client/AllPostales");
                 
                 getAutoCompleteDataNested(countryAutocomplete,departmentAutoComplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete);
+
+
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
                         resultCountry = resultCountry.replace(/Description/g, 'name');
@@ -253,72 +238,47 @@
                     }).fail(function (result) {
                             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                 });
+
+                rowValidate(i,tblReciber,curReciberRow, btnAddReciber);
                 
-                $("#tblReciber input[name*="+curReciberRow+"][class]:lt(7)").each(function(){
-                    $(this).change(function(){
-                        i = 0;
-                        $("#tblReciber input[name*="+curReciberRow+"][class]:lt(7)").each(function(){
-                            if ($(this).val()==""){
-                                i++;
-                            }
-                        });
-                        if (i==0){
-                            btnAddReciber.show();
-                        }else{
-                            btnAddReciber.hide();
-                        }
-                    });
-                });
                 reciber_count = reciber_count + 1;
                 $("#hddCountReciber").val(reciber_count);
                     
-                 $('.dataTables_scrollBody').slimscroll({
+                $('.dataTables_scrollBody').slimscroll({
                       height: '30vh',
                       disableFadeOut : false
-                 });
+                });
             });
-        }            
-    });   
+        }
 
+    });
+
+    var curInvoicerRow=0;
+    var i=0;
     var tblInvoicer = $("#tblInvoicer").DataTable({
         searching: false,
         dom: 'Bfrtip',
-    buttons: [{ text: 'Agregar',
-    className: 'btn-add-invoicer'}],
-        columns:[{ data: "CodDir" },
-                 { data: "Country" },
-                 { data: "Department" },
-                 { data: "Province" },
-                 { data: "District" },
-                 { data: "Address" },
-                 { data: "City" },
-                 { data: "Zone" },
-                 { data: "Phone" },
-                 { data: "Contact" }],
-        columnDefs:[{ targets: 0, width: "5%" },
-                 { targets: 1, width: "14%" },
-                 { targets: 2, width: "10%" },
-                 { targets: 3, width: "10%" },
-                 { targets: 4, width: "10%" },
-                 { targets: 5, width: "10%" },
-                 { targets: 6, width: "9%" },
-                 { targets: 7, width: "9%" },
-                 { targets: 8, width: "9%" },
-                 { targets: 9, width: "10%" }],
+        buttons: buttonTblInvoicer,
+        columns:columnTblInvoicer,
+        columnDefs:columnDefTblInvoicer,
+        "createdRow": function ( row, data, index ) {
+            curInvoicerRow = index;
+            i = 0;
+        },
         scrollY : '30hv',
         "scrollCollapse" : true,   
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
         initComplete: function( settings, json ) {
             if (action == '1') {
                 tblInvoicer.column(0).visible(false);
-    }
+            }
 
-    var btnRemoveReciber = $(".btn-remove-invoicer");
-    btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
+            var btnRemoveReciber = $(".btnRemoveReciber");
+            btnRemoveReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
 
-
-    var btnAddReciber = $(".btn-add-invoicer");
+            var btnAddReciber = $(".btnAddReciber");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
+
             if (action == '3'){
                 btnAddReciber.hide();
             }
@@ -457,42 +417,15 @@
                         });
                     }).fail(function (result) {
                             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                    }); 
-                $("#tblInvoicer input[class]:lt(7)").each(function(){
-                    $(this).change(function(){
-                        var i=0;
-                        $("#tblInvoicer input[class]:lt(7)").each(function(){
-                            if ($(this).val()==""){
-                                i++;
-                            }
-                        });
-                        if (i==0){
-                            btnAddReciber.show();
-                        }else{
-                            btnAddReciber.hide();
-                        }
-                    });
                 });
+                rowValidate(i,tblInvoicer,curInvoicerRow, btnAddReciber);
                 reciber_count = reciber_count + 1;
                 $("#hddCountInvoicer").val(reciber_count);
-                $("#tblnvoicer tbody").on( "click", "tr", function () {
-                    if ( $(this).hasClass("selected") ) {
-                        $(this).removeClass("selected");
-                    }
-                    else {
-                        tblInvoicer.$("tr.selected").removeClass("selected");
-                        $(this).addClass("selected");
-                   }
-                });
-                $("#btnDeleteInvoicer").click( function () {
-                    table.row(".selected").remove().draw( false );
-                } );
-
-                });
                 $('.dataTables_scrollBody').slimscroll({
-                      height: '30vh',
-                      disableFadeOut : false
+                        height: '30vh',
+                        disableFadeOut : false
                 });
+            });
         }
     });
 
@@ -517,20 +450,9 @@
         var personType = $(this).val();
 
         if(personType=="N") $("#divRuc").removeAttr("style");
-        else $("#divRuc").attr("style","visibility:hidden;");        
-    
-        $.ajax({ method: "GET", url: "/Finantial/Client/DocumentType", data: { clientType:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDocumentType");
-                documentType.html("");
-                $.each(objResult, function (index, value) {
-                    documentType.append("<option value='"+value.Id+"'>"+value.Description+"</option>");
-                });
-                documentType.trigger("chosen:updated");
-            }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width"});
-            });
+        else $("#divRuc").attr("style","visibility:hidden;");
+
+        allTypeDocument("/Finantial/Client/DocumentType",personType,chkDocumentType);
     });
     
      $("#chkDocumentType").chosen({
@@ -548,8 +470,9 @@
     
     $("#chkPostale").chosen({
         width: "100%"
-    }); 
-    
+    });
+
+
     $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
         .done(function (result) {
             var objResult = jQuery.parseJSON(result);
