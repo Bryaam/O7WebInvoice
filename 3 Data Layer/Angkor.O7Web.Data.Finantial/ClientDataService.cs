@@ -14,6 +14,15 @@ namespace Angkor.O7Web.Data.Finantial
         {
         }
 
+        public virtual ClientDetailDbEntity Client(string companyId, string branchId, string clientId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_company", companyId));
+            parameters.Add(O7Parameter.Make("p_branch", branchId));
+            parameters.Add(O7Parameter.Make("p_client_id", clientId));
+            return DataAccess.Execute<ClientDetailDbEntity>("pkg_client_managment.get_client", parameters)[0];
+        }
+
         public virtual IEnumerable<ClientDbEntity> Clients(string companyId, string branchId, string filter)
         {
             var parameters = O7DbParameterCollection.Make;

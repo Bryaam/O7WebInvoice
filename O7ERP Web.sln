@@ -40,9 +40,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angkor.O7Web.Domain.Security", "2 Domain Layer\Angkor.O7Web.Domain.Security\Angkor.O7Web.Domain.Security.csproj", "{F4793CCD-CFB9-4AFE-A223-4F181C247B88}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "3-1 Security", "3-1 Security", "{0249C2FC-A3D0-48B9-A23B-10BAE8E0288F}"
-	ProjectSection(SolutionItems) = preProject
-		4 Common Layer\Angkor.O7Web.Data.Common.Entity\Class1.cs = 4 Common Layer\Angkor.O7Web.Data.Common.Entity\Class1.cs
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angkor.O7Web.Common.Utility", "4 Common Layer\Angkor.O7Web.Common.Utility\Angkor.O7Web.Common.Utility.csproj", "{8B44343C-AB45-46B6-9310-AA21152D8268}"
 EndProject
@@ -107,6 +104,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angkor.O7Web.Data.Common.Entity", "4 Common Layer\Angkor.O7Web.Data.Common.Entity\Angkor.O7Web.Data.Common.Entity.csproj", "{DC60FAE8-F8E3-4DE7-BB56-541AF773DE88}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angkor.O7Web.Interface.Finantial.ViewModel", "Angkor.O7Web.Interface.Finantial.ViewModel\Angkor.O7Web.Interface.Finantial.ViewModel.csproj", "{814CF789-1705-485F-B4B9-14A3281EACEB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angkor.O7Web.Domain.Finantial.Model", "2 Domain Layer\Angkor.O7Web.Domain.Finantial.Model\Angkor.O7Web.Domain.Finantial.Model.csproj", "{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -222,6 +221,10 @@ Global
 		{814CF789-1705-485F-B4B9-14A3281EACEB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{814CF789-1705-485F-B4B9-14A3281EACEB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{814CF789-1705-485F-B4B9-14A3281EACEB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -267,5 +270,6 @@ Global
 		{2EBDA1D1-572A-402C-9A6C-65104F453893} = {AECB9827-E2C0-4AC6-B795-F44B265E977B}
 		{DC60FAE8-F8E3-4DE7-BB56-541AF773DE88} = {100047EE-AA29-427A-BE92-2F413C1EF406}
 		{814CF789-1705-485F-B4B9-14A3281EACEB} = {6D94DCA8-76CB-4E19-A532-250286EDDD41}
+		{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7} = {4138DA62-E8A9-47BD-BD68-9DC10A254E5A}
 	EndGlobalSection
 EndGlobal

@@ -2,11 +2,12 @@
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Utility;
 using Angkor.O7Web.Domain.Finantial.Base;
+using Angkor.O7Web.Domain.Finantial.Model;
 
 namespace Angkor.O7Web.Domain.Finantial
 {
     public class ClientBasicFlow : ClientDomain
-    {
+    {        
         public ClientBasicFlow(string login, string password) : base(login, password)
         {
         }
@@ -22,6 +23,14 @@ namespace Angkor.O7Web.Domain.Finantial
         {
             var response = ClientDataService.ClientChangeState(companyId, branchId, clientId);
             return O7SuccessResponse.MakeResponse($"{response}");
+        }
+
+        public override O7Response Client(string companyId, string branchId, string clientId)
+        {
+            var response = ClientDataService.Client(companyId, branchId, clientId);
+            var mapper = O7EntityMapper<ClientEntity>.Make(response);
+            var clientEntity = mapper.MapTarget();
+            return O7SuccessResponse.MakeResponse(clientEntity);
         }
     }
 }
