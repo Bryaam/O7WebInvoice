@@ -20,7 +20,7 @@
     @Html.StyleLink("css/plugins/steps/jquery.steps.css")
     @Html.StyleLink("css/plugins/datapicker/datepicker3.css")
     <style>
-        .btn-remove-invoicer {
+        .btnRemoveReciber {
             margin-left: 15px;
         }
     </style>
@@ -60,7 +60,8 @@
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
         dom: 'Bfrtip',
-        buttons:[{ text: 'Agregar'}],
+        buttons:[{ text: 'Agregar', classname: 'btnAddReciber'},
+                 {  text:'Eliminar', classname: 'btnRemoveReciber'}],
         columns:[{ data: "CodDir" },
                  { data: "Country" },
                  { data: "Department" },
@@ -86,11 +87,19 @@
             if (action == '1') {
                 tblReciber.column(0).visible(false);
             }
-            var btnAddReciber = $("#tblReciber_wrapper .dt-button");
+            var btnAddReciber = $(".btnAddReciber");
             btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-default");
+
+            var btnDeleteReciber = $(".btnRemoveReciber");
+            btnAddReciber.removeClass("dt-button").addClass("btn btn-w-m btn-danger");
+
             if (action == '3'){
                 btnAddReciber.hide();
             }
+            
+            $("#btnDeleteReciber").click( function () {
+                    table.row(".selected").remove().draw( false );
+             } );
             btnAddReciber.on("click", function () {                                
                 var reciber_count = parseInt($("#hddCountReciber").val());
                 var row = {};
@@ -239,13 +248,11 @@
                         $(this).addClass("selected");
                    }
                 });
-                $("#btnDeleteReciber").click( function () {
-                    table.row(".selected").remove().draw( false );
-                } );
+                
 
 
                 });
-        }            
+            }            
     });   
 
     var tblInvoicer = $("#tblInvoicer").DataTable({
