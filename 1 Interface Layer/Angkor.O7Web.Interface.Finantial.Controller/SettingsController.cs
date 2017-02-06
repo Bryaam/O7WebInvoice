@@ -17,7 +17,36 @@ namespace Angkor.O7Web.Interface.Finantial.Controller
             return new O7JsonResult(response);
         }
 
-        
+        public JsonResult getCategories()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.getCategories();
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult getAccountsT()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.getAccountsT(User.Company, User.Branch);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult getAccountsC()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.getAccountsC(User.Company, User.Branch);
+            return new O7JsonResult(response);
+        }
+
+        public JsonResult getDimensions()
+        {
+            var domain = ProxyDomain.Instance.FinantialDomain(User.Identity.Name, User.Password);
+            var response = domain.getDimensions();
+            return new O7JsonResult(response);
+        }
+
+
+
 
         public JsonResult InvoiceDocuments_Populate()
         {

@@ -729,6 +729,34 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<CcoView>("cost_centers.get_cost_centers", parameters, CcoViewMapper.Class);
         }
 
+        public virtual List<InvoiceTypeAhead> getCategories()
+        {
+            var parameters = O7DbParameterCollection.Make;
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_categories", parameters, TypeAheadMapper.Class);
+        }
+
+        public virtual List<InvoiceTypeAhead> getDimensions()
+        {
+            var parameters = O7DbParameterCollection.Make;
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_dimensiones", parameters, TypeAheadMapper.Class);
+        }
+
+        public virtual List<InvoiceTypeAhead> getAccountsC(string companyId, string branchId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_accounts", parameters, TypeAheadMapper.Class);
+        }
+
+        public virtual List<InvoiceTypeAhead> getAccountsT(string companyId, string branchId)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_cia", companyId));
+            parameters.Add(O7Parameter.Make("p_suc", branchId));
+            return DataAccess.ExecuteFunction<InvoiceTypeAhead>("cost_centers.get_accountsT", parameters, TypeAheadMapper.Class);
+        }
+
         public virtual List<InvoiceDetail> GetInvoiceDetail(string companyId, string branchId, string documentType, string documentId)
         {
             var parameters = O7DbParameterCollection.Make;

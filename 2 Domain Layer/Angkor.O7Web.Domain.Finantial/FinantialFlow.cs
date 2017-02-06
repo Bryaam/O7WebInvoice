@@ -1,6 +1,7 @@
 ﻿// O7ERP Web created by felix_dev
 using Angkor.O7Framework.Common.Model;
 using Angkor.O7Framework.Utility;
+using Angkor.O7Web.Data.Security.DataMapper;
 using Angkor.O7Web.Domain.Finantial.Base;
 
 namespace Angkor.O7Web.Domain.Finantial
@@ -42,6 +43,34 @@ namespace Angkor.O7Web.Domain.Finantial
             var heads = FinantialDataService.GetTTHeads(codtabl);
             var headsSerialized = O7JsonSerealizer.Serialize(heads);
             return O7SuccessResponse.MakeResponse(headsSerialized);
+        }
+
+        public override O7Response getDimensions()
+        {
+            var dimensiones = FinantialDataService.getDimensions();
+            var dimensionesSerialized = O7JsonSerealizer.Serialize(dimensiones);
+            return O7SuccessResponse.MakeResponse(dimensionesSerialized);
+        }
+
+        public override O7Response getAccountsC(string companyId,string branchId)
+        {
+            var accounts = FinantialDataService.getAccountsC(companyId,branchId);
+            var accountsSerialized = O7JsonSerealizer.Serialize(accounts);
+            return O7SuccessResponse.MakeResponse(accountsSerialized);
+        }
+
+        public override O7Response getAccountsT(string companyId, string branchId)
+        {
+            var accounts = FinantialDataService.getAccountsT(companyId, branchId);
+            var accountsSerialized = O7JsonSerealizer.Serialize(accounts);
+            return O7SuccessResponse.MakeResponse(accountsSerialized);
+        }
+
+        public override O7Response getCategories()
+        {
+            var accounts = FinantialDataService.getCategories();
+            var accountsSerialized = O7JsonSerealizer.Serialize(accounts);
+            return O7SuccessResponse.MakeResponse(accountsSerialized);
         }
 
         public override O7Response GetTTData(string primary,string secondary)

@@ -14,8 +14,16 @@ namespace Angkor.O7Web.Domain.Finantial.Base
 
         protected FinantialDomain(string login, string password)
         {
-            FinantialDataService = O7DataInstanceMaker.MakeInstance<FinantialDataService>(new object[] { login, password });
+            FinantialDataService = O7DataInstanceMaker.MakeInstance<FinantialDataService>(new object[] {login, password});
         }
+
+        public abstract O7Response getDimensions();
+
+        public abstract O7Response getAccountsC(string companyId, string branchId);
+        public abstract O7Response getAccountsT(string companyId, string branchId);
+        
+
+        public abstract O7Response getCategories();
 
         public abstract O7Response ClientChangeState(string companyId, string branchId, string clientId);
 
