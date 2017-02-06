@@ -9,17 +9,7 @@
                 $(hiddenId).val(field.id);
             }
         }
-        //if (hiddenId==null) {
-         //   $(id).typeahead({ source: objResult });
-       // } else {
-           // $(id).typeahead({
-               // source: objResult,
-               // afterSelect: function () {
-                //    var field = $(id).typeahead("getActive");
-              //      $(hiddenId).val(field.id);
-            //    }
-          //  });
-        //}
+
     }).fail(function (result) {
         toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
