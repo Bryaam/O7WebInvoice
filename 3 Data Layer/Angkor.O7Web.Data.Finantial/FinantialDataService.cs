@@ -214,6 +214,16 @@ namespace Angkor.O7Web.Data.Finantial
             return DataAccess.ExecuteFunction<TTData>("table_tables.get_data", parameters, TTDataMapper.Class);
         }
 
+        public virtual bool AddExchange(string date, string currencyBegin,string BuyValue,string SellValue)
+        {
+            var parameters = O7DbParameterCollection.Make;
+            parameters.Add(O7Parameter.Make("p_fecha", date));
+            parameters.Add(O7Parameter.Make("p_mon", currencyBegin));
+            parameters.Add(O7Parameter.Make("p_val_comp", BuyValue));
+            parameters.Add(O7Parameter.Make("p_val_vta", SellValue));
+            return DataAccess.ExecuteFunction<int>("crud_tipo_cambio.insert_tipo_cambio", parameters)==1;
+        }
+
         public virtual bool ValidateCountryInvoicer(string countryId)
         {
             var parameters = O7DbParameterCollection.Make;
