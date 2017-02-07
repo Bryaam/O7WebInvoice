@@ -91,7 +91,7 @@ function onclickBtnReciber () {
         height: '30vh',
         disableFadeOut : false
     });
-
+}
 function disableInputs(inputs) {
     for (var i = 0; i < inputs.length; i++)
         $(inputs[i]).attr('disabled', 'disabled');
@@ -345,8 +345,6 @@ function toolAutoComplete(nameAutoComplete, objResultDis, name) {
         }
     });
 }
-
-<<<<<<< HEAD
 function get_allClientZone() {
     $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: $("#chkCountry").val() }, async: false })
         .done(function (result) {
@@ -394,8 +392,6 @@ function get_allClientDepartments() {
                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
            });
 }
-=======
->>>>>>> 55ac8539cee326c1ffc2a81eebc2344dd55bac7a
 
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
