@@ -485,6 +485,16 @@
             return 0;
         }
 
+        $(function () {
+            $('.number-only').keypress(function (e) {
+                if (isNaN(this.value + "" + String.fromCharCode(e.charCode))) return false;
+            })
+            .on("cut copy paste", function (e) {
+                e.preventDefault();
+            });
+
+        });
+
     </script>
 }
 
@@ -921,25 +931,6 @@
 
     //Fin Tab 4
 
-    //Inicio de data dummy
-    /* var dataClient = {"ClientCode" :"666", "ClientType" :"Natural", "DocumentNumber" : "6688", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
-    var dataClient2 = {"ClientCode" :"6662", "ClientType" :"Natural2", "DocumentNumber" : "6688222", "ClientPhone" :"442131231", "ClientEmail" :"a@caca.com"};
-
-    var dataSetClient = [];
-    dataSetClient.push(dataClient);
-    dataSetClient.push(dataClient2);
-
-    var dataUnit = {"item":"1","concept":"observacion","desc":"descripcion","price":"8","tax":"18","porc":"5"};
-    dataUnit.amount = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' value='' id='item_amount_"+1+"'>";
-    dataUnit.comment = "<input class='form-control' value='' id='item_comment_"+1+"'>";
-    dataUnit.price = "<input class='form-control pull-left' style='width: 70%;margin-right: -100px;' type='number' id='item_price_"+1+"'>";
-
-    var dataSet = [];
-    dataSet.push(dataUnit);*/
-
-    //Fin de data dummy
-
-
     var tableClients = $('#seleccionarCliente').DataTable({
     "bPaginate": false,
     "bLengthChange": false,
@@ -1333,92 +1324,6 @@
     chosenElement.trigger("chosen:updated");
     }
 
-    function getInvoiceHeader() {
-    var ClientCode = $("#clientCode").html();
-    var ClientID = $("#docInput").val();
-    var ClientPhone = $("#phoneInput").val();
-    var ClientName = $("#nameInput").val();
-    var ClientMail = $("#mailInput").val();
-    var ClientAddressValue = $("#dirInput").val();
-    var ClientAddressContent = $("#dirInputContent").val();
-
-    var CondVenta = $("#condVenta").val();
-    var TipoVenta = $("#tipoVenta").val();
-    var FormaPago = $("#formaPago").val();
-    var CodFinanciero = $("#codFinanciero").val();
-    var Vendedor = $("#vendedor").val();
-    var LineaNegocio = $("#lineaNegocio").val();
-
-    var TipoDoc = $("#invoiceType").val();
-    var SerieExterno = $("#idSerieExterno").val();
-    var FechaDoc = $("#fechaDoc").val();
-    var FechaVenc = $("#fechaVenc").val();
-    var Currency = $("#currency").val();
-    var Language = $("#language").val();
-    var Taxe = $("#taxe").val();
-    var Perception = $("#perception").val();
-
-    var Glosa = $("#glosa").val();
-    var Donacion = $("#donacionCB").is(":checked") == true ? "S" : "N";
-    var SerieNumber = $("#serNumber").val();
-    var NroInt = $("#nroInt").val();
-    var NroDocRef = $("#nroDocRef").val();
-    var NroDocRefExt = $("#nroDocRefExt").val();
-    var NroOC = $("#nroOC").val();
-    var NroGuiaRemision = $("#nroGuiaRem").val();
-    var Trabajador = "";
-
-
-    $.ajax({
-    method: "POST",
-    url: "/Finantial/Invoice/Insert_Invoice",
-    data: {
-    documentType: TipoDoc,
-    serie: SerieExterno,
-    currency: Currency,
-    documentDate: FechaDoc,
-    documentExpiration: FechaVenc,
-    clienteCode: ClientCode,
-    codTax: Taxe,
-    clientName: ClientName,
-    invoiceAddress: ClientAddressContent,
-    clientId: ClientID,
-    glosa: Glosa,
-    sellType: TipoVenta,
-    language: Language,
-    condSell: CondVenta,
-    payment: FormaPago,
-    bussinessline: LineaNegocio,
-    finantialcod: CodFinanciero,
-    telephone: ClientPhone,
-    seller: Vendedor,
-    employeeId: Trabajador,
-    perception: Perception,
-    donate: Donacion,
-    documentTypeRef: SerieNumber,
-    documentIdRef: NroInt,
-    documentOc: NroOC,
-    guiRem: NroGuiaRemision,
-    addressId: ClientAddressValue,
-    serieExtRef: NroDocRef,
-    nroDoceExt: NroDocRefExt
-    }
-    })
-    .done(function(result) {
-    insertInvoiceDetail(result, TipoDoc, Perception);
-    $("#btnCrearFactura").prop('disabled', true);
-    $("#btnFacturacionE").prop('disabled', false);
-    $("#btnPDF").prop('disabled', false);
-    $("#btnFacturacionM").prop('disabled', false);
-    })
-    .fail(function(result) {
-    toastr.error(result.statusText, "Mensaje", {
-    positionClass: "toast-top-full-width"
-    });
-    });
-
-
-    }
 
     function insertInvoiceDetail(idInvoice, tipoDoc, perception) {
     tableProduct.rows().every(function(rowIdx, tableLoop, rowLoop) {
@@ -1605,9 +1510,9 @@
     function create_dataset() {
     var dataUnit = {};
     dataUnit.item = itemNum;
-    dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
+    dataUnit.amount = "<input class='form-control pull-left input-add_product number-only' style='width: 100%;' type='number' min='0' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
     dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
-    dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
+    dataUnit.price = "<input class='form-control pull-left input-add_product number-only' style='width: 100%;' type='number' min='0' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
     dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' style='width:100%' id='item_concept_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' style='width:100%' id='item_concept_value_" + itemNum + "' name='conceptId_" + itemNum + "'>";
     dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_" + itemNum + "' name='ccoId_" + itemNum + "'>";
     dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";

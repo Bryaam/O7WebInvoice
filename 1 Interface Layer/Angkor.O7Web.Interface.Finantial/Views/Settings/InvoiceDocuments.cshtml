@@ -138,239 +138,286 @@
     
 @section section_script {
     var tblSeries = $("#tblSeries").DataTable({
-    //searching: false,
-    dom: 'Bfrtip',
-    buttons: [{ text: 'Agregar',
-    action: function ( e, dt, node, config ) {
-    $("#txtModalTitle").text("Insertar serie");
-    $("#btnConfirm").attr("action","1");
-    $("#btnConfirm").show();
-    var txtSerie = $("#txtSerie");
-    var txtStart = $("#txtStart");
-    var txtFinal = $("#txtFinal");
-    var txtCurrent = $("#txtCurrent");
-    var slcDocumentType = $("#chkDocumentType");
-    var slcInvoiceType = $("#chkInvoiceType");
-    slcDocumentType.attr("disabled", false);
-    slcDocumentType.val("true");
-    slcDocumentType.trigger("chosen:updated");
-    slcInvoiceType.attr("disabled", false);
-    $("#chkInvoiceType option:first-child").attr("selected", "selected");
-    slcInvoiceType.trigger("chosen:updated");
-    txtSerie.val('');
-    txtSerie.attr('readonly', false);
-    txtStart.val('');
-    txtStart.attr('readonly', false);
-    txtFinal.val('');
-    txtFinal.attr('readonly', false);
-    txtCurrent.val('');
-    txtCurrent.attr('readonly', false);
-    }
-    }],
-    columns:[{ data: "Digital",
-    width: "15%",
-    render: function(data, type, full, meta) {
-    if (data == "true")
-    return "<span class='label label-warning'>Factura electrónica</span>";
-    else
-    return "<span class='label label-danger'>Factura manual</span>";
-    }
-    },
-    { data: "DocumentDescription", width: "18%" },
-    { data: "Id", width: "15%" },
-    { data: "Current", width: "20%" },
-    { data: "Default",
-    className: "text-center",
-    width: "7%",
-    orderable: false,
-    render: function(data, type, full, meta) {
-    if(data == "true")
-    return "
-    <div class='checkbox checkbox-primary' style='padding-left: 10px; pointer-events: none;'><input class='checkbox' type='checkbox' checked='' disabled/><label></label>
-    </div>";
-    else
-    return "
-    <div class='checkbox checkbox-primary' style='padding-left: 10px; pointer-events: none;'><input class='checkbox' type='checkbox' disabled/><label></label>
-    </div>";
-    }
-    },
-    { orderable: false,
-    className: "text-center",
-    render: function(data, type, full, meta){
-    console.log(full);
-    var invoiceId = '"'+full.Id+'",'+'"'+full.Max+'",'+'"'+full.Min+'",'+'"'+full.Current+'",'+'"'+full.DocumentType+'",'+'"'+full.Digital+'",'+'"'+full.Prefix+'",'+'"'+full.Default+'"';
-    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
-    var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
-    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action("+invoiceId+");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
-    return buttonSearch + buttonEdit + buttonDelete;
-    },
-    width: "15%"
-    }]
+        //searching: false,
+        dom: 'Bfrtip',
+        buttons: [{
+            text: 'Agregar',
+            action: function(e, dt, node, config) {
+                $("#txtModalTitle").text("Insertar serie");
+                $("#btnConfirm").attr("action", "1");
+                $("#btnConfirm").show();
+                var txtSerie = $("#txtSerie");
+                var txtStart = $("#txtStart");
+                var txtFinal = $("#txtFinal");
+                var txtCurrent = $("#txtCurrent");
+                var slcDocumentType = $("#chkDocumentType");
+                var slcInvoiceType = $("#chkInvoiceType");
+                slcDocumentType.attr("disabled", false);
+                slcDocumentType.val("true");
+                slcDocumentType.trigger("chosen:updated");
+                slcInvoiceType.attr("disabled", false);
+                $("#chkInvoiceType option:first-child").attr("selected", "selected");
+                slcInvoiceType.trigger("chosen:updated");
+                txtSerie.val('');
+                txtSerie.attr('readonly', false);
+                txtStart.val('');
+                txtStart.attr('readonly', false);
+                txtFinal.val('');
+                txtFinal.attr('readonly', false);
+                txtCurrent.val('');
+                txtCurrent.attr('readonly', false);
+            }
+        }],
+        columns: [{
+                data: "Digital",
+                width: "15%",
+                render: function(data, type, full, meta) {
+                    if (data == "true")
+                        return "<span class='label label-warning'>Factura electrónica</span>";
+                    else
+                        return "<span class='label label-danger'>Factura manual</span>";
+                }
+            },
+            {
+                data: "DocumentDescription",
+                width: "18%"
+            },
+            {
+                data: "Id",
+                width: "15%"
+            },
+            {
+                data: "Current",
+                width: "20%"
+            },
+            {
+                data: "Default",
+                className: "text-center",
+                width: "7%",
+                orderable: false,
+                render: function(data, type, full, meta) {
+                    if (data == "true")
+                        return "<div class='checkbox checkbox-primary' style='padding-left: 10px; pointer-events: none;'><input class='checkbox' type='checkbox' checked='' disabled /><label></label></div>";
+                    else
+                        return "<div class='checkbox checkbox-primary' style='padding-left: 10px; pointer-events: none;'><input class='checkbox' type='checkbox' disabled /><label></label></div>";
+                }
+            },
+            {
+                orderable: false,
+                className: "text-center",
+                render: function(data, type, full, meta) {
+                    console.log(full);
+                    var invoiceId = '"' + full.Id + '",' + '"' + full.Max + '",' + '"' + full.Min + '",' + '"' + full.Current + '",' + '"' + full.DocumentType + '",' + '"' + full.Digital + '",' + '"' + full.Prefix + '",' + '"' + full.Default + '"';
+                    var buttonSearch = "<button type='button' class='btn btn-outline btn-primary' onclick='detail(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-eye' aria-hidden='true'></i></button>&nbsp;";
+                    var buttonEdit = "<button type='button' class='btn btn-outline btn-success' onclick='update(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-pencil' aria-hidden='true'></i></button>&nbsp;";
+                    var buttonDelete = "<button type='button' class='btn btn-outline btn-danger' onclick='delete_action(" + invoiceId + ");' data-toggle='modal' data-target='#mdlInsert'><i class='fa fa-trash' aria-hidden='true'></i></button>";
+                    return buttonSearch + buttonEdit + buttonDelete;
+                },
+                width: "15%"
+            }
+        ]
     });
 
     $("#chkInvoiceType").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#chkDocumentType").chosen({
-    width: "100%",
-    disable_search: true
+        width: "100%",
+        disable_search: true
     });
 
     $("#chkDocumentType").chosen().change(function() {
-    var value = $(this).val();
-    if(value == "false")
-    $('#txtPrefix').attr('readonly', true);
-    else
-    $('#txtPrefix').attr('readonly', false);
+        var value = $(this).val();
+        if (value == "false")
+            $('#txtPrefix').attr('readonly', true);
+        else
+            $('#txtPrefix').attr('readonly', false);
     });
 
-    $.ajax({ method: "GET", url: "/Finantial/Settings/InvoiceDocuments_Populate", async: false })
-    .done(function (result) {
-    var objResult = jQuery.parseJSON(result);
-    tblSeries.clear().rows.add(objResult).draw();
-    }).fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+    $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/InvoiceDocuments_Populate",
+            async: false
+        })
+        .done(function(result) {
+            var objResult = jQuery.parseJSON(result);
+            tblSeries.clear().rows.add(objResult).draw();
+        }).fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
+            });
+        });
 
     $(".dt-button").removeClass("dt-button").addClass("btn btn-w-m btn-default").attr("data-toggle", "modal").attr("data-target", "#mdlInsert");
 
-    $.ajax({ method: "GET", url: "/Finantial/Settings/DocumentTypes" })
-    .done(function (result) {
-    var objResult = jQuery.parseJSON(result);
-    var documentType = $("#chkInvoiceType");
-    $.each(objResult, function (index, value) {
-    documentType.append("<option value='"+value.Value+"'>"+value.Content+"</option>");
-    });
-    documentType.trigger("chosen:updated");
-    }).fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
-
-
-    $("#btnConfirm").on("click", function () {
-    var value = $(this).attr("action");
-    var prefixVal = $("#chkDocumentType").val();
-    if (prefixVal=="true"){
-        serie= $("#txtSerie").val();
-        if(serie.length != 4){
-             toastr.error("La serie debe ser de 4 digitos", "Validación", {
-            positionClass: "toast-top-right",
-            preventDuplicates: true
+    $.ajax({
+            method: "GET",
+            url: "/Finantial/Settings/DocumentTypes"
+        })
+        .done(function(result) {
+            var objResult = jQuery.parseJSON(result);
+            var documentType = $("#chkInvoiceType");
+            $.each(objResult, function(index, value) {
+                documentType.append("<option value='" + value.Value + "'>" + value.Content + "</option>");
             });
-            return ;
-        }
-    }else {
-        serie= $("#txtSerie").val();
-        if(serie.length !=3){
-             toastr.error("La serie debe ser de 3 digitos", "Validación", {
-            positionClass: "toast-top-right",
-            preventDuplicates: true
+            documentType.trigger("chosen:updated");
+        }).fail(function(result) {
+            toastr.error(result.statusText, "Mensaje", {
+                positionClass: "toast-top-full-width"
             });
-            return ;
+        });
+
+
+    $("#btnConfirm").on("click", function() {
+        var value = $(this).attr("action");
+        var prefixVal = $("#chkDocumentType").val();
+        if (prefixVal == "true") {
+            serie = $("#txtSerie").val();
+            if (serie.length != 4) {
+                toastr.error("La serie debe ser de 4 digitos", "Validación", {
+                    positionClass: "toast-top-right",
+                    preventDuplicates: true
+                });
+                return;
+            }
+        } else {
+            serie = $("#txtSerie").val();
+            if (serie.length != 3) {
+                toastr.error("La serie debe ser de 3 digitos", "Validación", {
+                    positionClass: "toast-top-right",
+                    preventDuplicates: true
+                });
+                return;
+            }
         }
-    }
 
 
-    if (value == "1") {
-    var prefixVal = $("#chkDocumentType").val();
-    var serie = $("#txtSerie").val();
-    var _prefix = "";
-    var _id = "";
-    if(prefixVal == "true") {
-    _prefix = serie.substring(0, 1);
-    _id = serie.substring(1, 4);
-    }else{
-    _id = serie.substring(0, 3);
-    }
+        if (value == "1") {
+            var prefixVal = $("#chkDocumentType").val();
+            var serie = $("#txtSerie").val();
+            var _prefix = "";
+            var _id = "";
+            if (prefixVal == "true") {
+                _prefix = serie.substring(0, 1);
+                _id = serie.substring(1, 4);
+            } else {
+                _id = serie.substring(0, 3);
+            }
 
-    var _max = $("#txtStart").val();
-    var serieF = $("#txtSerie").val();
-    var defaultSerie= $("#checkbox2").is(":checked") == true ? "true" : "false";
-    swal({
-    title: "Desea Crear la serie",
-    text: "¿Crear serie?",
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#DD6B55",
-    confirmButtonText: "Sí",
-    closeOnConfirm: false
-    }, function() {
-    $.ajax({method: "POST", url: "/Finantial/Settings/AddSeries", data: { documentType: $("#chkInvoiceType").val(), id:_id, current: $("#txtCurrent").val(),
-    max: $("#txtFinal").val(), min: _max, default: defaultSerie, prefix:_prefix} })
-    .done(function (result){
-    console.log(result);
-    toastr.success(result, "Mensaje", {positionClass: "toast-top-full-width" });
-    }).fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width" });
-    });
+            var _max = $("#txtStart").val();
+            var serieF = $("#txtSerie").val();
+            var defaultSerie = $("#checkbox2").is(":checked") == true ? "true" : "false";
+            swal({
+                title: "Desea Crear la serie",
+                text: "¿Crear serie?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Sí",
+                closeOnConfirm: false
+            }, function() {
+                $.ajax({
+                        method: "POST",
+                        url: "/Finantial/Settings/AddSeries",
+                        data: {
+                            documentType: $("#chkInvoiceType").val(),
+                            id: _id,
+                            current: $("#txtCurrent").val(),
+                            max: $("#txtFinal").val(),
+                            min: _max,
+                            default: defaultSerie,
+                            prefix: _prefix
+                        }
+                    })
+                    .done(function(result) {
+                        console.log(result);
+                        toastr.success(result, "Mensaje", {
+                            positionClass: "toast-top-full-width"
+                        });
+                    }).fail(function(result) {
+                        toastr.error(result.statusText, "Mensaje", {
+                            positionClass: "toast-top-full-width"
+                        });
+                    });
 
-    swal({
-    title: "Generado",
-    text: "Serie creado exitosamente",
-    type: "success",
-    confirmButtonText: "Continuar"
-    }, function () {
-    location.reload();
+                swal({
+                    title: "Generado",
+                    text: "Serie creado exitosamente",
+                    type: "success",
+                    confirmButtonText: "Continuar"
+                }, function() {
+                    location.reload();
 
-    });
-    });
+                });
+            });
 
-    }
-    else{
-    if(value == "2") {
-    var prefixVal = $("#chkDocumentType").val();
-    var serie = $("#txtSerie").val();
-    var _prefix = "";
-    var _id = "";
-    if(prefixVal == "true") {
-    _prefix = serie.substring(0, 1);
-    _id = serie.substring(1, 4);
-    }else{
-    _id = serie.substring(0, 3);
-    }
-    var prefixVal = $("#chkDocumentType").val();
+        } else {
+            if (value == "2") {
+                var prefixVal = $("#chkDocumentType").val();
+                var serie = $("#txtSerie").val();
+                var _prefix = "";
+                var _id = "";
+                if (prefixVal == "true") {
+                    _prefix = serie.substring(0, 1);
+                    _id = serie.substring(1, 4);
+                } else {
+                    _id = serie.substring(0, 3);
+                }
+                var prefixVal = $("#chkDocumentType").val();
 
 
-    var _id = serie.substring(1, 4);
-    var _max = $("#txtStart").val();
-    var defaultSerie= $("#checkbox2").is(":checked") == true ? "true" : "false";
+                var _id = serie.substring(1, 4);
+                var _max = $("#txtStart").val();
+                var defaultSerie = $("#checkbox2").is(":checked") == true ? "true" : "false";
 
-    swal({
-    title: "Confirmación",
-    text: "¿Actualizar Serie?",
-    type: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#DD6B55",
-    confirmButtonText: "Sí",
-    closeOnConfirm: false
-    }, function() {
-    $.ajax({method: "POST", url: "/Finantial/Settings/UpdateSeries", data: { documentType: $("#txtInvoiceTypeOld").val(), id: $("#txtSerieOld").val(),
-    current:$("#txtCurrent").val(), max: $("#txtFinal").val(), min: _max, default: defaultSerie, prefix:_prefix, idUpdate:_id,
-    documentTypeUpdate:$("#chkInvoiceType").val()} })
-    .done(function (result) {
-    ;
+                swal({
+                    title: "Confirmación",
+                    text: "¿Actualizar Serie?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Sí",
+                    closeOnConfirm: false
+                }, function() {
+                    $.ajax({
+                            method: "POST",
+                            url: "/Finantial/Settings/UpdateSeries",
+                            data: {
+                                documentType: $("#txtInvoiceTypeOld").val(),
+                                id: $("#txtSerieOld").val(),
+                                current: $("#txtCurrent").val(),
+                                max: $("#txtFinal").val(),
+                                min: _max,
+                                default: defaultSerie,
+                                prefix: _prefix,
+                                idUpdate: _id,
+                                documentTypeUpdate: $("#chkInvoiceType").val()
+                            }
+                        })
+                        .done(function(result) {;
 
-    }).fail(function (result) {
-    toastr.error(result.statusText, "Mensaje", {positionClass: "toast-top-full-width" });
-    });
+                        }).fail(function(result) {
+                            toastr.error(result.statusText, "Mensaje", {
+                                positionClass: "toast-top-full-width"
+                            });
+                        });
 
-    swal({
-    title: "Actualizado",
-    text: "Documento creado exitosamente",
-    type: "success",
-    confirmButtonText: "Continuar"
-    }, function () {
-    location.reload();
+                    swal({
+                        title: "Actualizado",
+                        text: "Documento creado exitosamente",
+                        type: "success",
+                        confirmButtonText: "Continuar"
+                    }, function() {
+                        location.reload();
 
-    });
-    });
+                    });
+                });
 
-    }
-    else
-    if (value == "3") alert("eliminar");
-    }
+            } else
+            if (value == "3") alert("eliminar");
+        }
     });
 }
 
