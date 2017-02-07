@@ -173,7 +173,10 @@ function get_allClientDepartments() {
 }
 
 
+<<<<<<< HEAD
+=======
 
+>>>>>>> a64a624b24b5760e5f3e587899f34889b3d293e7
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
     row.Address = "<input class='form-control' style='width:100%' name='txtInvoicerAddress_" + reciber_count + "'>";
