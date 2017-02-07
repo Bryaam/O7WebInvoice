@@ -89,10 +89,10 @@ function parseAutocomplete(json) {
 }
 
 function rowValidate(i,tblName,curName, buttonName) {
-    $("#tblName input[name*=" + curName + "][class]:lt(7)").each(function () {
+    $("#"+tblName+ " input[name*=" + curName + "][class]:lt(7)").each(function () {
         $(this).change(function () {
             i = 0;
-            $("#tblName input[name*=" + curName + "][class]:lt(7)").each(function () {
+            $("#"+tblName+" input[name*=" + curName + "][class]:lt(7)").each(function () {
                 if ($(this).val() == "") {
                     i++;
                 }
@@ -111,6 +111,17 @@ function iterate_Combo(documentType, objResult) {
         documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
     });
     documentType.trigger("chosen:updated");
+}
+
+function toolAutoComplete(nameAutoComplete, objResultDis, name) {
+    $(nameAutoComplete).typeahead({
+        source: objResultDis,
+    });
+    $.each(objResultDis, function (index, value) {
+        if (value.id == name) {
+            $(nameAutoComplete).val(value.name);
+        }
+    });
 }
 
 function get_allClientZone() {
@@ -161,17 +172,11 @@ function get_allClientDepartments() {
            });
 }
 
-function toolAutoComplete(nameAutoComplete, objResultDis,name) {
-    $(nameAutoComplete).typeahead({
-        source: objResultDis,
-    });
-    $.each(objResultDis, function (index, value) {
-        if (value.id == name) {
-            $(nameAutoComplete).val(value.name);
-        }
-    });
-}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> a64a624b24b5760e5f3e587899f34889b3d293e7
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
     row.Address = "<input class='form-control' style='width:100%' name='txtInvoicerAddress_" + reciber_count + "'>";
