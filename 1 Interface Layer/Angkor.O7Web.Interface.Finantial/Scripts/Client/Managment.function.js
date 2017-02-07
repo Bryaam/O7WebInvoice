@@ -1,4 +1,88 @@
-﻿function getAutoCompleteDataSingle(field, requestUrl,data) {
+﻿function disableInputs(inputs) {
+    for (var i = 0; i < inputs.length; i++)
+        $(inputs[i]).attr('disabled', 'disabled');
+}
+
+function ableInputs(inputs) {
+    for (var i = 0; i < inputs.length; i++)
+        $(inputs[i]).removeAttr('disabled');
+}
+
+function validateCountry(path, country, ubigs) {
+    $.ajax({ method: 'GET', url: '/Finantial/Client/' + path, data: { countryId: country } })
+        .done(function (resultValidation) {
+            var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
+            if (objResultValidation == true) { ableInputs(ubigs); }
+            else { disableInputs(ubigs); }
+        }).fail(function (result) {
+            toastr.error(result.statusText, 'Mensaje', { positionClass: 'toast-top-full-width' });
+        });
+}
+
+function autocompleteZones(autocompleteId, hiddenId, country) {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country } })
+    .done(function (resultZone) {        
+        var objResultZone = jQuery.parseJSON(formatJsonAutocomplete(resultZone));
+        autocompleteInitialization(autocompleteId, hiddenId, objResultZone);        
+    }).fail(function (result) {
+        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+    });
+}
+
+function autocompleteInitialization(autocompleteId, hiddenId, source) {
+    $(autocompleteId).typeahead({
+        source: source,
+        afterSelect: function () {
+            var value = $(autocompleteId).typeahead("getActive");
+            $(hiddenId).val(value.id)
+        }
+    });
+}
+
+function autocompletePostales(autocompleteId) {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales" })
+        .done(function (resultPostale) {
+            var objResultPostale = jQuery.parseJSON(formatJsonAutocomplete(resultPostale));
+            $(autocompleteId).typeahead({ source: objResultPostale });
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
+}
+
+function formatJsonAutocomplete(json) {
+    json = json.replace(/Description/g, 'name');
+    json = json.replace(/Id/g, 'id');
+    return json;
+}
+
+function addRowAddress(tblAddress, tblName, count) {
+    var row = {};
+    row.CodDir = '';
+    row.Address = buildTextbox(tblName, 'Address', count);
+    row.Department = buildTextbox(tblName, 'Department', count) + buildHidden(tblName, 'Department', count);
+    row.Province = buildTextbox(tblName, 'Province', count) + buildHidden(tblName, 'Province', count);
+    row.District = buildTextbox(tblName, 'District', count) + buildHidden(tblName, 'District', count);
+    row.Country = buildTextbox(tblName, 'Country', count) + buildHidden(tblName, 'Country', count);
+    row.City = buildTextbox(tblName, 'City', count);
+    row.Zone = buildTextbox(tblName, 'Zone', count) + buildHidden(tblName, 'Zone', count);
+    row.Phone = buildTextbox(tblName, 'Phone', count);
+    row.Contact = buildTextbox(tblName, 'Contact', count);
+    var rowCollection = [];
+    rowCollection.push(row);
+    tblAddress.rows.add(rowCollection).draw();
+}
+
+function buildTextbox(area, name, count) {
+    var textboxName = 'txt' + area + name + '_' + count;
+    return '<input class="form-control pull-left" style="width: 100%;" id="' + textboxName + '" name="' + textboxName + '" />';
+}
+
+function buildHidden(area, name, count) {
+    var textboxName = 'txt' + area + name + 'Id_' + count;
+    return '<input type="hidden" id="' + textboxName + '" name="' + textboxName + '" />';
+}
+
+function getAutoCompleteDataSingle(field, requestUrl, data) {
     var fieldId = field.hidden;
     $.ajax({ method: "GET", url: requestUrl, data: { fieldId: data.id }, async: false })
     .done(function (resultField) {
@@ -82,11 +166,7 @@ function getAutoCompleteDataNested(countryField,departmentField,provinceField,di
     });
 }
 
-function parseAutocomplete(json) {
-    json = json.replace(/Description/g, 'name');
-    json = json.replace(/Id/g, 'id');
-    return json;
-}
+
 
 function rowValidate(i,tblName,curName, buttonName) {
     $("#"+tblName+ " input[name*=" + curName + "][class]:lt(7)").each(function () {
@@ -172,11 +252,6 @@ function get_allClientDepartments() {
            });
 }
 
-
-<<<<<<< HEAD
-=======
-
->>>>>>> a64a624b24b5760e5f3e587899f34889b3d293e7
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
     row.Address = "<input class='form-control' style='width:100%' name='txtInvoicerAddress_" + reciber_count + "'>";
