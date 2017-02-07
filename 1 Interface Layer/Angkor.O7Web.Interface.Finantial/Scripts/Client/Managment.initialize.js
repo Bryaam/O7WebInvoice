@@ -67,6 +67,12 @@
         get_allClientDistrict();
     }
 }
+function iterate_Combo(documentType, objResult) {
+    $.each(objResult, function (index, value) {
+        documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
+    });
+    documentType.trigger("chosen:updated");
+}
 
 function on_Combos() {
     get_allPersonType();
