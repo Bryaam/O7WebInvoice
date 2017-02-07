@@ -1,0 +1,18 @@
+﻿@using Angkor.O7Web.Interface.Finantial.ViewModel.Client
+@{
+    var vmodel = (ManagmentViewModel)Model;
+}
+@if (vmodel.Action == "1")
+{
+    <a class="btn btn-white" href="Index"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Atras</a>
+    <button id="btnSubmit" class="btn btn-primary" type="submit">Guardar&nbsp;<i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+}
+@if (vmodel.Action == "2")
+{
+    <a class="btn btn-white" href="Index"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Atras</a>
+    <button id="btnSubmit" class="btn btn-primary" type="submit">Actualizar&nbsp;<i class="fa fa-floppy-o" aria-hidden="true"></i></button>
+}
+@if (vmodel.Action == "3")
+{
+    <a class="btn btn-white" href="Index"><i class="fa fa-reply" aria-hidden="true"></i>&nbsp;Atras</a>    
+}

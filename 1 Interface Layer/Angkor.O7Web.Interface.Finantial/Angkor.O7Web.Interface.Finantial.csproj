@@ -113,6 +113,7 @@
     <Content Include="Global.asax" />
     <Content Include="Scripts\Client\Index.data.js" />
     <Content Include="Scripts\Client\Index.function.js" />
+    <Content Include="Scripts\Client\Index.function.min.js" />
     <Content Include="Scripts\Client\Managment.data.js" />
     <Content Include="Scripts\Client\Managment.function.js" />
     <Content Include="Web.config" />
@@ -127,13 +128,15 @@
     <Content Include="Views\Client\Managment.cshtml" />
     <Content Include="Views\Invoice\Management.cshtml" />
     <Content Include="Views\Invoice\Show.cshtml" />
-    <Content Include="Views\Settings\TableofTables.cshtml" />
-    <Content Include="Views\Settings\CostCenters.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Angkor.O7Web.Interface.Finantial.ViewModel\Angkor.O7Web.Interface.Finantial.ViewModel.csproj">
+      <Project>{814cf789-1705-485f-b4b9-14a3281eaceb}</Project>
+      <Name>Angkor.O7Web.Interface.Finantial.ViewModel</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Angkor.O7Web.Interface.AppStart\Angkor.O7Web.Interface.AppStart.csproj">
       <Project>{ADA3E972-2BF5-44A1-9629-DAD33E5FFBE9}</Project>
       <Name>Angkor.O7Web.Interface.AppStart</Name>
@@ -146,9 +149,6 @@
     <Content Include="Views\_Layout.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\Settings\InvoiceDocuments.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="Views\Invoice\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +156,28 @@
     <Content Include="Views\Invoice\Insert.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Views\Settings\CostCenters.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Views\Settings\Exchange.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\InvoiceDocuments.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Settings\TableofTables.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\_ViewStart.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_PartialManagmentAddress.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Shared\_PartialManagmentButtons.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
