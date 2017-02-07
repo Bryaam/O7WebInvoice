@@ -17,6 +17,21 @@ function initializeInput(inputName, count){
     return result;
 }
 
+function autocompleteInitialization2(autocompleteId, hiddenId, source, functionCallback) {
+    $(autocompleteId).typeahead({
+        source: source,
+        afterSelect: function () {
+            var value = $(autocompleteId).typeahead("getActive");
+            $(hiddenId).val(value.id);
+            functionCallback(arguments[4]);
+        }
+    });
+}
+
+function autocompleteProvince(objParameters){
+    autocompleteDistricts(districtAutocomplete, districtId, country.id, department.id, province.id);
+}
+
 function onclickBtnReciber () {
     var count = getNumber("#hddCountInvoicer");
     addRowAddress (tblInvoicer, 'Invoicer', reciber_count);
@@ -47,7 +62,8 @@ function onclickBtnReciber () {
                                     $(inputs.HiddenDepartment).val(department.id);
                                     $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:"PER", departmentId: department.id }, async: false })
                                         .done(function (resultProv) {
-                                            var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));   
+                                            var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
+                                            autocompleteInitialization2(inputs.InputProvince,inputs.HiddenProvince,objResultProv,)
                                             $(inputs.InputProvince).typeahead({
                                                 source: objResultProv,
                                                 afterSelect: function () {
@@ -112,10 +128,12 @@ function autocompleteInitialization(autocompleteId, hiddenId, source) {
         source: source,
         afterSelect: function () {
             var value = $(autocompleteId).typeahead("getActive");
-            $(hiddenId).val(value.id)
+            $(hiddenId).val(value.id);
         }
     });
 }
+
+
 
 function autocompleteDistricts(districtAutocomplete, districtHidden, country, department, province) {
     $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country, departmentId: department, provinceId: province }, async: false })
