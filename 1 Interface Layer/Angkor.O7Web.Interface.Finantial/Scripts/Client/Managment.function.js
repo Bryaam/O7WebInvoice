@@ -137,8 +137,6 @@ function get_allClientDistrict() {
             });
 }
 
-<<<<<<< HEAD
-
 function get_allClientProvinces() {
     $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: { countryId: $("#chkCountry").val(), departmentId: $(this).val() }, async: false })
              .done(function (result) {
@@ -174,8 +172,6 @@ function toolAutoComplete(nameAutoComplete, objResultDis,name) {
     });
 }
 
-=======
->>>>>>> cb39438afa5dab4d34679b67d305e9c09c4f7f50
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
     row.Address = "<input class='form-control' style='width:100%' name='txtInvoicerAddress_" + reciber_count + "'>";
@@ -215,7 +211,4 @@ function onClickBtnAddReciber() {
         disableFadeOut: false
     });
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> cb39438afa5dab4d34679b67d305e9c09c4f7f50
