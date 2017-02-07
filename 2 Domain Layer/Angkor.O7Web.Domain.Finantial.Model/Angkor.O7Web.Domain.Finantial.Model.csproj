@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2EBDA1D1-572A-402C-9A6C-65104F453893}</ProjectGuid>
+    <ProjectGuid>{F9422E7F-6FF2-40C3-B2CC-0A87231CA0B7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Angkor.O7Web.Data.Finantial.Entity</RootNamespace>
-    <AssemblyName>Angkor.O7Web.Data.Finantial.Entity</AssemblyName>
+    <RootNamespace>Angkor.O7Web.Domain.Finantial.Model</RootNamespace>
+    <AssemblyName>Angkor.O7Web.Domain.Finantial.Model</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,14 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Angkor.O7Framework.Data">
-      <HintPath>..\..\6 Libraries\Angkor.O7Framework.Data.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClientDbEntity.cs" />
-    <Compile Include="ClientDetailDbEntity.cs" />
+    <Compile Include="ClientEntity.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

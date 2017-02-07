@@ -1,9 +1,8 @@
 ﻿// O7ERP Web created by felix_dev
-namespace Angkor.O7Web.Interface.Finantial.ViewModel.Client
+namespace Angkor.O7Web.Domain.Finantial.Model
 {
-    public class ManagmentViewModel
+    public class ClientEntity
     {
-        public string Action { get; set; }
         public string Id { get; set; }
         public string Origin { get; set; }
         public string Name { get; set; }

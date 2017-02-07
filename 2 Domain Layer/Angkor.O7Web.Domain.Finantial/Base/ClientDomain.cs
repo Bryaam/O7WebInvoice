@@ -17,5 +17,7 @@ namespace Angkor.O7Web.Domain.Finantial.Base
         public abstract O7Response Clients(string companyId, string branchId, string filter);
 
         public abstract O7Response ClientChangeState(string companyId, string branchId, string clientId);
+
+        public abstract O7Response Client(string companyId, string branchId, string clientId);
     }
 }
