@@ -1,4 +1,82 @@
-﻿function disableInputs(inputs) {
+﻿function getNumber(id){
+    return parseInt($("#hddCountInvoicer").val());
+}
+
+function initializeInput(inputName, count){
+    var result = {};
+    result.HiddenDepartment ='#txt'+inputName+'DepartmentId_'+count;
+    result.InputDepartment ='#txt'+inputName+'Department_'+count;
+    result.HiddenProvince ='#txt'+inputName+'ProvinceId_'+count;
+    result.InputProvince ='#txt'+inputName +'Province_'+count;
+    result.HiddenDistrict ='#txt'+inputName+'DistrictId_'+count;
+    result.InputDistrict ='#txt'+inputName +'District_'+count;
+    result.HiddenCountry ='#txt'+inputName+'CountryId_'+count;
+    result.InputCountry ='#txt'+inputName +'Country_'+count;
+    result.HiddenZone ='#txt'+inputName+'ZoneId_'+count;
+    result.InputZone ='#txt'+inputName+ 'Zone_'+count;
+    return result;
+}
+
+function onclickBtnReciber () {
+    var count = getNumber("#hddCountInvoicer");
+    addRowAddress (tblInvoicer, 'Invoicer', reciber_count);
+    var inputs = initializeInput('Invoicer', count);    
+    autocompletePostales(postaleAutocomplete);
+
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
+        .done(function (resultCountry) {            
+            var objResultCountry = jQuery.parseJSON(formatJsonAutocomplete(resultCountry));
+
+            $(countryAutocomplete).typeahead({
+                source: objResultCountry,
+                afterSelect: function () {
+                    var country = $(countryAutocomplete).typeahead("getActive");
+                    $(countryId).val(country.id);
+                    var ubigs=[inputs.InputDepartment, inputs.InputProvince, inputs.InputDistrict, inputs.InputZone];
+                    validateCountry('ValidateCountryInvoicer', country.id, ubigs);
+                    autocompleteZones(inputs.InputZone, zoneId, country.id);                    
+
+                    $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country.id } , async: false })
+                        .done(function (result) {
+                            var objResult = jQuery.parseJSON(parseAutocomplete(result));
+
+                            $(inputs.InputDepartment).typeahead({
+                                source: objResult,
+                                afterSelect: function () {
+                                    var department = $(inputs.InputDepartment).typeahead("getActive");
+                                    $(inputs.HiddenDepartment).val(department.id);
+                                    $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:"PER", departmentId: department.id }, async: false })
+                                        .done(function (resultProv) {
+                                            var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));   
+                                            $(inputs.InputProvince).typeahead({
+                                                source: objResultProv,
+                                                afterSelect: function () {
+                                                    var province = $(inputs.InputProvince).typeahead("getActive");
+                                                    $(inputs.HiddenProvince).val(province.id);
+                                                    autocompleteDistricts(districtAutocomplete, districtId, country.id, department.id, province.id);
+                                                }
+                                            });
+                                        }).fail(function (result) {
+                                            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                                        });
+                                }
+                            });
+                        }).fail(function (result) {
+                            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                        });
+                }
+            });
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });    
+    reciber_count = reciber_count + 1;
+    $("#hddCountInvoicer").val(reciber_count);
+    $('.dataTables_scrollBody').slimscroll({
+        height: '30vh',
+        disableFadeOut : false
+    });
+
+function disableInputs(inputs) {
     for (var i = 0; i < inputs.length; i++)
         $(inputs[i]).attr('disabled', 'disabled');
 }
@@ -37,6 +115,16 @@ function autocompleteInitialization(autocompleteId, hiddenId, source) {
             $(hiddenId).val(value.id)
         }
     });
+}
+
+function autocompleteDistricts(districtAutocomplete, districtHidden, country, department, province) {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country, departmentId: department, provinceId: province }, async: false })
+        .done(function (resultDistrict) {
+            var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
+            autocompleteInitialization(districtAutocomplete, districtHidden, objResultDis);    
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
 }
 
 function autocompletePostales(autocompleteId) {
@@ -106,6 +194,42 @@ function toggleFields(status) {
             $(arguments[i]).attr("disabled", "disabled");
         }
     }
+}
+
+function autocompleteDependencies(){
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country.id } , async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(parseAutocomplete(result));
+                $(departmentAutocomplete).typeahead({
+                    source: objResult,
+                    afterSelect: function () {
+                        var department = $(departmentAutocomplete).typeahead("getActive");
+                        $(departmentId).val(department.id);
+                        $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:"PER", departmentId: department.id }, async: false })
+                            .done(function (resultProv) {
+                                var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));   
+                                $(provinceAutocomplete).typeahead({
+                                    source: objResultProv,
+                                    afterSelect: function () {
+                                        var province = $(provinceAutocomplete).typeahead("getActive");
+                                        $(provinceId).val(province.id);
+                                        $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:"PER", departmentId: department.id, provinceId: province.id }, async: false })
+                                            .done(function (resultDistrict) {
+                                                var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
+                                                autocompleteInitialization(districtAutocomplete, districtId, objResultDis);    
+                                            }).fail(function (result) {
+                                                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                                            });
+                                    }
+                                });
+                            }).fail(function (result) {
+                                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                            });
+                    }
+                });
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
 }
 
 //departmentId,departmentAutocomplete

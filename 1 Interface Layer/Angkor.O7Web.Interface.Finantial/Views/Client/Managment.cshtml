@@ -307,9 +307,9 @@
                             source: objResultCountry,
                             afterSelect: function () {
                                 var country = $(countryAutocomplete).typeahead("getActive");
-    $(countryId).val(country.id);
-    var ubigs=[departmentAutocomplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete]
-    validateCountry('ValidateCountryInvoicer', country.id, ubigs);
+                                $(countryId).val(country.id);
+                                var ubigs=[departmentAutocomplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete]
+                                validateCountry('ValidateCountryInvoicer', country.id, ubigs);
 //                                $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryInvoicer", data: { countryId: country.id }, async: false })
   //                                  .done(function (resultValidation) {
     //                                    var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
@@ -322,28 +322,26 @@
                   //                      toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                     //                });
         
-    autocompleteZones(zoneAutocomplete, zoneId, country.id)
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
-                                    .done(function (resultZone) {
-                                        resultZone = resultZone.replace(/Description/g, 'name');
-                                        resultZone = resultZone.replace(/Id/g, 'id');
-                                        var objResultZone = jQuery.parseJSON(resultZone);
-                                        $(zoneAutocomplete).typeahead({ 
-                                            source: objResultZone,
-                                            afterSelect: function () {
-                                                var zone = $(zoneAutocomplete).typeahead("getActive");
-                                                $(zoneId).val(zone.id)
-                                            }
-                                        });
-                                    }).fail(function (result) {
-                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                                    });
+                                autocompleteZones(zoneAutocomplete, zoneId, country.id);
+        //                        $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
+       //                             .done(function (resultZone) {
+         //                               resultZone = resultZone.replace(/Description/g, 'name');
+         //                               resultZone = resultZone.replace(/Id/g, 'id');
+         //                               var objResultZone = jQuery.parseJSON(parseAutocomplete(resultProv));
+         //                               $(zoneAutocomplete).typeahead({ 
+         //                                   source: objResultZone,
+         //                                   afterSelect: function () {
+         //                                       var zone = $(zoneAutocomplete).typeahead("getActive");
+         //                                       $(zoneId).val(zone.id)
+          //                                  }
+         //                               });
+         //                           }).fail(function (result) {
+       //                                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+         //                           });
 
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country.id } , async: false })
                                     .done(function (result) {
-                                        result = result.replace(/Description/g, 'name');
-                                        result = result.replace(/Id/g, 'id');
-                                        var objResult = jQuery.parseJSON(result);
+                                        var objResult = jQuery.parseJSON(parseAutocomplete(result));
 
                                         $(departmentAutocomplete).typeahead({
                                             source: objResult,
@@ -352,25 +350,20 @@
                                                 $(departmentId).val(department.id);
                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:"PER", departmentId: department.id }, async: false })
                                                     .done(function (resultProv) {
-                                                        var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
+                                                        var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));   
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
                                                             afterSelect: function () {
                                                                 var province = $(provinceAutocomplete).typeahead("getActive");
-                                                                $(provinceId).val(province.id);
-                                                                $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:"PER", departmentId: department.id, provinceId: province.id }, async: false })
-                                                                    .done(function (resultDistrict) {
-                                                                        var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
-                                                                        $(districtAutocomplete).typeahead({
-                                                                            source:objResultDis,
-                                                                            afterSelect: function() {
-                                                                                var district = $(districtAutocomplete).typeahead("getActive");
-                                                                                $(districtId).val(district.id);
-                                                                            }
-                                                                        });
-                                                                    }).fail(function (result) {
-                                                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                                                                    });
+    $(provinceId).val(province.id);
+    autocompleteDistricts(districtAutocomplete, districtId, country.id, department.id, province.id);
+//                                                                $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:"PER", departmentId: department.id, provinceId: province.id }, async: false })
+  //                                                                  .done(function (resultDistrict) {
+    //                                                                    var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
+      //                                                                  autocompleteInitialization(districtAutocomplete, districtId, objResultDis);    
+        //                                                            }).fail(function (result) {
+          //                                                              toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            //                                                        });
                                                             }
                                                         });
                                                     }).fail(function (result) {
