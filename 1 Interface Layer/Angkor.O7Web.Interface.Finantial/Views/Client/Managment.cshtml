@@ -54,36 +54,16 @@
 }
 
 @section section_script {
-    @*moment.locale('es');
+    var curReciberRow = 0,i=0,curInvoicerRow = 0,j=0;
+    initialize();
     
-    $("#hddCountReciber").val("0");
-    $("#hddCountInvoicer").val("0");
-    
-    $("#dpckRegister").datepicker({
-        format: "dd/mm/yyyy"
-    });
-    
-    $("#chkDepartment").chosen({
-        width: "100%"
-    }); 
-
-    var action = $("#txtAction").val();*@
-    
-    if(action=="3") {
-        $("#btnSubmit").hide();
-    }
-    var curReciberRow = 0;
-    var i=0;
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
         dom: 'Bfrtip',
         buttons:buttonTblReciber,
         columns:columnTblReciber,
         columnDefs:columnDefsTblReciber,
-        "createdRow": function ( row, data, index ) {
-            curReciberRow = index;
-            i = 0;
-        },
+        "createdRow": function ( row, data, index ) {curReciberRow = index; i = 0;},
         scrollY : '30hv',
         "scrollCollapse" : true,
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
@@ -252,18 +232,13 @@
 
     });
 
-    var curInvoicerRow=0;
-    var i=0;
     var tblInvoicer = $("#tblInvoicer").DataTable({
         searching: false,
         dom: 'Bfrtip',
         buttons: buttonTblInvoicer,
         columns:columnTblInvoicer,
         columnDefs:columnDefTblInvoicer,
-        "createdRow": function ( row, data, index ) {
-            curInvoicerRow = index;
-            i = 0;
-        },
+        "createdRow": function ( row, data, index ) {curInvoicerRow = index; j = 0; },
         scrollY : '30hv',
         "scrollCollapse" : true,   
         language: { url: "@Html.SourceLink("js/plugins/dataTables/datatables-spanish.json")" },
@@ -412,7 +387,7 @@
                     }).fail(function (result) {
                             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                 });
-                rowValidate(i,tblInvoicer,curInvoicerRow, btnAddReciber);
+                rowValidate(j,tblInvoicer,curInvoicerRow, btnAddReciber);
                 reciber_count = reciber_count + 1;
                 $("#hddCountInvoicer").val(reciber_count);
                 $('.dataTables_scrollBody').slimscroll({
@@ -423,131 +398,6 @@
         }
     });
 
-    $("#dpckRegister").val(moment().format("DD/MM/YYYY"));
-
-    $("#chkOriginClient").chosen({
-        width: "100%",
-        disable_search: true
-    });
-    
-    $("#chkClientState").chosen({
-        width: "100%",
-        disable_search: true
-    });
-    
-    $("#chkpersonType").chosen({
-        width: "100%",
-        disable_search: true
-    });
-    
-    $('#chkpersonType').on('change', function(e) {
-        var personType = $(this).val();
-
-        if(personType=="N") $("#divRuc").removeAttr("style");
-        else $("#divRuc").attr("style","visibility:hidden;");
-        
-        $.ajax({ method: "GET", url: "/Finantial/Client/DocumentType", data: { clientType: personType }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDocumentType");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
-    });
-    
-     $("#chkDocumentType").chosen({
-        width: "100%",
-        disable_search: true
-    });    
-    
-    $("#chkCountry").chosen({
-        width: "100%"
-    });     
-    
-    $("#chkZone").chosen({
-        width: "100%"
-    }); 
-    
-    $("#chkPostale").chosen({
-        width: "100%"
-    });
-
-
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkCountry");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
-
-    get_allClientZone();
-
-    $("#chkCountry").on('change', function(e) {
-        get_allClientZone();
-        get_allClientDepartments();
-        get_allClientDistrict();
-        get_allClientProvinces(); 
-    });
-    
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkPostale");
-            documentType.html("");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });    
-
-    $("#chkProvince").chosen({
-        width: "100%"
-    });
-    
-    $("#chkDistrict").chosen({
-        width: "100%"
-    });
-    
-    $("#chkProvince").on('change', function(e) {
-        get_allClientDistrict();
-    });
-
-    $("#chkDepartment").on('change', function(e) {        
-        get_allClientProvinces();
-    });
-
-    $.ajax({ method: "GET", url: "/Finantial/Client/ClientOrigins", async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkOriginClient");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
-
-    $.ajax({ method: "GET", url: "/Finantial/Client/ClientStates", async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkClientState");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
-    
-    $.ajax({ method: "GET", url: "/Finantial/Client/ClientType", async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkpersonType");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });        
-    
-    get_allClientDepartments();
-    
     if(action == "2" || action == "3") {
         var clientId = $("#txtClientId").val();
         $("#btnSubmit").text("Actualizar ");        
@@ -998,24 +848,7 @@
             });
             $("#hddCountInvoicer").val(countInvoicer);
     }
-    if(action == "1"){
-        get_allClientProvinces();
-        get_allClientDistrict();
-    }
     
-    $("#tblReciber tbody").on("click", "tr", function () {
-        if ( $(this).hasClass("selected") ) {
-            $(this).removeClass("selected");
-        }
-        else {
-            tblReciber.$("tr.selected").removeClass("selected");
-            $(this).addClass("selected");
-        }
-    });
-
-    $(".btn-remove-reciber").click( function () {
-        tblReciber.row(".selected").remove().draw( false );
-    });
 }
 <div class="ibox float-e-margins">
     <form method="post" class="form-horizontal">
