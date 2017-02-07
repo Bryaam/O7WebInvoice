@@ -126,8 +126,8 @@
                 var countryAutocomplete = "#txtReciberCountry_"+reciber_count;
                 var zoneAutocomplete = "#txtReciberZone_"+reciber_count;
                 var postaleAutocomplete = "#txtReciberPostal_"+reciber_count;
-<<<<<<< HEAD
-                /*
+
+                
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
                     .done(function (resultPostale) {
                         resultPostale = resultPostale.replace(/Description/g, 'name');
@@ -136,20 +136,12 @@
                         $(postaleAutocomplete).typeahead({ source: objResultPostale });            
                     }).fail(function (result) {
                         toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                }); */
+                }); 
     
                 //Now:
-                getAutocompleteDataSingle(postaleAutocomplete,null,"/Finantial/Client/AllPostales");
+                //getAutocompleteDataSingle(postaleAutocomplete,null,"/Finantial/Client/AllPostales");
                 
-                getAutoCompleteDataNested(countryAutocomplete,departmentAutoComplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete);
-
-
-=======
-
-
-                getAutocompleteDataSingle(postaleAutocomplete,"/Finantial/Client/AllPostales");
-            
->>>>>>> 8c8d91e0b490059e0a4e65ef828a7057c984988e
+                //getAutoCompleteDataNested(countryAutocomplete,departmentAutoComplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete);
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
                         resultCountry = resultCountry.replace(/Description/g, 'name');
@@ -339,7 +331,6 @@
                             afterSelect: function () {
                                 var country = $(countryAutocomplete).typeahead("getActive");
                                 $(countryId).val(country.id);
-    
                                 $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryInvoicer", data: { countryId: country.id }, async: false })
                                     .done(function (resultValidation) {
                                         var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
