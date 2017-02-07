@@ -109,4 +109,62 @@ function iterate_Combo(documentType, objResult) {
     documentType.trigger("chosen:updated");
 }
 
+function get_allClientZone() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: $("#chkCountry").val() }, async: false })
+        .done(function (result) {
+            var objResult = jQuery.parseJSON(result);
+            var documentType = $("#chkZone");
+            documentType.html("");
+            iterate_Combo(documentType, objResult);
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
+}
+
+function get_allClientDistrict() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: $("#chkCountry").val(), departmentId: $("#chkDepartment").val(), provinceId: $(this).val() }, async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                var documentType = $("#chkDistrict");
+                documentType.html("");
+                iterate_Combo(documentType, objResult);
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
+}
+
+function get_allClientProvinces() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: { countryId: $("#chkCountry").val(), departmentId: $(this).val() }, async: false })
+             .done(function (result) {
+                 var objResult = jQuery.parseJSON(result);
+                 var documentType = $("#chkProvince");
+                 documentType.html("");
+                 iterate_Combo(documentType, objResult);
+             }).fail(function (result) {
+                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+             });
+}
+
+function get_allClientDepartments() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: $("#chkCountry").val() }, async: false })
+           .done(function (result) {
+               var objResult = jQuery.parseJSON(result);
+               var documentType = $("#chkDepartment");
+               documentType.html("");
+               iterate_Combo(documentType, objResult);
+           }).fail(function (result) {
+               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+           });
+}
+
+function toolAutoComplete(nameAutoComplete, objResultDis,name) {
+    $(nameAutoComplete).typeahead({
+        source: objResultDis,
+    });
+    $.each(objResultDis, function (index, value) {
+        if (value.id == name) {
+            $(nameAutoComplete).val(value.name);
+        }
+    });
+}
 

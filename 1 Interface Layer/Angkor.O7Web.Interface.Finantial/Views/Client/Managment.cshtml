@@ -48,6 +48,7 @@
     @Html.JavaScriptLink("js/plugins/moment/moment-es.js")
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.js")
     <script src="~/Scripts/Client/Managment.data.js"></script>
+    <script src="~/Scripts/Client/Managment.function.js"></script>
 }
 
 @section section_script {
@@ -380,9 +381,7 @@
                                                 $(departmentId).val(department.id);
                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:"PER", departmentId: department.id }, async: false })
                                                     .done(function (resultProv) {
-                                                        resultProv = resultProv.replace(/Description/g, 'name');
-                                                        resultProv = resultProv.replace(/Id/g, 'id');
-                                                        var objResultProv = jQuery.parseJSON(resultProv);
+                                                        var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
                                                             afterSelect: function () {
@@ -390,9 +389,7 @@
                                                                 $(provinceId).val(province.id);
                                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:"PER", departmentId: department.id, provinceId: province.id }, async: false })
                                                                     .done(function (resultDistrict) {
-                                                                        resultDistrict = resultDistrict.replace(/Description/g, 'name');
-                                                                        resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        var objResultDis = jQuery.parseJSON(resultDistrict);
+                                                                        var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
                                                                             afterSelect: function() {
@@ -490,55 +487,13 @@
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
     });
 
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId:$("#chkCountry").val() }, async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkZone");
-            documentType.html("");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-    });
+    get_allClientZone();
 
     $("#chkCountry").on('change', function(e) {
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkZone");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId:$("#chkCountry").val() } , async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDepartment");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
-    
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:$("#chkCountry").val(),departmentId:$("#chkDepartment").val(), provinceId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDistrict");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });    
-    
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:$("#chkCountry").val(), departmentId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkProvince");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });   
+        get_allClientZone();
+        get_allClientDepartments();
+        get_allClientDistrict();
+        get_allClientProvinces(); 
     });
     
     $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
@@ -560,27 +515,11 @@
     });
     
     $("#chkProvince").on('change', function(e) {
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:$("#chkCountry").val(),departmentId:$("#chkDepartment").val(), provinceId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkDistrict");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
+        get_allClientDistrict();
     });
 
     $("#chkDepartment").on('change', function(e) {        
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:$("#chkCountry").val(), departmentId:$(this).val() }, async: false })
-            .done(function (result) {
-                var objResult = jQuery.parseJSON(result);
-                var documentType = $("#chkProvince");
-                documentType.html("");
-                iterate_Combo(documentType, objResult);
-            }).fail(function (result) {
-               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
+        get_allClientProvinces();
     });
 
     $.ajax({ method: "GET", url: "/Finantial/Client/ClientOrigins", async: false })
@@ -610,14 +549,7 @@
             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
         });        
     
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId:$("#chkCountry").val() } , async: false })
-        .done(function (result) {
-            var objResult = jQuery.parseJSON(result);
-            var documentType = $("#chkDepartment");
-            iterate_Combo(documentType, objResult);
-        }).fail(function (result) {
-            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });
+    get_allClientDepartments();
     
     if(action == "2" || action == "3") {
         var clientId = $("#txtClientId").val();
@@ -738,9 +670,7 @@
                          
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
-                        resultCountry = resultCountry.replace(/Description/g, 'name');
-                        resultCountry = resultCountry.replace(/Id/g, 'id');
-                        var objResultCountry = jQuery.parseJSON(resultCountry);                                                
+                        var objResultCountry = jQuery.parseJSON(parseAutocomplete(resultCountry));                                                
                         $(countryAutocomplete).typeahead({
                             source: objResultCountry,
                             afterSelect: function () {
@@ -748,9 +678,7 @@
                                 $(countryId).val(country.id);
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
                                     .done(function (resultZone) {
-                                        resultZone = resultZone.replace(/Description/g, 'name');
-                                        resultZone = resultZone.replace(/Id/g, 'id');
-                                        var objResultZone = jQuery.parseJSON(resultZone);
+                                        var objResultZone = jQuery.parseJSON(parseAutocomplete(resultZone));
                                         $(zoneAutocomplete).typeahead({
                                             source: objResultZone,
                                             afterSelect: function () {
@@ -769,9 +697,7 @@
                                     });                                
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country.id } , async: false })
                                     .done(function (result) {
-                                        result = result.replace(/Description/g, 'name');
-                                        result = result.replace(/Id/g, 'id');
-                                        var objResult = jQuery.parseJSON(result);
+                                        var objResult = jQuery.parseJSON(parseAutocomplete(result));
                                         $(departmentAutocomplete).typeahead({
                                             source: objResult,
                                             afterSelect: function () {
@@ -779,9 +705,7 @@
                                                 $(departmentId).val(department.id);
                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId: country.id, departmentId: department.id }, async: false })
                                                     .done(function (resultProv) {
-                                                        resultProv = resultProv.replace(/Description/g, 'name');
-                                                        resultProv = resultProv.replace(/Id/g, 'id');
-                                                        var objResultProv = jQuery.parseJSON(resultProv);
+                                                        var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
                                                             afterSelect: function () {
@@ -789,9 +713,7 @@
                                                                 $(provinceId).val(province.id);
                                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country.id, departmentId: department.id, provinceId: province.id }, async: false })
                                                                     .done(function (resultDistrict) {
-                                                                        resultDistrict = resultDistrict.replace(/Description/g, 'name');
-                                                                        resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        objResultDis = jQuery.parseJSON(resultDistrict);
+                                                                        objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
                                                                             afterSelect: function() {
@@ -799,7 +721,6 @@
                                                                                 $(districtId).val(district.id);
                                                                             }
                                                                         });
-
                                                                     }).fail(function (result) {
                                                                         toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                                                                     });
@@ -983,9 +904,7 @@
                                                 $(departmentId).val(department.id);
                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId: country.id, departmentId: department.id }, async: false })
                                                     .done(function (resultProv) {
-                                                        resultProv = resultProv.replace(/Description/g, 'name');
-                                                        resultProv = resultProv.replace(/Id/g, 'id');
-                                                        var objResultProv = jQuery.parseJSON(resultProv);
+                                                        var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
                                                         $(provinceAutocomplete).typeahead({
                                                             source: objResultProv,
                                                             afterSelect: function () {
@@ -993,9 +912,7 @@
                                                                 $(provinceId).val(province.id);
                                                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country.id, departmentId: department.id, provinceId: province.id }, async: false })
                                                                     .done(function (resultDistrict) {
-                                                                        resultDistrict = resultDistrict.replace(/Description/g, 'name');
-                                                                        resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                                                        objResultDis = jQuery.parseJSON(resultDistrict);
+                                                                        objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
                                                                         $(districtAutocomplete).typeahead({
                                                                             source:objResultDis,
                                                                             afterSelect: function() {
@@ -1027,65 +944,28 @@
                             }
                         });
 
-
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country }, async: false })
                             .done(function (resultZone) {
-                                resultZone = resultZone.replace(/Description/g, 'name');
-                                resultZone = resultZone.replace(/Id/g, 'id');
-                                var objResultZone = jQuery.parseJSON(resultZone);
-    							$(zoneAutocomplete).typeahead({
-								    source: objResultZone,
-							    });
-                                $.each(objResultZone, function (index, value){
-                                    if(value.id == zone) {
-                                        $(zoneAutocomplete).val(value.name);
-                                    }
-                                });
+                                var objResultZone = jQuery.parseJSON(parseAutocomplete(resultZone));
+                                toolAutoComplete(zoneAutocomplete, objResultZone,zone);
                             });
 
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country } , async: false })
                             .done(function (result) {
-                                result = result.replace(/Description/g, 'name');
-                                result = result.replace(/Id/g, 'id');
-                                var objResult = jQuery.parseJSON(result);
-							    $(departmentAutocomplete).typeahead({
-								    source: objResult,
-							    });
-                                $.each(objResult, function (index, value){
-                                    if(value.id == department) {
-                                        $(departmentAutocomplete).val(value.name);
-                                    }
-                                });
+                                var objResult = jQuery.parseJSON(parseAutocomplete(result));
+                                toolAutoComplete(departmentAutocomplete, objResult,department);
                             });
 
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId: country, departmentId: department }, async: false })
                             .done(function (resultProv) {
-                                resultProv = resultProv.replace(/Description/g, 'name');
-                                resultProv = resultProv.replace(/Id/g, 'id');
-                                var objResultProv = jQuery.parseJSON(resultProv);
-							    $(provinceAutocomplete).typeahead({
-								    source: objResultProv,
-							    });
-                                $.each(objResultProv, function (index, value){
-                                    if(value.id == province) {
-                                        $(provinceAutocomplete).val(value.name);
-                                    }
-                                });
+                                var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
+                                toolAutoComplete(provinceAutocomplete, objResultDis,province); 
                             });
 
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country, departmentId: department, provinceId: province }, async: false })
                             .done(function (resultDistrict) {
-                                resultDistrict = resultDistrict.replace(/Description/g, 'name');
-                                resultDistrict = resultDistrict.replace(/Id/g, 'id');
-                                objResultDis = jQuery.parseJSON(resultDistrict);
-							    $(districtAutocomplete).typeahead({
-								    source: objResultDis,
-							    });
-                                $.each(objResultDis, function (index, value){
-                                    if(value.id == district) {
-                                        $(districtAutocomplete).val(value.name);
-                                    }
-                                });
+                                var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
+                                toolAutoComplete(districtAutocomplete, objResultDis,district); 
                             });                        
                     });
                     countInvoicer = countInvoicer + 1;
@@ -1093,25 +973,8 @@
             $("#hddCountInvoicer").val(countInvoicer);
     }
     if(action == "1"){
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:$("#chkCountry").val(), departmentId:$(this).val() }, async: false })
-                .done(function (result) {
-                    var objResult = jQuery.parseJSON(result);
-                    var documentType = $("#chkProvince");
-                    documentType.html("");
-                    iterate_Combo(documentType, objResult) 
-                }).fail(function (result) {
-                   toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-            });
-    
-        $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId:$("#chkCountry").val(),departmentId:$("#chkDepartment").val(), provinceId:$(this).val() }, async: false })
-                .done(function (result) {
-                    var objResult = jQuery.parseJSON(result);
-                    var documentType = $("#chkDistrict");
-                    documentType.html("");
-                    iterate_Combo(documentType, objResult) 
-                }).fail(function (result) {
-                   toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-        });  
+        get_allClientProvinces();
+        get_allClientDistrict();
     }
     
     $("#tblReciber tbody").on("click", "tr", function () {
