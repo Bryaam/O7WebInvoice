@@ -82,22 +82,23 @@
             }
 
             btnAddReciber.on("click", function () {     
-                btnAddReciber.hide();                           
+                btnAddReciber.hide();
                 var reciber_count = parseInt($("#hddCountReciber").val());
-                var row = {};
-                row.CodDir = "";
-                row.Address = "<input class='form-control' style='width:100%' name='txtReciberAddress_"+reciber_count+"'>";  
-                row.Department = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberDepartment_"+reciber_count+"' name='txtReciberDepartment_"+reciber_count+"'><input type='hidden' id='txtReciberDepartmentId_"+reciber_count+"' name='txtReciberDepartmentId_"+reciber_count+"'>";
-                row.Province = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberProvince_"+reciber_count+"' name='txtReciberProvince_"+reciber_count+"'><input type='hidden' id='txtReciberProvinceId_"+reciber_count+"' name='txtReciberProvinceId_"+reciber_count+"'>";
-                row.District = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberDistrict_"+reciber_count+"' name='txtReciberDistrict_"+reciber_count+"'><input type='hidden' id='txtReciberDistrictId_"+reciber_count+"' name='txtReciberDistrictId_"+reciber_count+"'>";
-                row.Country = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberCountry_"+reciber_count+"' name='txtReciberCountry_"+reciber_count+"'><input type='hidden' id='txtReciberCountryId_"+reciber_count+"' name='txtReciberCountryId_"+reciber_count+"'>";
-                row.City = "<input class='form-control pull-left' style='width: 100%;' name='txtReciberCity_"+reciber_count+"'>";
-                row.Zone = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberZone_"+reciber_count+"' name='txtReciberZone_"+reciber_count+"'><input type='hidden' id='txtReciberZoneId_"+reciber_count+"' name='txtReciberZoneId_"+reciber_count+"'>";
-                row.Phone = "<input class='form-control pull-left' style='width: 100%;' name='txtReciberPhone_"+reciber_count+"'>"; 
-                row.Contact = "<input class='form-control pull-left' style='width: 100%;' name='txtReciberContact_"+reciber_count+"'>";
-                var rowCollection = [];
-                rowCollection.push(row);
-                tblReciber.rows.add(rowCollection).draw();
+                addRowAddress(tblReciber, 'Reciber', reciber_count)
+     //           var row = {};
+     //           row.CodDir = "";
+     //           row.Address = "<input class='form-control' style='width:100%' name='txtReciberAddress_"+reciber_count+"'>";  
+     //           row.Department = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberDepartment_"+reciber_count+"' name='txtReciberDepartment_"+reciber_count+"'><input type='hidden' id='txtReciberDepartmentId_"+reciber_count+"' name='txtReciberDepartmentId_"+reciber_count+"'>";
+     //           row.Province = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberProvince_"+reciber_count+"' name='txtReciberProvince_"+reciber_count+"'><input type='hidden' id='txtReciberProvinceId_"+reciber_count+"' name='txtReciberProvinceId_"+reciber_count+"'>";
+     //           row.District = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberDistrict_"+reciber_count+"' name='txtReciberDistrict_"+reciber_count+"'><input type='hidden' id='txtReciberDistrictId_"+reciber_count+"' name='txtReciberDistrictId_"+reciber_count+"'>";
+     //           row.Country = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberCountry_"+reciber_count+"' name='txtReciberCountry_"+reciber_count+"'><input type='hidden' id='txtReciberCountryId_"+reciber_count+"' name='txtReciberCountryId_"+reciber_count+"'>";
+     //           row.City = "<input class='form-control pull-left' style='width: 100%;' name='txtReciberCity_"+reciber_count+"'>";
+     //           row.Zone = "<input class='form-control pull-left' style='width: 100%;' id='txtReciberZone_"+reciber_count+"' name='txtReciberZone_"+reciber_count+"'><input type='hidden' id='txtReciberZoneId_"+reciber_count+"' name='txtReciberZoneId_"+reciber_count+"'>";
+     //           row.Phone = "<input class='form-control pull-left' style='width: 100%;' name='txtReciberPhone_"+reciber_count+"'>"; 
+     //           row.Contact = "<input class='form-control pull-left' style='width: 100%;' name='txtReciberContact_"+reciber_count+"'>";
+     //           var rowCollection = [];
+     //           rowCollection.push(row);
+     //           tblReciber.rows.add(rowCollection).draw();
                 var departmentId = "#txtReciberDepartmentId_"+reciber_count;
                 var provinceId = "#txtReciberProvinceId_"+reciber_count;
                 var districtId = "#txtReciberDistrictId_"+reciber_count;
@@ -110,17 +111,17 @@
                 var zoneAutocomplete = "#txtReciberZone_"+reciber_count;
                 var postaleAutocomplete = "#txtReciberPostal_"+reciber_count;
 
+                autocompletePostales(postaleAutocomplete);
 
-
-                $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
-                    .done(function (resultPostale) {
-                        resultPostale = resultPostale.replace(/Description/g, 'name');
-                        resultPostale = resultPostale.replace(/Id/g, 'id');
-                        var objResultPostale = jQuery.parseJSON(resultPostale);
-                        $(postaleAutocomplete).typeahead({ source: objResultPostale });            
-                    }).fail(function (result) {
-                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                }); 
+    //            $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
+    //                .done(function (resultPostale) {
+    //                    resultPostale = resultPostale.replace(/Description/g, 'name');
+    //                    resultPostale = resultPostale.replace(/Id/g, 'id');
+    //                    var objResultPostale = jQuery.parseJSON(resultPostale);
+    //                    $(postaleAutocomplete).typeahead({ source: objResultPostale });            
+    //                }).fail(function (result) {
+    //                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+    //            }); 
     
                 $.ajax({ method: "GET", url: "/Finantial/Client/AllCountries", async: false })
                     .done(function (resultCountry) {
@@ -132,40 +133,43 @@
                             afterSelect: function () {
                                 var country = $(countryAutocomplete).typeahead("getActive");
                                 $(countryId).val(country.id);
+                                var ubigs=[departmentAutocomplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete]
+                                validateCountry('ValidateCountryInvoicer', country.id, ubigs);
     
-                               $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryEntry", data: { countryId: country.id }, async: false })
-                                    .done(function (resultValidation) {    
-                                        var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
-                                        if (objResultValidation == true) {
-                                            $(departmentAutocomplete).removeAttr("disabled");
-                                            $(provinceAutocomplete).removeAttr("disabled");
-                                            $(districtAutocomplete).removeAttr("disabled");
-                                            $(zoneAutocomplete).removeAttr("disabled");
-                                        } else {
-                                            $(departmentAutocomplete).attr("disabled", "disabled");
-                                            $(provinceAutocomplete).attr("disabled", "disabled");
-                                            $(districtAutocomplete).attr("disabled", "disabled");
-                                            $(zoneAutocomplete).attr("disabled", "disabled");
-                                        }
-                                    }).fail(function (result) {
-                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                                    });
-    
-                                $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
-                                    .done(function (resultZone) {
-                                        resultZone = resultZone.replace(/Description/g, 'name');
-                                        resultZone = resultZone.replace(/Id/g, 'id');
-                                        var objResultZone = jQuery.parseJSON(resultZone);
-                                        $(zoneAutocomplete).typeahead({ 
-                                            source: objResultZone,
-                                            afterSelect: function () {
-                                                var zone = $(zoneAutocomplete).typeahead("getActive");
-                                                $(zoneId).val(zone.id)
-                                            }
-                                        }); 
-                                    }).fail(function (result) {
-                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                                    });
+      //                         $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryEntry", data: { countryId: country.id }, async: false })
+      //                              .done(function (resultValidation) {    
+      //                                  var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
+      //                                  if (objResultValidation == true) {
+        //                                    $(departmentAutocomplete).removeAttr("disabled");
+          //                                  $(provinceAutocomplete).removeAttr("disabled");
+        //                                    $(districtAutocomplete).removeAttr("disabled");
+        //                                    $(zoneAutocomplete).removeAttr("disabled");
+        //                                } else {
+        //                                    $(departmentAutocomplete).attr("disabled", "disabled");
+          //                                  $(provinceAutocomplete).attr("disabled", "disabled");
+            //                                $(districtAutocomplete).attr("disabled", "disabled");
+              //                              $(zoneAutocomplete).attr("disabled", "disabled");
+                //                        }
+                  //                  }).fail(function (result) {
+                    //                    toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                      //              });
+
+                                 autocompleteZones(zoneAutocomplete, zoneId, country.id);               
+      //                           $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
+        //                            .done(function (resultZone) {
+          //                              resultZone = resultZone.replace(/Description/g, 'name');
+            //                            resultZone = resultZone.replace(/Id/g, 'id');
+              //                          var objResultZone = jQuery.parseJSON(resultZone);
+                //                        $(zoneAutocomplete).typeahead({ 
+                  //                          source: objResultZone,
+                    //                        afterSelect: function () {
+                      //                          var zone = $(zoneAutocomplete).typeahead("getActive");
+                        //                        $(zoneId).val(zone.id)
+                          //                  }
+                            //            }); 
+                              //      }).fail(function (result) {
+                            //            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                              //      });
     
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country.id } , async: false })
                                     .done(function (result) {
@@ -286,7 +290,7 @@
                 var zoneAutocomplete = "#txtInvoicerZone_"+reciber_count;
                 var postaleAutocomplete = "#txtInvoicerPostal_"+reciber_count;  
     
-    autocompletePostales(postaleAutocomplete);
+                autocompletePostales(postaleAutocomplete);
 //                $.ajax({ method: "GET", url: "/Finantial/Client/AllPostales", async: false })
   //                  .done(function (resultPostale) {
     //                    resultPostale = resultPostale.replace(/Description/g, 'name');
@@ -307,9 +311,9 @@
                             source: objResultCountry,
                             afterSelect: function () {
                                 var country = $(countryAutocomplete).typeahead("getActive");
-    $(countryId).val(country.id);
-    var ubigs=[departmentAutocomplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete]
-    validateCountry('ValidateCountryInvoicer', country.id, ubigs);
+                                $(countryId).val(country.id);
+                                var ubigs=[departmentAutocomplete,provinceAutocomplete,districtAutocomplete,zoneAutocomplete]
+                                validateCountry('ValidateCountryInvoicer', country.id, ubigs);
 //                                $.ajax({ method: "GET", url: "/Finantial/Client/ValidateCountryInvoicer", data: { countryId: country.id }, async: false })
   //                                  .done(function (resultValidation) {
     //                                    var objResultValidation = jQuery.parseJSON(resultValidation.toLowerCase());
@@ -322,22 +326,22 @@
                   //                      toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
                     //                });
         
-    autocompleteZones(zoneAutocomplete, zoneId, country.id)
-    $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
-                                    .done(function (resultZone) {
-                                        resultZone = resultZone.replace(/Description/g, 'name');
-                                        resultZone = resultZone.replace(/Id/g, 'id');
-                                        var objResultZone = jQuery.parseJSON(resultZone);
-                                        $(zoneAutocomplete).typeahead({ 
-                                            source: objResultZone,
-                                            afterSelect: function () {
-                                                var zone = $(zoneAutocomplete).typeahead("getActive");
-                                                $(zoneId).val(zone.id)
-                                            }
-                                        });
-                                    }).fail(function (result) {
-                                        toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
-                                    });
+                                    autocompleteZones(zoneAutocomplete, zoneId, country.id);
+ //                                $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country.id }, async: false })
+   //                                 .done(function (resultZone) {
+     //                                   resultZone = resultZone.replace(/Description/g, 'name');
+       //                                 resultZone = resultZone.replace(/Id/g, 'id');
+         //                               var objResultZone = jQuery.parseJSON(resultZone);
+           //                             $(zoneAutocomplete).typeahead({ 
+             //                               source: objResultZone,
+               //                             afterSelect: function () {
+                 //                               var zone = $(zoneAutocomplete).typeahead("getActive");
+                   //                             $(zoneId).val(zone.id)
+                     //                       }
+                       //                 });
+                         //           }).fail(function (result) {
+                           //             toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+                             //       });
 
                                 $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country.id } , async: false })
                                     .done(function (result) {
