@@ -944,25 +944,54 @@
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: country }, async: false })
                             .done(function (resultZone) {
                                 var objResultZone = jQuery.parseJSON(parseAutocomplete(resultZone));
-                                toolAutoComplete(zoneAutocomplete, objResultZone,zone);
+                                $(zoneAutocomplete).typeahead({
+                                    source: objResultZone,
+                                });
+                                $.each(objResultZone, function (index, value) {
+                                    if (value.id == zone) {
+                                        $(zoneAutocomplete).val(value.name);
+                                    }
+                                }); 
                             });
 
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: country } , async: false })
                             .done(function (result) {
                                 var objResult = jQuery.parseJSON(parseAutocomplete(result));
-                                toolAutoComplete(departmentAutocomplete, objResult,department);
+                                $(departmentAutocomplete).typeahead({
+                                    source: objResult,
+                                });
+                                $.each(objResult, function (index, value) {
+                                    if (value.id == department) {
+                                        $(departmentAutocomplete).val(value.name);
+                                    }
+                                }); 
                             });
 
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId: country, departmentId: department }, async: false })
                             .done(function (resultProv) {
                                 var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
-                                toolAutoComplete(provinceAutocomplete, objResultDis,province); 
+                                $(provinceAutocomplete).typeahead({
+                                    source: objResultProv,
+                                });
+                                $.each(objResultProv, function (index, value) {
+                                    if (value.id == province) {
+                                        $(provinceAutocomplete).val(value.name);
+                                    }
+                                });                         
+                        
                             });
 
                         $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country, departmentId: department, provinceId: province }, async: false })
                             .done(function (resultDistrict) {
                                 var objResultDis = jQuery.parseJSON(parseAutocomplete(resultDistrict));
-                                toolAutoComplete(districtAutocomplete, objResultDis,district); 
+                                $(districtAutocomplete).typeahead({
+                                    source: objResultDis,
+                                });
+                                $.each(objResultDis, function (index, value) {
+                                    if (value.id == district) {
+                                        $(districtAutocomplete).val(value.name);
+                                    }
+                                }); 
                             });                        
                     });
                     countInvoicer = countInvoicer + 1;

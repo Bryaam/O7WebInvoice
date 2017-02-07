@@ -89,10 +89,10 @@ function parseAutocomplete(json) {
 }
 
 function rowValidate(i,tblName,curName, buttonName) {
-    $("#tblName input[name*=" + curName + "][class]:lt(7)").each(function () {
+    $("#"+tblName+ " input[name*=" + curName + "][class]:lt(7)").each(function () {
         $(this).change(function () {
             i = 0;
-            $("#tblName input[name*=" + curName + "][class]:lt(7)").each(function () {
+            $("#"+tblName+" input[name*=" + curName + "][class]:lt(7)").each(function () {
                 if ($(this).val() == "") {
                     i++;
                 }
@@ -111,6 +111,17 @@ function iterate_Combo(documentType, objResult) {
         documentType.append("<option value='" + value.Id + "'>" + value.Description + "</option>");
     });
     documentType.trigger("chosen:updated");
+}
+
+function toolAutoComplete(nameAutoComplete, objResultDis, name) {
+    $(nameAutoComplete).typeahead({
+        source: objResultDis,
+    });
+    $.each(objResultDis, function (index, value) {
+        if (value.id == name) {
+            $(nameAutoComplete).val(value.name);
+        }
+    });
 }
 
 function get_allClientZone() {
@@ -137,8 +148,6 @@ function get_allClientDistrict() {
             });
 }
 
-<<<<<<< HEAD
-
 function get_allClientProvinces() {
     $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: { countryId: $("#chkCountry").val(), departmentId: $(this).val() }, async: false })
              .done(function (result) {
@@ -163,19 +172,8 @@ function get_allClientDepartments() {
            });
 }
 
-function toolAutoComplete(nameAutoComplete, objResultDis,name) {
-    $(nameAutoComplete).typeahead({
-        source: objResultDis,
-    });
-    $.each(objResultDis, function (index, value) {
-        if (value.id == name) {
-            $(nameAutoComplete).val(value.name);
-        }
-    });
-}
 
-=======
->>>>>>> cb39438afa5dab4d34679b67d305e9c09c4f7f50
+
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";
     row.Address = "<input class='form-control' style='width:100%' name='txtInvoicerAddress_" + reciber_count + "'>";
@@ -215,7 +213,4 @@ function onClickBtnAddReciber() {
         disableFadeOut: false
     });
 }
-<<<<<<< HEAD
 
-=======
->>>>>>> cb39438afa5dab4d34679b67d305e9c09c4f7f50
