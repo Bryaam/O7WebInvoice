@@ -927,7 +927,7 @@
 
 
     function updateInvoiceHeader(idInvoice) {
-        var ClientCode = $("#clientCode").html();
+        var ClientCode = $("#clientCode").val();
         var ClientID = $("#docInput").val();
         var ClientPhone = $("#phoneInput").val();
         var ClientName = $("#nameInput").val();
@@ -1204,9 +1204,9 @@
             "porc": "5"
         };
         dataUnit.item = itemNum;
-        dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
+        dataUnit.amount = "<input class='form-control pull-left input-add_product number-only' style='width: 100%;' type='number' min='0' value='' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
         dataUnit.comment = "<input class='form-control input-add_product' value='' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
-        dataUnit.price = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
+        dataUnit.price = "<input class='form-control pull-left input-add_product number-only' style='width: 100%;' type='number' min='0' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
         dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' style='width:100%' id='item_concept_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' style='width:100%' id='item_concept_value_" + itemNum + "' name='conceptId_" + itemNum + "'>";
         dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='' style='width:100%' id='item_cost_center_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' value='' style='width:100%' id='item_cost_center_value_" + itemNum + "' name='ccoId_" + itemNum + "'>";
         dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";
@@ -1350,10 +1350,10 @@
         $("#invoiceType").prop('disabled', true).trigger("chosen:updated");
         $("#idSerieExterno").prop('disabled', true).trigger("chosen:updated");
         $("#idDocExt").html(invoice.documentExt);
-        $("#invoiceId").html(invoice.documentId);
+        $("#invoiceId").val(invoice.documentId);
         $("#fechaDoc").val(invoice.documentDate);
         $("#fechaVenc").val(invoice.expirationDate);
-        $("#clientCode").html(invoice.clientCode);
+        $("#clientCode").val(invoice.clientCode);
         $("#porcNumber").val(invoice.TaxPorc);
         update_chosen_select("#currency", invoice.currency);
         $("#taxe").val(invoice.TaxId);
@@ -1502,9 +1502,9 @@
             };
             dataUnit.item = itemNum;
             subtotal = value.price * value.amount;
-            dataUnit.amount = "<input class='form-control pull-left input-add_product' style='width: 100%;' type='number' value='" + value.amount + "' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
+            dataUnit.amount = "<input class='form-control pull-left input-add_product number-only' style='width: 100%;' type='number' min='0' value='" + value.amount + "' id='item_amount_" + itemNum + "' name='cantidad_" + itemNum + "'>";
             dataUnit.comment = "<input class='form-control input-add_product' value='" + value.commentary + "' style='width:100%' id='item_comment_" + itemNum + "' name='observacion_" + itemNum + "'>";
-            dataUnit.price = "<input class='form-control pull-left input-add_product' value='" + value.price + "' style='width: 100%;' type='number' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
+            dataUnit.price = "<input class='form-control pull-left input-add_product number-only' value='" + value.price + "' style='width: 100%;' type='number' min='0' id='item_price_" + itemNum + "' name='unitValue_" + itemNum + "'>";
             dataUnit.concept = "<input class='form-control input-add_product autocomplete-reference' value='" + value.conceptContent + "' style='width:100%' id='item_concept_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' value='" + value.conceptId + "' style='width:100%' id='item_concept_value_" + itemNum + "' name='conceptId_" + itemNum + "'>";
             dataUnit.cost_center = "<input class='form-control input-add_product autocomplete-reference' value='" + value.ccoContent + "' style='width:100%' id='item_cost_center_" + itemNum + "'><input class='form-control input-add_product autocomplete-reference-value hidden' value='" + value.ccoId + "' style='width:100%' id='item_cost_center_value_" + itemNum + "' name='ccoId_" + itemNum + "'>";
             dataUnit.delete = "<a class='delete text-danger text-center' href='#'><i class='fa fa-trash'></i></a>";

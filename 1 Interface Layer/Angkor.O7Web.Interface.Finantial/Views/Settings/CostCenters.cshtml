@@ -341,9 +341,10 @@
             });
             return false;
         }
+        var value = $("#btnConfirm").attr("action");
         swal({
             title: "Confirmación",
-            text: "¿Crear registro?",
+            text: value == 1 ? "¿Crear registro?" : "¿Editar registro?",
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
@@ -352,12 +353,11 @@
         }, function() {
         swal({
             title: "Generado",
-            text: "Registro creado exitosamente",
+            text: value == 1 ? "Registro creado exitosamente" : "Registro editado exitosamente",
             type: "success",
             confirmButtonText: "Continuar"
             }, function () {
                 submit_cco("#btnConfirm");
-                location.reload();
             });
         });
     });
@@ -401,7 +401,8 @@
                         flgDet: $('#checkboxDet').is(":checked") ? "S" : "N" ,
                         flgPresup: $('#checkboxPresup').is(":checked") ? "S" : "N",
                         flgIng: $('#checkboxCenIng').is(":checked") ? "S" : "N"
-                    }
+                    },
+                    async: false
                 })
                 .done(function(result) {
                     console.log(result);
@@ -436,7 +437,8 @@
                             flgDet: $('#checkboxDet').is(":checked") ? "S" : "N" ,
                             flgPresup: $('#checkboxPresup').is(":checked") ? "S" : "N",
                             flgIng: $('#checkboxCenIng').is(":checked") ? "S" : "N"
-                        }
+                        },
+                        async: false
                     })
                     .done(function(result) {
                         console.log(result);
@@ -445,8 +447,8 @@
                             positionClass: "toast-top-full-width"
                         });
                     });
-            } else
-            if (value == "3") alert("eliminar");
+            }
+            window.location.href = window.location.href;
         }
     }
 
