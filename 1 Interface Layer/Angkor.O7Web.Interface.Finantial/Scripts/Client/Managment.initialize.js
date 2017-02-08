@@ -66,6 +66,7 @@
         get_allClientProvinces();
         get_allClientDistrict();
     }
+    return action;
 }
 function iterate_Combo(documentType, objResult) {
     $.each(objResult, function (index, value) {

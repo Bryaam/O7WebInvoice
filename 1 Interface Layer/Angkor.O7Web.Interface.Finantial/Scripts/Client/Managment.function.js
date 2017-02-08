@@ -17,6 +17,21 @@ function initializeInput(inputName, count){
     return result;
 }
 
+function autocompleteInitialization2(autocompleteId, hiddenId, source, functionCallback) {
+    $(autocompleteId).typeahead({
+        source: source,
+        afterSelect: function () {
+            var value = $(autocompleteId).typeahead("getActive");
+            $(hiddenId).val(value.id);
+            functionCallback(arguments[4]);
+        }
+    });
+}
+
+function autocompleteProvince(objParameters){
+    autocompleteDistricts(districtAutocomplete, districtId, country.id, department.id, province.id);
+}
+
 function onclickBtnReciber () {
     var count = getNumber("#hddCountInvoicer");
     addRowAddress (tblInvoicer, 'Invoicer', reciber_count);
@@ -47,7 +62,8 @@ function onclickBtnReciber () {
                                     $(inputs.HiddenDepartment).val(department.id);
                                     $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: {countryId:"PER", departmentId: department.id }, async: false })
                                         .done(function (resultProv) {
-                                            var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));   
+                                            var objResultProv = jQuery.parseJSON(parseAutocomplete(resultProv));
+                                            autocompleteInitialization2(inputs.InputProvince,inputs.HiddenProvince,objResultProv,)
                                             $(inputs.InputProvince).typeahead({
                                                 source: objResultProv,
                                                 afterSelect: function () {
@@ -75,7 +91,7 @@ function onclickBtnReciber () {
         height: '30vh',
         disableFadeOut : false
     });
-
+}
 function disableInputs(inputs) {
     for (var i = 0; i < inputs.length; i++)
         $(inputs[i]).attr('disabled', 'disabled');
@@ -112,10 +128,12 @@ function autocompleteInitialization(autocompleteId, hiddenId, source) {
         source: source,
         afterSelect: function () {
             var value = $(autocompleteId).typeahead("getActive");
-            $(hiddenId).val(value.id)
+            $(hiddenId).val(value.id);
         }
     });
 }
+
+
 
 function autocompleteDistricts(districtAutocomplete, districtHidden, country, department, province) {
     $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: country, departmentId: department, provinceId: province }, async: false })
@@ -143,63 +161,47 @@ function formatJsonAutocomplete(json) {
     return json;
 }
 
-function format_reciber(variable,code) {
+function format_reciber(variable) {
     var reciberCode = $(variable);
     var code = reciberCode.html();
     reciberCode.html("");
-    return reciberCode;
+    return code;
 }
 
 function editTable(tds,tblName,count) {
-    var code=0, country=0, department=0, province=0, district=0, address=0, city=0, zone=0, phone=0, contact=0;
-    format_reciber(tds[0],code);
+    var code=format_reciber(tds[0]);
     buildTextbox(tblName, 'Code', count, 1, 1, code);
-    //var reciberCode = $(tds[0]);
-    //var code = reciberCode.html();
-    //reciberCode.html("");
-    //reciberCode.append("<input type='text' class='form-control pull-left' style='width:100%;' name='txtReciberCode_"+countReciber+"' readonly='readonly' value='"+code+"' />");
-    format_reciber(tds[1],country);
-    buildTextbox(tblName, 'Country', count, 0, 0, country);
-    //var reciberCountry = $(tds[1]);
-    //var country = reciberCountry.html();
-    //reciberCountry.html("");
-    //reciberCountry.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberCountry_"+countReciber+"' name='txtReciberCountry_"+countReciber+"' />
-    <input type='hidden' id='txtReciberCountryId_"+countReciber+"' name='txtReciberCountryId_"+countReciber+"' value='"+country+"' />");                
-    var reciberDepartment = $(tds[2]);
-    var department = reciberDepartment.html(); 
-    reciberDepartment.html("");
-    reciberDepartment.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberDepartment_"+countReciber+"' name='txtReciberDepartment_"+countReciber+"' /><input type='hidden' id='txtReciberDepartmentId_"+countReciber+"' name='txtReciberDepartmentId_"+countReciber+"' value='"+department+"' />");
-    var reciberProvince = $(tds[3]);
-    var province = reciberProvince.html(); 
-    reciberProvince.html("");
-    reciberProvince.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberProvince_"+countReciber+"' name='txtReciberProvince_"+countReciber+"' /><input type='hidden' id='txtReciberProvinceId_"+countReciber+"' name='txtReciberProvinceId_"+countReciber+"' value='"+province+"' />");
-    var reciberDistrict = $(tds[4]);
-    var district = reciberDistrict.html(); 
-    reciberDistrict.html("");
-    reciberDistrict.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberDistrict_"+countReciber+"' name='txtReciberDistrict_"+countReciber+"' /><input type='hidden' id='txtReciberDistrictId_"+countReciber+"' name='txtReciberDistrictId_"+countReciber+"' value='"+district+"' />");
-    var reciberAddress = $(tds[5]);
-    var address = reciberAddress.html();
-    reciberAddress.html("");
-    reciberAddress.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberAddress_"+countReciber+"' value='"+address+"' />");
-    var reciberCity = $(tds[6]);
-    var city = reciberCity.html();
-    reciberCity.html("");
-    reciberCity.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberCity_"+countReciber+"' value='"+city+"' />");
-    var reciberZone = $(tds[7]);
-    var zone = reciberZone.html(); 
-    reciberZone.html("");
-    reciberZone.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberZone_"+countReciber+"' name='txtReciberZone_"+countReciber+"' /><input type='hidden' id='txtReciberZoneId_"+countReciber+"' name='txtReciberZoneId_"+countReciber+"' value='"+zone+"' />");
-    var reciberPhone = $(tds[8]);
-    var phone = reciberPhone.html();
-    reciberPhone.html("");
-    reciberPhone.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberPhone_"+countReciber+"' value='"+phone+"' />");
-    var reciberContact = $(tds[9]);
-    var contact = reciberContact.html();
-    reciberContact.html("");
-    reciberContact.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberContact_"+countReciber+"' value='"+contact+"' />");
+
+    var country=format_reciber(tds[1]);
+    buildTextbox(tblName, 'Country', count, 0, 0, country);buildHidden(tblName, 'Country', count, 1, country);
+
+    var department=format_reciber(tds[2]);
+    buildTextbox(tblName, 'Department', count, 0, 0, department);buildHidden(tblName, 'Department', count, 1, department);
+
+    var province=format_reciber(tds[3]);
+    buildTextbox(tblName, 'Province', count, 0, 0, province);buildHidden(tblName, 'Province', count, 1, province);
+
+    var district=format_reciber(tds[4]);
+    buildTextbox(tblName, 'District', count, 0, 0, district);buildHidden(tblName, 'District', count, 1, district);
+
+    var address=format_reciber(tds[5]);
+    buildTextbox(tblName, 'Address', count, 1, 0, address);
+
+    var city=format_reciber(tds[6]);
+    buildTextbox(tblName, 'City', count, 1, 0, city);
+
+    var zone=format_reciber(tds[7]);
+    buildTextbox(tblName, 'Zone', count, 0, 0, zone);buildHidden(tblName, 'Zone', count, 1, zone);
+
+    var phone=format_reciber(tds[8]);
+    buildTextbox(tblName, 'Phone', count, 1, 0, phone);
+
+    var contact=format_reciber(tds[9]);
+    buildTextbox(tblName, 'Contact', count, 1, 0, contact);
 
     var parametros = [code, country,department,province,district,address,city,zone,phone,contact];
-    
+    return parametros;
+
 }
 
 function addRowAddress(tblAddress, tblName, count) {
@@ -390,7 +392,57 @@ function toolAutoComplete(nameAutoComplete, objResultDis, name) {
         }
     });
 }
+<<<<<<< HEAD
 
+=======
+function get_allClientZone() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllClientZones", data: { countryId: $("#chkCountry").val() }, async: false })
+        .done(function (result) {
+            var objResult = jQuery.parseJSON(result);
+            var documentType = $("#chkZone");
+            documentType.html("");
+            iterate_Combo(documentType, objResult);
+        }).fail(function (result) {
+            toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+        });
+}
+
+function get_allClientDistrict() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllDistricts", data: { countryId: $("#chkCountry").val(), departmentId: $("#chkDepartment").val(), provinceId: $(this).val() }, async: false })
+            .done(function (result) {
+                var objResult = jQuery.parseJSON(result);
+                var documentType = $("#chkDistrict");
+                documentType.html("");
+                iterate_Combo(documentType, objResult);
+            }).fail(function (result) {
+                toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+            });
+}
+
+function get_allClientProvinces() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllProvinces", data: { countryId: $("#chkCountry").val(), departmentId: $(this).val() }, async: false })
+             .done(function (result) {
+                 var objResult = jQuery.parseJSON(result);
+                 var documentType = $("#chkProvince");
+                 documentType.html("");
+                 iterate_Combo(documentType, objResult);
+             }).fail(function (result) {
+                 toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+             });
+}
+
+function get_allClientDepartments() {
+    $.ajax({ method: "GET", url: "/Finantial/Client/AllDepartments", data: { countryId: $("#chkCountry").val() }, async: false })
+           .done(function (result) {
+               var objResult = jQuery.parseJSON(result);
+               var documentType = $("#chkDepartment");
+               documentType.html("");
+               iterate_Combo(documentType, objResult);
+           }).fail(function (result) {
+               toastr.error(result.statusText, "Mensaje", { positionClass: "toast-top-full-width" });
+           });
+}
+>>>>>>> ddbd84fe788a03f13d64fd6f52edc4906b8ba480
 
 function generateAddressFields(row,reciber_count) {
     row.CodDir = "";

@@ -51,11 +51,12 @@
     @Html.JavaScriptLink("js/plugins/typehead/bootstrap3-typeahead.js")
     <script src="~/Scripts/Client/Managment.data.js"></script>
     <script src="~/Scripts/Client/Managment.function.js"></script>
+    <script src="~/Scripts/Client/Managment.initialize.js"></script>
 }
 
 @section section_script {
     var curReciberRow = 0,i=0,curInvoicerRow = 0,j=0;
-    initialize();
+    var action=initialize();
     
     var tblReciber = $("#tblReciber").DataTable({
         searching: false,
@@ -461,47 +462,57 @@
             var countReciber = 0;    
             $("#tblReciber > tbody > tr").each(function () {
                 var tds = $(this).children();
-                editTable(tds);
-                var reciberCode = $(tds[0]);
-                var code = reciberCode.html();
-                reciberCode.html("");
-                reciberCode.append("<input type='text' class='form-control pull-left' style='width:100%;' name='txtReciberCode_"+countReciber+"' readonly='readonly' value='"+code+"' />");
-                var reciberCountry = $(tds[1]);
-                var country = reciberCountry.html();
-                reciberCountry.html("");
-                reciberCountry.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberCountry_"+countReciber+"' name='txtReciberCountry_"+countReciber+"' /><input type='hidden' id='txtReciberCountryId_"+countReciber+"' name='txtReciberCountryId_"+countReciber+"' value='"+country+"' />");                
-                var reciberDepartment = $(tds[2]);
-                var department = reciberDepartment.html(); 
-                reciberDepartment.html("");
-                reciberDepartment.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberDepartment_"+countReciber+"' name='txtReciberDepartment_"+countReciber+"' /><input type='hidden' id='txtReciberDepartmentId_"+countReciber+"' name='txtReciberDepartmentId_"+countReciber+"' value='"+department+"' />");
-                var reciberProvince = $(tds[3]);
-                var province = reciberProvince.html(); 
-                reciberProvince.html("");
-                reciberProvince.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberProvince_"+countReciber+"' name='txtReciberProvince_"+countReciber+"' /><input type='hidden' id='txtReciberProvinceId_"+countReciber+"' name='txtReciberProvinceId_"+countReciber+"' value='"+province+"' />");
-                var reciberDistrict = $(tds[4]);
-                var district = reciberDistrict.html(); 
-                reciberDistrict.html("");
-                reciberDistrict.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberDistrict_"+countReciber+"' name='txtReciberDistrict_"+countReciber+"' /><input type='hidden' id='txtReciberDistrictId_"+countReciber+"' name='txtReciberDistrictId_"+countReciber+"' value='"+district+"' />");
-                var reciberAddress = $(tds[5]);
-                var address = reciberAddress.html();
-                reciberAddress.html("");
-                reciberAddress.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberAddress_"+countReciber+"' value='"+address+"' />");
-                var reciberCity = $(tds[6]);
-                var city = reciberCity.html();
-                reciberCity.html("");
-                reciberCity.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberCity_"+countReciber+"' value='"+city+"' />");
-                var reciberZone = $(tds[7]);
-                var zone = reciberZone.html(); 
-                reciberZone.html("");
-                reciberZone.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberZone_"+countReciber+"' name='txtReciberZone_"+countReciber+"' /><input type='hidden' id='txtReciberZoneId_"+countReciber+"' name='txtReciberZoneId_"+countReciber+"' value='"+zone+"' />");
-                var reciberPhone = $(tds[8]);
-                var phone = reciberPhone.html();
-                reciberPhone.html("");
-                reciberPhone.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberPhone_"+countReciber+"' value='"+phone+"' />");
-                var reciberContact = $(tds[9]);
-                var contact = reciberContact.html();
-                reciberContact.html("");
-                reciberContact.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberContact_"+countReciber+"' value='"+contact+"' />");
+                var parametros=editTable(tds,'Reciber',countReciber);
+                var code=parametros[0];
+                var country=parametros[1];
+                var department=parametros[2];
+                var province=parametros[3];
+                var district=parametros[4];
+                var address=parametros[5];
+                var city=parametros[6];
+                var zone=parametros[7];
+                var phone=parametros[8];
+                var contact=parametros[9]; 
+                @*var reciberCode = $(tds[0]);
+    var code = reciberCode.html();
+    reciberCode.html("");
+    reciberCode.append("<input type='text' class='form-control pull-left' style='width:100%;' name='txtReciberCode_"+countReciber+"' readonly='readonly' value='"+code+"' />");
+    var reciberCountry = $(tds[1]);
+    var country = reciberCountry.html();
+    reciberCountry.html("");
+    reciberCountry.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberCountry_"+countReciber+"' name='txtReciberCountry_"+countReciber+"' /><input type='hidden' id='txtReciberCountryId_"+countReciber+"' name='txtReciberCountryId_"+countReciber+"' value='"+country+"' />");
+    var reciberDepartment = $(tds[2]);
+    var department = reciberDepartment.html();
+    reciberDepartment.html("");
+    reciberDepartment.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberDepartment_"+countReciber+"' name='txtReciberDepartment_"+countReciber+"' /><input type='hidden' id='txtReciberDepartmentId_"+countReciber+"' name='txtReciberDepartmentId_"+countReciber+"' value='"+department+"' />");
+    var reciberProvince = $(tds[3]);
+    var province = reciberProvince.html();
+    reciberProvince.html("");
+    reciberProvince.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberProvince_"+countReciber+"' name='txtReciberProvince_"+countReciber+"' /><input type='hidden' id='txtReciberProvinceId_"+countReciber+"' name='txtReciberProvinceId_"+countReciber+"' value='"+province+"' />");
+    var reciberDistrict = $(tds[4]);
+    var district = reciberDistrict.html();
+    reciberDistrict.html("");
+    reciberDistrict.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberDistrict_"+countReciber+"' name='txtReciberDistrict_"+countReciber+"' /><input type='hidden' id='txtReciberDistrictId_"+countReciber+"' name='txtReciberDistrictId_"+countReciber+"' value='"+district+"' />");
+    var reciberAddress = $(tds[5]);
+    var address = reciberAddress.html();
+    reciberAddress.html("");
+    reciberAddress.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberAddress_"+countReciber+"' value='"+address+"' />");
+    var reciberCity = $(tds[6]);
+    var city = reciberCity.html();
+    reciberCity.html("");
+    reciberCity.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberCity_"+countReciber+"' value='"+city+"' />");
+    var reciberZone = $(tds[7]);
+    var zone = reciberZone.html();
+    reciberZone.html("");
+    reciberZone.append("<input class='form-control pull-left' style='width:100%;' id='txtReciberZone_"+countReciber+"' name='txtReciberZone_"+countReciber+"' /><input type='hidden' id='txtReciberZoneId_"+countReciber+"' name='txtReciberZoneId_"+countReciber+"' value='"+zone+"' />");
+    var reciberPhone = $(tds[8]);
+    var phone = reciberPhone.html();
+    reciberPhone.html("");
+    reciberPhone.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberPhone_"+countReciber+"' value='"+phone+"' />");
+    var reciberContact = $(tds[9]);
+    var contact = reciberContact.html();
+    reciberContact.html("");
+    reciberContact.append("<input class='form-control pull-left' style='width:100%;' name='txtReciberContact_"+countReciber+"' value='"+contact+"' />");*@
     
                 var departmentId = "#txtReciberDepartmentId_"+countReciber;
                 var provinceId = "#txtReciberProvinceId_"+countReciber;
@@ -661,7 +672,19 @@
             var countInvoicer = 0;
             $("#tblInvoicer > tbody > tr").each(function () {
                 var tds = $(this).children();
-                var reciberCode = $(tds[0]);
+                var parametros=editTable(tds,'Invoicer',countInvoicer);
+                var code=parametros[0];
+                var country=parametros[1];
+                var department=parametros[2];
+                var province=parametros[3];
+                var district=parametros[4];
+                var address=parametros[5];
+                var city=parametros[6];
+                var zone=parametros[7];
+                var phone=parametros[8];
+                var contact=parametros[9];   
+
+                @*var reciberCode = $(tds[0]);
                 var code = reciberCode.html();
                 reciberCode.html("");
                 reciberCode.append("<input class='form-control pull-left' style='width:100%;' name='txtInvoicerCode_"+countInvoicer+"' readonly='readonly' value='"+code+"' />");
@@ -700,7 +723,7 @@
                 var reciberContact = $(tds[9]);
                 var contact = reciberContact.html();
                 reciberContact.html("");
-                reciberContact.append("<input class='form-control pull-left' style='width:100%;' name='txtInvoicerContact_"+countInvoicer+"' value='"+contact+"' />");
+                reciberContact.append("<input class='form-control pull-left' style='width:100%;' name='txtInvoicerContact_"+countInvoicer+"' value='"+contact+"' />");*@
         
                 var departmentId = "#txtInvoicerDepartmentId_"+countInvoicer;
                 var provinceId = "#txtInvoicerProvinceId_"+countInvoicer;
@@ -853,8 +876,7 @@
 <div class="ibox float-e-margins">
     <form method="post" class="form-horizontal">
         <input id="txtAction" name="txtAction" type="hidden" value="@action" />
-        @if (clientId != null)
-        {
+        @if (clientId != null) {
             <input id="txtClientId" name="txtClientId" type="hidden" value="@clientId" />
         }
         <input id="hddCountReciber" type="hidden" />
