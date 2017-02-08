@@ -9,6 +9,20 @@
     @Html.StyleLink("css/plugins/chosen/bootstrap-chosen.css")
     @Html.StyleLink("css/plugins/awesome-bootstrap-checkbox/awesome-bootstrap-checkbox.css")   
     @Html.StyleLink("css/plugins/sweetalert/sweetalert.css")
+
+    <style>
+        .text-float-label {
+            font-size: 12px;
+            position: fixed;
+            margin-top: -9px;
+            background-color: white;
+            margin-left: 3px;
+            padding-right: 5px;
+            padding-left: 5px;
+            color: rgb(103, 106, 108);
+            visibility:hidden;
+        }
+    </style>
  
 }
 
@@ -153,11 +167,11 @@
                 var slcDocumentType = $("#chkDocumentType");
                 var slcInvoiceType = $("#chkInvoiceType");
                 slcDocumentType.attr("disabled", false);
-                slcDocumentType.val("true");
-                slcDocumentType.trigger("chosen:updated");
+                //slcDocumentType.val("true");
+                //slcDocumentType.trigger("chosen:updated");
                 slcInvoiceType.attr("disabled", false);
-                $("#chkInvoiceType option:first-child").attr("selected", "selected");
-                slcInvoiceType.trigger("chosen:updated");
+               // $("#chkInvoiceType option:first-child").attr("selected", "selected");
+                //slcInvoiceType.trigger("chosen:updated");
                 txtSerie.val('');
                 txtSerie.attr('readonly', false);
                 txtStart.val('');
@@ -168,6 +182,7 @@
                 txtCurrent.attr('readonly', false);
             }
         }],
+        scrollY: '30hv',
         columns: [{
                 data: "Digital",
                 width: "15%",
@@ -215,7 +230,13 @@
                 },
                 width: "15%"
             }
-        ]
+        ],
+        initComplete: function(){
+            $('.dataTables_scrollBody').slimscroll({
+                height: '30vh',
+                disableFadeOut : false
+            });
+        }
     });
 
     $("#chkInvoiceType").chosen({
@@ -419,6 +440,20 @@
             if (value == "3") alert("eliminar");
         }
     });
+    $('.text-float').focus(function(){
+        var inputLabel = $(this).parent().children('label');
+        inputLabel.css("color","#1ab394");
+        inputLabel.css("visibility","visible");
+        $(this).removeAttr("placeholder");
+    }).blur(function(){
+        var inputLabel = $(this).parent().children('label');
+        inputLabel.css("color","#676a6c");
+        if ($(this).val()==""){
+            var placeH = inputLabel[0].innerHTML;
+            inputLabel.css("visibility","hidden");
+            $(this).attr("placeholder",placeH);
+        }
+    });
 }
 
 
@@ -483,13 +518,16 @@
                             <label>Correlativos</label>
                             <div class="col-md-12">
                                 <div class="col-md-4">
-                                    <input id="txtStart" type="text" class="form-control" placeholder="Inicio" />
+                                    <label class="text-float-label" style="font-size:12px;">Inicio</label>
+                                    <input id="txtStart" type="text" class="form-control text-float" placeholder="Inicio" />
                                 </div>
                                 <div class="col-md-4">
-                                    <input id="txtFinal" type="text" class="form-control" placeholder="Final" />
+                                    <label class="text-float-label" style="font-size:12px;">Final</label>
+                                    <input id="txtFinal" type="text" class="form-control text-float" placeholder="Final" />
                                 </div>
                                 <div class="col-md-4">
-                                    <input id="txtCurrent" type="text" class="form-control" placeholder="Actual" />
+                                    <label class="text-float-label" style="font-size:12px;">Actual</label>
+                                    <input id="txtCurrent" type="text" class="form-control text-float" placeholder="Actual" />
                                 </div>
                             </div>
                         </div>
